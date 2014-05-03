@@ -1,536 +1,357 @@
 package pingball.board;
 
-import java.io.*;
-import java.util.*;
-
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import antlr.*;
-import physics.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import physics.Vect;
+import server.PingballClient;
+import utilities.Coords;
 
 /**
+ * @author Julia
  * 
- *
  */
 public class Board {
+    private static final int DEFAULT_SIZE = 20;
+    private final PingballClient client;
+    private final int height;
+    private final int width;
+    private final List<Ball> balls;
+    private final HashMap<String, Gadget> boardGadgets;
+    private final String name;
+    private OuterWall[] walls;
+    private Vect g; // In L / ms^2
+    private double mu; // In per s.
+    private double mu2; // In per L.
+    private String leftBoard, rightBoard, topBoard, bottomBoard;
 
     /**
-     * Thread Safety Information: Board is threadsafe because clients threads never modify the board; they only access it.
+     * Creates a new instance of Board.
+     * 
+     * @param client
+     * @param name
+     * @param balls
+     * @param gadgets
      */
+    public Board(PingballClient client, String name, List<Ball> balls,
+            List<Gadget> gadgets, double gravity, double friction1,
+            double friction2) {
+        this.client = client;
+        this.name = name;
+        this.g = new Vect(0, gravity / (1000 * 1000)); // L / ms^2
 
-    private final int width = 20; //horizontal dimension
-    private final int height = 20; //vertical dimension
-    private String name;
-    
-    private double gravity = 25;
-    private double friction1 = 0.025;
-    private double friction2 = 0.025;
-
-    private final Gadget[][] gadgets;
-    private final OuterWalls outerWall = new OuterWalls();
-    
-    //Various inputs from the file neccessary for other classes.
-    private Set<Ball> ballsFromFile = new HashSet<Ball>();
-    private HashMap<Gadget,Set<Gadget>> fireMap = new HashMap<Gadget,Set<Gadget>>();
-    Set<Gadget> gadgetList= new HashSet<Gadget>();
-
-
-    /** Constructs a new board with a default, predetermined size of 20 by 20 */
-    public Board(double grav, String n) {
-        name = n;
-        gravity = grav;
-        gadgets = new Gadget[width][height];
-    }
-    
-    /** 
-     * Constructs a new board with given frictions, name, and gravity values
-     * @param friction1
-     * @param friction2
-     * @param  name
-     * @param gravity
-     */
-    public Board(double fric1, double fric2, String n, double grav) {
-        name = n;
-        friction1 = fric1;
-        friction2 = fric2;
-        gravity = grav;
-        gadgets = new Gadget[width][height];
-    }
-    
-    /** 
-     * Constructs a new board with a default, predetermined size of 20 by 20 and
-     * default gravity value of 25. 
-     */
-    public Board() {
-        name = "default";
-        gadgets = new Gadget[width][height];
-    }
-  
-    /**
-     * Returns a string representation of the board.
-     * Square bumpers are denoted by "#"
-     * Circle bumpers are denoted by "0"
-     * Triangle bumpers are denoted by "/" for orientation 0 or 180 or "\" for orientation 90 or 270
-     * Flippers are denoted by "|" when vertical or "-" when horizontal
-     * Absorbers are denoted by "="
-     * Outer walls are denoted by "."
-     * @return string representation of board
-     */
-    public String toString() {
-        String result = "";
-
-        String[][] gameBoard = new String[width+2][height+2];
-
-        for (int j = 0; j < gadgets[0].length; j++) {
-            for (int i = 0; i < gadgets.length; i++) {
-                Gadget g = gadgets[i][j];
-                if (g != null) {
-                    //Takes care of all the flipper printing since they take up four squares.
-                    if (g.type().equals("flipper"))
-                    {
-                        if ((g.getX() == i) && (g.getY() == j)) {
-                            Flipper f = (Flipper)g;
-                            String orientation = f.getOrientation();
-
-                            if (orientation.equals("top")) {
-                                gameBoard[i][j] = f.toString();
-                                gameBoard[i+1][j] = f.toString();
-                            } else if (orientation.equals("bottom")) {
-                                gameBoard[i][j+1] = f.toString();
-                                gameBoard[i+1][j+1] = f.toString();
-                            } else if (orientation.equals("left")) {
-                                gameBoard[i][j] = f.toString();
-                                gameBoard[i][j+1] = f.toString();
-                            } else {
-                                gameBoard[i+1][j] = f.toString();
-                                gameBoard[i+1][j+1] = f.toString();          
-                            }
-                        }
-                    } else {
-                        gameBoard[i][j] = g.toString();
-                    }
-                }
-            }
-        }
-        //Does outer wall toString
-        gameBoard = this.wallHelper(gameBoard);
-        
-
-        
-        //Finally takes the gameBoard and turns it into the returned String        
-        for (int j = 0; j < gameBoard[0].length; j++) {
-            for (int i = 0; i < gameBoard.length; i++) {
-
-                //If just empty space
-                if (gameBoard[i][j] == null) {
-                    result += " ";
-                } else {
-                    result += gameBoard[i][j];
-                }
-            }
-            result += "\n";
-        }
-        return result;
-    }
-    
-    
-    /**
-     * Returns a string representation of the board with the balls inputted into the method.
-     * Square bumpers are denoted by "#"
-     * Circle bumpers are denoted by "0"
-     * Triangle bumpers are denoted by "/" for orientation 0 or 180 or "\" for orientation 90 or 270
-     * Flippers are denoted by "|" when vertical or "-" when horizontal
-     * Absorbers are denoted by "="
-     * Outer walls are denoted by "."
-     * Balls are denoted by "*"
-     * @param set of balls that should also be displayed on the board. Does not display any balls outside the coordinates of the board.
-     * @return string representation of board
-     */
-    public String viewBoard(Set<Ball> balls) {
-        String result = "";
-
-        String[][] gameBoard = new String[width+2][height+2];
-
-
-        for (int j = 0; j < gadgets[0].length; j++) {
-            for (int i = 0; i < gadgets.length; i++) {
-                Gadget g = gadgets[i][j];
-                if (g != null) {
-                    //Takes care of all the flipper printing since they take up four squares.
-                    if (g.type().equals("flipper"))
-                    {
-                        if ((g.getX() == i) && (g.getY() == j)) {
-                            Flipper f = (Flipper)g;
-                            String orientation = f.getOrientation();
-
-                            if (orientation.equals("top")) {
-                                gameBoard[i][j] = f.toString();
-                                gameBoard[i+1][j] = f.toString();
-                            } else if (orientation.equals("bottom")) {
-                                gameBoard[i][j+1] = f.toString();
-                                gameBoard[i+1][j+1] = f.toString();
-                            } else if (orientation.equals("left")) {
-                                gameBoard[i][j] = f.toString();
-                                gameBoard[i][j+1] = f.toString();
-                            } else {
-                                gameBoard[i+1][j] = f.toString();
-                                gameBoard[i+1][j+1] = f.toString();          
-                            }
-                        }
-                    } else {
-                        gameBoard[i][j] = g.toString();
-                    }
-                }
-            }
-        }
-        
-        //Does outer wall toString
-        gameBoard = this.wallHelper(gameBoard);
-        
-
-        
-        
-        //Show all the balls currently on the board
-        for (Ball b: balls) {
-            int ballX = (int) Math.floor(b.getPos().x());
-            int ballY = (int) Math.floor(b.getPos().y());
-            if (inBoard(ballX,ballY)) {
-                gameBoard[ballX][ballY] = "*"; 
-            }
-        }
-
-        
-        for (int j = 0; j < gameBoard[0].length; j++) {
-            for (int i = 0; i < gameBoard.length; i++) {
-                //If just empty space
-                if (gameBoard[i][j] == null) {
-                    result += " ";
-                } else {
-                    result += gameBoard[i][j];
-                }
-            }
-            result += "\n";
-        }
-        return result.trim();
-    }
-    
-    
-    /**
-     * Returns a string representation of what's in the (x,y) location if it's a 
-     * legitimate location on the board. 
-     * @param x, x-coordinate of location
-     * @param y, y-coordinate of location
-     * @return string representation of what's in (x,y)
-     */
-    public String getElement(int x, int y) {
-        if (inBoard(x,y)) {
-            if (gadgets[x][y] != null) {
-                return gadgets[x][y].toString();
-            } else {
-                return " ";
-            }      
-        }
-        return "";
-    }
-    
-    /**
-     * Returns the gadget at the specified location iff coordinates are in the board or denote an outer wall.
-     * Returns null otherwise.
-     * @param x-coordinate
-     * @param y-coordinate
-     * @return gadget at coordinates (x,y)
-     */
-    public Gadget getGadget(int x, int y) {
-        if (inBoard(x,y)) {
-            if (gadgets[x][y] != null) {
-                return gadgets[x][y];
-            }
-        
-        } else if (x == -1 || y == -1 || x == 20 || y == 20) {
-            return this.outerWall;
-        }
-      return null;
-    }
-    
-    /**
-     * Changes visibility of outer walls depending 
-     */
-    public void changeOuterVisibility(String wallName, String otherBoard) {
-        this.outerWall.changeWallVisibility(wallName, otherBoard);
-    }
-    
-/********** Accessors for any instance variables **********/
-    
-    /**
-     * Returns the size of the board 
-     * @return size of the board
-     */
-    public double getSize() {
-        return width;
-    }
-    
-    /**
-     * Returns the friction co-efficient mu
-     * @return friction1
-     */
-    public double getMuOne() {
-        return friction1;
-    }
-    
-    /**
-     * Returns the friction co-efficient mu1
-     * @return friction2
-     */
-    public double getMuTwo() {
-        return friction2;
-    }
-    
-    /**
-     * Returns gravity
-     * @return gravity
-     */
-    public double getGravity() {
-        return gravity;
-    }
-    
-    
-    /**
-     * Returns name of the board in a String.
-     * @return name of the board
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Returns a list of balls specified in the file constructor
-     * @return list of balls
-     */
-    public Set<Ball> getBallsFromFile() {
-        return ballsFromFile;
-    }
-    
-    /**
-     * Returns information obtained by parsing the 'fire' lines in a Board file.
-     * @return a map where Gadget A is mapped to all the gadgets that fire upon A being triggered.
-     */
-    public Map<Gadget,Set<Gadget>> getFireMap() {
-        return fireMap;
-    }
-    
-    
-/********** Various helper functions **********/
-    
-    
-    
-    /**
-     * Takes a string representation of the board and adds the outer walls to it.
-     * If the board is joined to another, it adds the name of the conjoined board to the respective
-     * outer wall. 
-     * @param the working String board array to be editted 
-     * @return String array representation of the board
-     */
-    public String[][] wallHelper(String[][] gameBoard) {
-        Map<String, String> wallMapping = outerWall.getWallMapping();
-        
-        //Adding outer walls for toString purposes
-            
-        //Check top wall 
-        String wall = this.wallFormat("top", wallMapping);
-        wall = wall.substring(0,gameBoard.length);
-        for (int i = 0; i < wall.length(); i++)
-            gameBoard[i][0] = ""+ wall.charAt(i);
-
-        //Check bottom wall 
-        wall = this.wallFormat("bottom", wallMapping);
-        wall = wall.substring(0,gameBoard.length);
-        for (int i = 0; i < wall.length(); i++)
-            gameBoard[i][gameBoard[i].length-1] = ""+ wall.charAt(i);
-        
-        //Check left wall 
-         wall = this.wallFormat("left", wallMapping);
-        wall = wall.substring(0,gameBoard.length);
-        for (int i = 0; i < wall.length(); i++)
-            gameBoard[0][i] = ""+ wall.charAt(i);
-        
-        //Check right wall 
-         wall = this.wallFormat("right", wallMapping);
-        wall = wall.substring(0,gameBoard.length);
-        for (int i = 0; i < wall.length(); i++)
-            gameBoard[gameBoard.length-1][i] = ""+ wall.charAt(i);
-        
-        return gameBoard;
-  
-    }
-    
-    /** Helper function to display the outer walls. 
-     * Handles formatting the name for the wall.
-     */
-    private String wallFormat (String side, Map<String, String> wallMapping) {
-        String name = wallMapping.get(side);
-        int stringBoardWidth = width+2;
-        if (name.length() > stringBoardWidth) {
-            name = name.substring(0,width);
-        } else {
-            while (name.length() < stringBoardWidth) {
-                name += ".";
-            } 
-        }
-        name = "." + name;
-        name +=".";
-        return name;
-    }
-    
-    
-    /**
-     * Adds a gadget-type to its proper location on the board.
-     * Location is determined by the coordinates of the gadget itself.
-     * @param toAdd, new gadget to add to board
-     */
-    public void addGadget(Gadget toAdd) {
-        if (toAdd.type().equals("absorber")) {
-            this.addAbsorber((Absorber) toAdd);
-        } else if (toAdd.type().equals("flipper")){
-            this.addFlipper((Flipper) toAdd);
-        } else {
-            int x = (int) Math.floor(toAdd.getX());
-            int y = (int) Math.floor(toAdd.getY());
-            if (inBoard(x, y)) {
-                gadgets[x][y] = toAdd;
-            }
-        }
-
-        
-    }
-    
-    /**
-     * Helper function for addGadget that deals with adding flippers to the board.
-     * Flippers are unique since they take four squares on a board. Location is determined by the coordinates of the gadget itself.
-     * @param toAdd, new gadget to add to board
-     */
-    private void addFlipper(Flipper toAdd) {
-        int x = (int) Math.floor(toAdd.getX());
-        int y = (int) Math.floor(toAdd.getY());
-        gadgets[x][y]     = toAdd;
-        gadgets[x+1][y]   = toAdd;
-        gadgets[x][y+1]   = toAdd;
-        gadgets[x+1][y+1] = toAdd;
-    }
-    
-    /**
-     * Helper function for addGadget that deals with adding absorbers to the board.
-     * Flippers are unique since they have a length and width. Starting location is determined by the coordinates of the gadget itself.
-     * @param toAdd, new gadget to add to board
-     */
-    private void addAbsorber(Absorber toAdd) {
-        int width = toAdd.getWidth();
-        int height = toAdd.getHeight();
-        int x = (int) Math.floor(toAdd.getX());
-        int y = (int) Math.floor(toAdd.getY());
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                    gadgets[x+i][y+j] = toAdd;
-                
-            }
-        }      
-    }
-    
-    /**
-     * Takes the String-mapped input from the file and creates a map. Uses the names of the gadget to create the map.
-     * This created map is such that Gadget A is mapped to all the gadgets that fire upon A being triggered.
-     */
-    private void createFireMap(Map<String,Set<String>> stringMap) {   
-        for (String key : stringMap.keySet()) {
-            Gadget keyGadget = this.findGadget(key);
-            if (keyGadget != null) {
-                Iterator iter = stringMap.get(key).iterator();
-                Set<Gadget> values = new HashSet<Gadget>();
-                while (iter.hasNext()) {
-                    Gadget toAdd = this.findGadget((String) iter.next());
-                    values.add(toAdd);
-                }
-                
-                fireMap.put(keyGadget, values);
-                
-                //It's an absorber, check if it triggers itself
-                if (keyGadget.toString().equals("=")) {
-                    Absorber abs = (Absorber) checkAbsorber(values,(Absorber)keyGadget);
-                    
-                    //Find and delete duplicate absorber
-                    String absName = abs.getName();
-
-                    Iterator i = gadgetList.iterator();
-                    while(i.hasNext()) {
-                        Gadget g = (Gadget) i.next();
-                        String name = g.getName();
-                        if (name.equals(absName)) {
-                            i.remove();
-                        }
-                    }
-                    //Add in our new absorber!
-                    gadgetList.add(abs);
-
-                }
-                
-            }
-
-        }      
-    }
-    
-    /**
-     * Sets the absorber to self-triggering if found in a map denoting gadget relations.
-     * Returns the modified absorber.
-     * @param values - All the gadgets related to the Absorber key
-     * @param key - Absorber we're checking to see if self-triggering
-     */
-    private Gadget checkAbsorber(Set<Gadget> values, Absorber key) {
-        String keyName = key.getName();
-        Iterator iter = values.iterator();
-        while(iter.hasNext()) {
-            Gadget currentVal = (Gadget) iter.next();
-            if (currentVal.getName().equals(keyName)) {
-                key.setTriggerable(true);
-            }
-        }
-        return key;
-    }
-    
-    /**
-     * Searches for a Gadget by name, returns if found. Returns null otherwise.
-     * @param name of Gadget to find
-     * @return the Gadget with specified name
-     */
-    private Gadget findGadget(String name) {
-        HashSet<Gadget> gadgets = (HashSet<Gadget>) gadgetList;
+        this.mu = friction1;
+        this.mu2 = friction2;
+        this.balls = balls;
+        this.width = DEFAULT_SIZE;
+        this.height = DEFAULT_SIZE;
+        boardGadgets = new HashMap<String, Gadget>();
         for (Gadget gadget : gadgets) {
-            if (gadget.getName().equals(name)) {
-                return gadget;
+            // //System.out.println("Adding");
+            boardGadgets.put(gadget.getPosition().toString(), gadget);
+        }
+        // add corner walls to gadgets
+        Gadget cornerNE = new OuterWallPart(this, true, new Coords(20, -1), '.');
+        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
+        Gadget cornerSE = new OuterWallPart(this, true, new Coords(20, 20), '.');
+        boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
+        Gadget cornerNW = new OuterWallPart(this, true, new Coords(-1, -1), '.');
+        boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
+        Gadget cornerSW = new OuterWallPart(this, true, new Coords(-1, 20), '.');
+        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
+        OuterWall topWall = new OuterWall(this, "TOP");
+        OuterWall bottomWall = new OuterWall(this, "BOTTOM");
+        OuterWall leftWall = new OuterWall(this, "LEFT");
+        OuterWall rightWall = new OuterWall(this, "RIGHT");
+        walls = new OuterWall[] { topWall, bottomWall, leftWall, rightWall };
+        for (OuterWall w : walls)
+            reset(w);
+        leftBoard = null;
+        rightBoard = null;
+        topBoard = null;
+        bottomBoard = null;
+    }
+
+    @Override
+    public String toString() {
+        String[][] board = new String[this.height + 2][this.width + 2]; // Array
+                                                                        // of
+                                                                        // rows.
+        for (int i = 0; i <= height + 1; i++) { // i is y coordinates
+            for (int j = 0; j <= width + 1; j++) { // j is x coordinates
+                Coords coords = new Coords(j - 1, i - 1);
+                String currentCoords = coords.toString();
+                boolean isABall = false;
+                for (int k = 0; k < balls.size(); k++) {
+                    if (Math.round(balls.get(k).getX()) == j - 1
+                            && Math.round(balls.get(k).getY()) == i - 1) {
+                        board[i][j] = balls.get(k).toString();
+                        isABall = true;
+                        break; // TODO Should this really be here? What if there
+                               // are multiple balls?
+                    }
+                }
+                if ((!isABall) && (board[i][j] != "=")) {
+                    if (boardGadgets.get(currentCoords) != null) {
+                        if (boardGadgets.get(currentCoords).getType() == "ABSORBER") {
+                            // This is an absorber. This encompasses multiple
+                            // levels.
+                            Absorber absorb = (Absorber) boardGadgets
+                                    .get(currentCoords);
+                            for (int n = j; n <= j + absorb.getWidth(); n++) {
+                                for (int p = i; p <= i + absorb.getHeight(); p++) {
+                                    /*
+                                     * n => x-coordinate p => y-coordinate
+                                     */
+                                    board[p][n] = absorb.toString();
+                                }
+                            }
+                        } else {
+                            board[i][j] = boardGadgets.get(currentCoords)
+                                    .toString();
+                        }
+                    } else {
+                        board[i][j] = " ";
+                    }
+                }
             }
         }
-        return null;
+        String boardString = "";
+        for (int k = 0; k <= height + 1; k++) {
+            for (int m = 0; m <= width + 1; m++) {
+                boardString += board[k][m];
+            }
+            boardString += "\r\n";
+        }
+        return boardString;
     }
-    
-    /**
-     * Checks that a given (x,y) coordinate is within the bounds of the board. 
-     * Does not take into account outer walls.
-     * @param x-coordinate
-     * @param y-coordinate
-     * @return true or false depending if in board
-     */
-    public boolean inBoard(int x, int y) {
-        return (x >= 0 && x < (width) && y >= 0 && y < (height));
+
+    public synchronized void go() {
+        int j = 0;
+        for (int i = 0; i < balls.size(); i++) {
+            Ball b = balls.get(i);
+            this.balls.set(j, b.move());
+            j++;
+        }
+
+        int k = 0;
+        for (int i = 0; i < balls.size(); i++) {
+            Ball b = balls.get(i);
+            this.balls.set(k, this.gravity(b));
+            k++;
+        }
+
+        int m = 0;
+        for (int i = 0; i < balls.size(); i++) {
+            Ball b = balls.get(i);
+            this.balls.set(m, this.friction(b));
+            m++;
+        }
+
+        int n = 0;
+        for (int i = 0; i < balls.size(); i++) {
+            Ball b = balls.get(i);
+            if (this.contactTest(b) != null) {
+                this.balls.set(n, this.contactTest(b));
+            } else {
+                this.balls.remove(n);
+            }
+            n++;
+        }
     }
-    
-    
-    public void checkRep() {
-        assert (gadgets.length == width);
+
+    private synchronized Ball gravity(Ball b) {
+        double t = 50d; // In milliseconds. This should be equal to the thread
+                        // refresh rate.
+        double u = b.getVelocity().y();
+        double a = g.y();
+        double v = u + a * t;
+        return new Ball(b.getCenter(), new Vect(b.getVelocity().x(), v));
     }
-    
+
+    private synchronized Ball friction(Ball b) {
+        double deltaT = 10d / 1000d; // Should be equal to the thread refresh
+                                     // rate but in seconds.
+        Vect oldV = b.getVelocity();
+        double speed = Math.sqrt(Math.pow(oldV.x(), 2) + Math.pow(oldV.y(), 2));
+        double scalingFactor = 1 - this.mu * deltaT - this.mu2 * speed * deltaT;
+        Vect vNew = oldV.times(scalingFactor);
+        return new Ball(b.getCenter(), vNew);
+    }
+
+    public synchronized boolean hasName() {
+        return name.length() > 0;
+    }
+
+    public synchronized String getName() {
+        return name;
+    }
+
+    public synchronized String stringify(String s) {
+        if (s.length() > 20)
+            return s.substring(0, 20);
+        StringBuffer name = new StringBuffer();
+        for (int i = 0; i < (20 - s.length()) / 2; i++)
+            name = name.append(".");
+        name = name.append(s);
+        for (int i = 0; i < (20 - s.length() + 1) / 2; i++)
+            name = name.append(".");
+        return name.toString();
+    }
+
+    public synchronized void remove(String direction) {
+        String defolt = "....................";
+        if (direction.equals("left")) {
+            leftBoard = defolt;
+            walls[2].reset("LEFT");
+            reset(walls[2]);
+        } else if (direction.equals("right")) {
+            rightBoard = defolt;
+            walls[3].reset("RIGHT");
+            reset(walls[3]);
+        } else if (direction.equals("top")) {
+            topBoard = defolt;
+            walls[0].reset("TOP");
+            reset(walls[0]);
+        } else if (direction.equals("bottom")) {
+            bottomBoard = defolt;
+            walls[1].reset("BOTTOM");
+            reset(walls[1]);
+        } else {
+            throw new RuntimeException(
+                    "A direction other than left, right, top, or bottom was specified... Something wrong happened!");
+        }
+    }
+
+    public synchronized void add(String direction, String name) {
+        if (direction.equals("left")) {
+            leftBoard = name;
+            walls[2].reset(false, "LEFT", stringify(name));
+            reset(walls[2]);
+        } else if (direction.equals("right")) {
+            rightBoard = name;
+            walls[3].reset(false, "RIGHT", stringify(name));
+            reset(walls[3]);
+        } else if (direction.equals("top")) {
+            topBoard = name;
+            walls[0].reset(false, "TOP", stringify(name));
+            reset(walls[0]);
+        } else if (direction.equals("bottom")) {
+            bottomBoard = name;
+            walls[1].reset(false, "BOTTOM", stringify(name));
+            reset(walls[1]);
+        } else {
+            throw new RuntimeException(
+                    "A direction other than left, right, top, or bottom was specified... Something wrong happened!");
+        }
+    }
+
+    private synchronized void reset(OuterWall outerWall) {
+        for (OuterWallPart p : outerWall.getParts())
+            boardGadgets.put(p.getPosition().toString(), p);
+    }
+
+    public synchronized String getNeighbors() {
+        return name + " left: " + leftBoard + " right: " + rightBoard
+                + " top: " + topBoard + " bottom: " + bottomBoard;
+    }
+
+    private synchronized Ball contactTest(Ball b) {
+        // Loop through all the gadgets and find the min time-before-collision
+        // among all of them.
+        HashMap<String, Gadget> allGadgets = new HashMap<String, Gadget>();
+        allGadgets.putAll(this.boardGadgets);
+        Gadget minTimeGadget = null;
+        double finalMinTime = Double.POSITIVE_INFINITY;
+        String side = "";
+        Iterator itGadget = allGadgets.entrySet().iterator();
+        while (itGadget.hasNext()) {
+            Map.Entry pairsGadget = (Map.Entry) itGadget.next();
+            String coords = (String) pairsGadget.getKey();
+            Gadget g = (Gadget) pairsGadget.getValue();
+            // There's just one key-value pair in the following hashmap.
+            HashMap<String, Double> timeMap = g.leastCollisionTime(b,
+                    b.getVelocity());
+            HashMap<String, Double> allTimes = timeMap;
+            Iterator itComponents = allTimes.entrySet().iterator();
+            while (itComponents.hasNext()) {
+                Map.Entry pairsComponents = (Map.Entry) itComponents.next();
+                String identifier = (String) pairsComponents.getKey();
+                double time = (double) pairsComponents.getValue();
+                if (time <= finalMinTime) {
+                    finalMinTime = time;
+                    minTimeGadget = g;
+                    side = identifier;
+                }
+                itComponents.remove(); // avoids a
+                                       // ConcurrentModificationException
+            }
+            itGadget.remove(); // avoids a ConcurrentModificationException
+        }
+        Boolean bounceABall = false;
+        Ball bounceFirst = null;
+        // Do the same thing for all the balls.
+        for (Ball aBall : this.balls) {
+            HashMap<String, Double> times = aBall.leastCollisionTime(b,
+                    b.getVelocity());
+            double ballTime = times.get("BALL");
+            if (ballTime <= finalMinTime) {
+                finalMinTime = ballTime;
+                bounceABall = true;
+                bounceFirst = aBall;
+            }
+        }
+
+        double epsilon = 1.0d;
+        if (bounceABall) {
+            epsilon = 1.0d;
+        } else {
+            switch (minTimeGadget.getType()) {
+
+            case "BUMPER":
+                Bumper bump = (Bumper) minTimeGadget;
+                if (bump.getBumperType() == "SQUARE") {
+                    epsilon = 0.3d;
+                } else if (bump.getBumperType() == "CIRCLE") {
+                }
+                break;
+
+            case "OUTER_WALL_PART":
+                epsilon = 0.5d;
+                break;
+
+            case "FLIPPER":
+                epsilon = 1.0d;
+                break;
+
+            case "ABSORBER":
+                epsilon = 0.05d;
+                break;
+            }
+        }
+
+        if (finalMinTime < epsilon) {
+            if (bounceABall) {
+                return bounceFirst.bounce(b);
+            }
+            return minTimeGadget.bounce(b, side);
+        }
+        return b;
+    }
+
+    public synchronized void addBall(Ball ball) {
+        balls.add(ball);
+    }
+
+    public void sendBall(Ball b, String s) {
+        if (s.equals("left"))
+            client.sendBall(b, leftBoard);
+        else if (s.equals("right"))
+            client.sendBall(b, rightBoard);
+        else if (s.equals("top"))
+            client.sendBall(b, topBoard);
+        else if (s.equals("bottom"))
+            client.sendBall(b, bottomBoard);
+    }
 }
