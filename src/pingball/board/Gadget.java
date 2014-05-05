@@ -100,6 +100,6 @@ public interface Gadget {
      * Hooks the action of another gadget to the trigger of this gadget
      * @param gadget the gadget's whose action needs to be hooked
      */
-    public hookActionToTrigger(Gadget gadget);
+    public void hookActionToTrigger(Gadget gadget);
     
 }
