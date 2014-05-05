@@ -5,15 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import physics.Vect;
-import server.PingballClient;
 
 /**
- * @author Julia
  * 
  */
 public class Board {
     private static final int DEFAULT_SIZE = 20;
-    private final PingballClient client;
     private final int height;
     private final int width;
     private final List<Ball> balls;
@@ -33,10 +30,9 @@ public class Board {
      * @param balls
      * @param gadgets
      */
-    public Board(PingballClient client, String name, List<Ball> balls,
+    public Board(String name, List<Ball> balls,
             List<Gadget> gadgets, double gravity, double friction1,
             double friction2) {
-        this.client = client;
         this.name = name;
         this.g = new Vect(0, gravity / (1000 * 1000)); // L / ms^2
 
@@ -347,14 +343,4 @@ public class Board {
         balls.add(ball);
     }
 
-    public void sendBall(Ball b, String s) {
-        if (s.equals("left"))
-            client.sendBall(b, leftBoard);
-        else if (s.equals("right"))
-            client.sendBall(b, rightBoard);
-        else if (s.equals("top"))
-            client.sendBall(b, topBoard);
-        else if (s.equals("bottom"))
-            client.sendBall(b, bottomBoard);
-    }
 }
