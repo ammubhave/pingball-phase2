@@ -129,7 +129,7 @@ public class BoardFactory {
         @Override
         public void exitSquareBumperObjectLine(BoardParser.SquareBumperObjectLineContext ctx) {
             board.addGadget(new SquareBumper(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")), 
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
                     attributes.get("name")));
             attributes.clear();
         }
@@ -160,7 +160,7 @@ public class BoardFactory {
                 orientation = TriangularBumperOrientation.SW; break;
             }*/
             board.addGadget(new TriangularBumper(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")),
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     Integer.parseInt(attributes.get("orientation")),
                     attributes.get("name")));
             attributes.clear();
@@ -194,7 +194,7 @@ public class BoardFactory {
                 orientation = FlipperOrientation.BOTTOM; break;
             }
             board.addGadget(new LeftFlipper(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")),
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     orientation, 
                     attributes.get("name")));
             attributes.clear();
@@ -226,7 +226,7 @@ public class BoardFactory {
                 orientation = FlipperOrientation.BOTTOM; break;
             }
             board.addGadget(new RightFlipper(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")),
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     orientation, 
                     attributes.get("name")));
             attributes.clear();
@@ -246,7 +246,7 @@ public class BoardFactory {
         @Override
         public void exitCircleBumperObjectLine(BoardParser.CircleBumperObjectLineContext ctx) {
             board.addGadget(new CircularBumper(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")), 
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
                     attributes.get("name")));
             attributes.clear();
         }
@@ -266,7 +266,7 @@ public class BoardFactory {
         @Override
         public void exitAbsorberObjectLine(BoardParser.AbsorberObjectLineContext ctx) {
             board.addGadget(new Absorber(
-                    Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")),
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                             Integer.parseInt(attributes.get("width")), Integer.parseInt(attributes.get("height")),
                             attributes.get("name")));
             attributes.clear();
