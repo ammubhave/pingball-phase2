@@ -5,6 +5,10 @@ import physics.LineSegment;
 /** Represents the Flipper gadget class */
 
 public class Flipper implements Gadget {
+    
+    public enum FlipperOrientation {
+        TOP, BOTTOM, LEFT, RIGHT
+    }
 
     private final double coefficientOfReflection = 0.95;
     private final double boundingBoxLength = 2.0;
@@ -106,8 +110,8 @@ public class Flipper implements Gadget {
      * 
      * @return orientation of flipper
      */
-    public String getOrientation() {
-        return "top";
+    public FlipperOrientation getOrientation() {
+        return FlipperOrientation.TOP;
     }
 
     /**
