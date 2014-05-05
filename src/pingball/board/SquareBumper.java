@@ -10,17 +10,18 @@ import physics.Vect;
 public class SquareBumper implements Gadget {
 
     /**
-     * Thread Safety Information: SquareBumper is threadsafe because it is never altered after creation.
+     * Thread Safety Information: SquareBumper is threadsafe because it is never
+     * altered after creation.
      */
     private final static double REFL_COEFF = 1.0;
 
     private final double xCoord;
     private final double yCoord;
 
-    //Following are constants specified by the project
+    // Following are constants specified by the project
     private final static double EDGE_LENGTH = 1.0;
     private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5; //Used as placeholder value
+    private final static double NULL = 5; // Used as placeholder value
 
     private final LineSegment topLine;
     private final LineSegment bottomLine;
@@ -29,14 +30,20 @@ public class SquareBumper implements Gadget {
 
     private final String name;
 
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
+
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
 
     /**
-     * Creates a square bumper with the user-inputted parameters. 
-     * Has a side-length of 1.0
-     * @param topLeftX, x coordinate of top-left point on the square
-     * @param topLeftY, y coordinate of top-left point on the square
-     * @param n, name
+     * Creates a square bumper with the user-inputted parameters. Has a
+     * side-length of 1.0
+     * 
+     * @param topLeftX
+     *            , x coordinate of top-left point on the square
+     * @param topLeftY
+     *            , y coordinate of top-left point on the square
+     * @param n
+     *            , name
      */
     public SquareBumper(double topLeftX, double topLeftY, String n) {
         name = n;
@@ -53,12 +60,23 @@ public class SquareBumper implements Gadget {
         sides.add(rightLine);
     }
 
-    /** Calculates time an inputted ball will take to hit this bumper. 
-     * Returns a very large value if not nearby (5 seconds).
-     * @param ball to check if it's nearby
+    /**
+     * Calculates time an inputted ball will take to hit this bumper. Returns a
+     * very large value if not nearby (5 seconds).
+     * 
+     * @param ball
+     *            to check if it's nearby
      * @return amount of time to take to trigger object based on inputted ball.
      */
-    public double trigger(Ball ball) {
+    @Override
+    public void trigger() {
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
+    }
+
+    @Override
+    public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
@@ -70,11 +88,16 @@ public class SquareBumper implements Gadget {
     }
 
     /**
-     * Called when inputted ball is less than 0.001 seconds from impacting gadget (as found out from the trigger function).
-     * Handles the resulting physics of when given ball collides with this bumper.
+     * Called when inputted ball is less than 0.001 seconds from impacting
+     * gadget (as found out from the trigger function). Handles the resulting
+     * physics of when given ball collides with this bumper.
      */
     @Override
-    public void action(Ball ball) {
+    public void action() {
+
+    }
+
+    public void reactBall(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         LineSegment wall = null;
         for (LineSegment ls : sides) {
@@ -88,9 +111,8 @@ public class SquareBumper implements Gadget {
         newDir = new Vect(newDir.x(), -newDir.y());
         ball.changeVelocity(newDir);
         ball.move(TIME_TO_TRIGGER - tx);
-
     }
-    
+
     /**
      * @return the reflection coefficient
      */
@@ -100,8 +122,9 @@ public class SquareBumper implements Gadget {
     }
 
     /**
-     * Returns a list of the lines used to make the square:
-     * top line, bottom line, left line, right line
+     * Returns a list of the lines used to make the square: top line, bottom
+     * line, left line, right line
+     * 
      * @return list of lines that make up this bumper
      */
     public List<LineSegment> getLineSegments() {
@@ -141,12 +164,16 @@ public class SquareBumper implements Gadget {
     public String getName() {
         return name;
     }
-    
+
     /**
      * Returns a string representing the type of gadget.
      */
     public String type() {
         return "square";
+    }
+
+    public void hookActionToTrigger(Gadget gadget) {
+        gadgetsToBeHooked.add(gadget);
     }
 
 }

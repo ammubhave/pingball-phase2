@@ -34,6 +34,8 @@ public class Absorber implements Gadget {
 
     private final String name;
 
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
+
     private LineSegment top;
     private LineSegment bottom;
     private LineSegment left;
@@ -90,18 +92,10 @@ public class Absorber implements Gadget {
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
-    public double trigger(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (!isInside(ball)) {
-                if (time < TIME_TO_TRIGGER) {
-                    return time;
-                }
-            }
-
+    public void trigger() {
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
         }
-        return NULL;
     }
 
     public double leastCollisionTime(Ball ball) {
@@ -207,5 +201,9 @@ public class Absorber implements Gadget {
      */
     public String type() {
         return "absorber";
+    }
+
+    public void hookActionToTrigger(Gadget gadget) {
+        gadgetsToBeHooked.add(gadget);
     }
 }
