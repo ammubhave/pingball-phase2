@@ -22,9 +22,9 @@ public class Flipper implements Gadget {
     private double xCoord;
     private double yCoord;
 
-    public Flipper(double xLoc, double yLoc) {
-        xCoord = xLoc;
-        yCoord = yLoc;
+    public Flipper(Vect vect) {
+        xCoord = vect.x();
+        yCoord = vect.y();
         boundingBoxTop = new LineSegment(xLoc, yLoc, xLoc + boundingBoxLength, yLoc);
         boundingBoxBottom = new LineSegment(xLoc, yLoc + boundingBoxLength, xLoc + boundingBoxLength, yLoc
                 + boundingBoxLength);
@@ -119,5 +119,35 @@ public class Flipper implements Gadget {
      * is overridden by both left and right flipper)
      */
     public void move(double time) {
+    }
+
+    @Override
+    public void trigger() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public double leastCollisionTime(Ball ball) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void reactBall(Ball ball) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void action() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void hookActionToTrigger(Gadget gadget) {
+        // TODO Auto-generated method stub
+        
     }
 }
