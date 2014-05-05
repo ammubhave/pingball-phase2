@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import physics.Vect;
 import server.PingballClient;
-import utilities.Coords;
 
 /**
  * @author Julia
@@ -20,7 +19,7 @@ public class Board {
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
     private final String name;
-    private OuterWall[] walls;
+    private OuterWalls walls;
     private Vect g; // In L / ms^2
     private double mu; // In per s.
     private double mu2; // In per L.
@@ -48,34 +47,34 @@ public class Board {
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
         for (Gadget gadget : gadgets) {
-            // //System.out.println("Adding");
-            boardGadgets.put(gadget.getPosition().toString(), gadget);
+            Vect pos = new Vect(gadget.getX(),gadget.getY());
+            boardGadgets.put(pos.toString(), gadget);
         }
         // add corner walls to gadgets
-        Gadget cornerNE = new OuterWallPart(this, true, new Coords(20, -1), '.');
-        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
-        Gadget cornerSE = new OuterWallPart(this, true, new Coords(20, 20), '.');
-        boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
-        Gadget cornerNW = new OuterWallPart(this, true, new Coords(-1, -1), '.');
-        boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
-        Gadget cornerSW = new OuterWallPart(this, true, new Coords(-1, 20), '.');
-        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
-        OuterWall topWall = new OuterWall(this, "TOP");
-        OuterWall bottomWall = new OuterWall(this, "BOTTOM");
-        OuterWall leftWall = new OuterWall(this, "LEFT");
-        OuterWall rightWall = new OuterWall(this, "RIGHT");
-        walls = new OuterWall[] { topWall, bottomWall, leftWall, rightWall };
-        for (OuterWall w : walls)
+//        Gadget cornerNE = new OuterWallPart(this, true, new Vect(20, -1), '.');
+//        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
+//        Gadget cornerSE = new OuterWallPart(this, true, new Vect(20, 20), '.');
+//        boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
+//        Gadget cornerNW = new OuterWallPart(this, true, new Vect(-1, -1), '.');
+//        boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
+//        Gadget cornerSW = new OuterWallPart(this, true, new Vect(-1, 20), '.');
+//        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
+        
+        walls = new OuterWalls();
+        boardGadgets.put(walls.getName(), walls);
+        for (OuterWalls w : walls)
             reset(w);
+        
+        //I don't think the following four lines are still necessary.
         leftBoard = null;
         rightBoard = null;
         topBoard = null;
         bottomBoard = null;
     }
-    
-    public void addGadget(Gadget g){
+
+    public void addGadget(Gadget gadget) {
         boardGadgets.put(gadget.getPosition().toString(), gadget);
-}
+    }
 
     @Override
     public String toString() {
@@ -84,7 +83,7 @@ public class Board {
                                                                         // rows.
         for (int i = 0; i <= height + 1; i++) { // i is y coordinates
             for (int j = 0; j <= width + 1; j++) { // j is x coordinates
-                Coords coords = new Coords(j - 1, i - 1);
+                Vect coords = new Vect(j - 1, i - 1);
                 String currentCoords = coords.toString();
                 boolean isABall = false;
                 for (int k = 0; k < balls.size(); k++) {
