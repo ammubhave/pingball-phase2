@@ -27,11 +27,13 @@ public class Ball {
     private Vect position;
     private Vect velocity;
 
-    // TODO: Change this constructor
-    public Ball(double xCoord, double yCoord, double xVel, double yVel) {
-        this.position = new Vect(xCoord, yCoord);
+    private String name;
+
+    public Ball(String ballName, Vect pos, Vect vel) {
+        this.position = pos;
         this.circle = new Circle(position, RADIUS);
-        this.velocity = new Vect(xVel, yVel);
+        this.velocity = vel;
+        name = ballName;
     }
 
     /**
@@ -98,6 +100,15 @@ public class Ball {
         double newX = velocity.x();
         double newY = velocity.y();
         return new Vect(newX, -newY);
+    }
+
+    /**
+     * Returns the name of the ball
+     * 
+     * @return Vect form of velocity
+     */
+    public String getName() {
+        return name;
     }
 
     /**

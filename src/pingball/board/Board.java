@@ -6,22 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import physics.Vect;
-import server.PingballClient;
-import utilities.Coords;
 
 /**
- * @author Julia
  * 
  */
 public class Board {
     private static final int DEFAULT_SIZE = 20;
-    private final PingballClient client;
     private final int height;
     private final int width;
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
     private final String name;
-    private OuterWalls[] walls;
+    private OuterWalls walls;
     private Vect g; // In L / ms^2
     private double mu; // In per s.
     private double mu2; // In per L.
@@ -30,15 +26,13 @@ public class Board {
     /**
      * Creates a new instance of Board.
      * 
-     * @param client
      * @param name
      * @param balls
      * @param gadgets
      */
-    public Board(PingballClient client, String name, List<Ball> balls,
+    public Board(String name, List<Ball> balls,
             List<Gadget> gadgets, double gravity, double friction1,
             double friction2) {
-        this.client = client;
         this.name = name;
         this.g = new Vect(0, gravity / (1000 * 1000)); // L / ms^2
 
@@ -49,29 +43,38 @@ public class Board {
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
         for (Gadget gadget : gadgets) {
-            // //System.out.println("Adding");
-            boardGadgets.put(gadget.getPosition().toString(), gadget);
+            Vect pos = new Vect(gadget.getX(),gadget.getY());
+            boardGadgets.put(pos.toString(), gadget);
         }
         // add corner walls to gadgets
-        Gadget cornerNE = new OuterWallPart(this, true, new Coords(20, -1), '.');
-        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
-        Gadget cornerSE = new OuterWallPart(this, true, new Coords(20, 20), '.');
-        boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
-        Gadget cornerNW = new OuterWallPart(this, true, new Coords(-1, -1), '.');
-        boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
-        Gadget cornerSW = new OuterWallPart(this, true, new Coords(-1, 20), '.');
-        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
-        OuterWall topWall = new OuterWall(this, "TOP");
-        OuterWall bottomWall = new OuterWall(this, "BOTTOM");
-        OuterWall leftWall = new OuterWall(this, "LEFT");
-        OuterWall rightWall = new OuterWall(this, "RIGHT");
-        walls = new OuterWall[] { topWall, bottomWall, leftWall, rightWall };
-        for (OuterWall w : walls)
+//        Gadget cornerNE = new OuterWallPart(this, true, new Vect(20, -1), '.');
+//        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
+//        Gadget cornerSE = new OuterWallPart(this, true, new Vect(20, 20), '.');
+//        boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
+//        Gadget cornerNW = new OuterWallPart(this, true, new Vect(-1, -1), '.');
+//        boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
+//        Gadget cornerSW = new OuterWallPart(this, true, new Vect(-1, 20), '.');
+//        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
+        
+        walls = new OuterWalls();
+        boardGadgets.put(walls.getName(), walls);
+        for (OuterWalls w : walls)
             reset(w);
+        
+        //I don't think the following four lines are still necessary.
         leftBoard = null;
         rightBoard = null;
         topBoard = null;
         bottomBoard = null;
+    }
+
+    /**
+     * Adds a gadget to the board
+     * 
+     * @param gadget to be added to board
+     */
+    public void addGadget(Gadget gadget) {
+        boardGadgets.put(gadget.getName(), gadget);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class Board {
                                                                         // rows.
         for (int i = 0; i <= height + 1; i++) { // i is y coordinates
             for (int j = 0; j <= width + 1; j++) { // j is x coordinates
-                Coords coords = new Coords(j - 1, i - 1);
+                Vect coords = new Vect(j - 1, i - 1);
                 String currentCoords = coords.toString();
                 boolean isABall = false;
                 for (int k = 0; k < balls.size(); k++) {
@@ -341,6 +344,11 @@ public class Board {
         return b;
     }
 
+    /**
+     * Adds a ball to the board
+     * 
+     * @param ball to be added to the board
+     */
     public synchronized void addBall(Ball ball) {
         balls.add(ball);
     }
@@ -349,24 +357,6 @@ public class Board {
     public void removeBall(String ballName) {
         
     }
-
-    public void sendBall(Ball b, String s) {
-        if (s.equals("left"))
-            client.sendBall(b, leftBoard);
-        else if (s.equals("right"))
-            client.sendBall(b, rightBoard);
-        else if (s.equals("top"))
-            client.sendBall(b, topBoard);
-        else if (s.equals("bottom"))
-            client.sendBall(b, bottomBoard);
-    }
-    
-    
-    /**
-     * Adds the gadget to the board
-     * @param gadget the gadget to add
-     */
-    public void addGadget(Gadget gadget);
     
     /**
      * Gets a gadget from the board with the given name.
