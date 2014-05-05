@@ -27,6 +27,7 @@ public class Ball {
     private Vect position;
     private Vect velocity;
 
+    // TODO: Change this constructor
     public Ball(double xCoord, double yCoord, double xVel, double yVel) {
         this.position = new Vect(xCoord, yCoord);
         this.circle = new Circle(position, RADIUS);

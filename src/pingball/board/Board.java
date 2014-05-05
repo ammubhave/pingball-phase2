@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import physics.Vect;
 import server.PingballClient;
 import utilities.Coords;
@@ -20,7 +21,7 @@ public class Board {
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
     private final String name;
-    private OuterWall[] walls;
+    private OuterWalls[] walls;
     private Vect g; // In L / ms^2
     private double mu; // In per s.
     private double mu2; // In per L.
@@ -343,6 +344,11 @@ public class Board {
     public synchronized void addBall(Ball ball) {
         balls.add(ball);
     }
+    
+    // TODO: Implement removeBall
+    public void removeBall(String ballName) {
+        
+    }
 
     public void sendBall(Ball b, String s) {
         if (s.equals("left"))
@@ -354,4 +360,19 @@ public class Board {
         else if (s.equals("bottom"))
             client.sendBall(b, bottomBoard);
     }
+    
+    
+    /**
+     * Adds the gadget to the board
+     * @param gadget the gadget to add
+     */
+    public void addGadget(Gadget gadget);
+    
+    /**
+     * Gets a gadget from the board with the given name.
+     * If does not exists, throws exception
+     * @param name the name of the gadget to find.
+     * @return
+     */
+    public Gadget getGadgetFromName(String name);
 }

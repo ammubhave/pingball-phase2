@@ -26,8 +26,15 @@ public interface Gadget {
     // private boolean triggered - lets you know if the gadget is in the process
     // of performing an action.
 
+    // TODO: Implement this. Loop over all the hooked gadgets, and call action on them.
     /**
-     * Decides whether the gadget has been triggered
+     * Should call action method of all the hooked gadgets
+     */
+    public void trigger();
+    
+    /**
+     * Decides whether the gadget has been triggered. If triggered, should 
+     * call action method of all the hooked gadgets
      * 
      * @param ball
      *            the Ball object inside this.containingSquare that may be
@@ -35,8 +42,11 @@ public interface Gadget {
      * @return the time before the trigger will occur (returns some ridiculous
      *         number if irrelevant)
      */
-    public double trigger(Ball ball);
+    //TODO: Write spec, move code from trigger to this method
+    public double leastCollisionTime(Ball ball);
 
+    // TODO: Look up this code and make changes so that this does not affect the
+    // gadget themselved
     /**
      * Performs the action required once a trigger has occurred. This could
      * involve changing the velocity/angle/position of the ball. (NOTE: The
@@ -47,7 +57,15 @@ public interface Gadget {
      *            the Ball object inside this.containingSquare that is
      *            interacting with the gadget
      */
-    public void action(Ball ball);
+    public void reactBall(Ball ball);
+    
+    // TODO: Implement this. Mostly move partial code from react (current action) so that
+    // the code that changes the gadget it self is here in action
+    
+    /**
+     * Performs action of the gadget
+     */
+    public void action();
 
     /**
      * Gets the reflection coefficient of the gadget.
@@ -71,9 +89,17 @@ public interface Gadget {
      */
     public String getName();
 
+    // TODO: Try not to use this method anywhere, similar to instanceOf
     /**
      * @return type of the gadget
      */
     public String type();
-
+    
+    // TODO: Implement this
+    /**
+     * Hooks the action of another gadget to the trigger of this gadget
+     * @param gadget the gadget's whose action needs to be hooked
+     */
+    public hookActionToTrigger(Gadget gadget);
+    
 }
