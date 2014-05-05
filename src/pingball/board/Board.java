@@ -25,7 +25,6 @@ public class Board {
     /**
      * Creates a new instance of Board.
      * 
-     * @param client
      * @param name
      * @param balls
      * @param gadgets
@@ -68,8 +67,13 @@ public class Board {
         bottomBoard = null;
     }
 
+    /**
+     * Adds a gadget to the board
+     * 
+     * @param gadget to be added to board
+     */
     public void addGadget(Gadget gadget) {
-        boardGadgets.put(gadget.getPosition().toString(), gadget);
+        boardGadgets.put(gadget.getName(), gadget);
     }
 
     @Override
@@ -339,6 +343,11 @@ public class Board {
         return b;
     }
 
+    /**
+     * Adds a ball to the board
+     * 
+     * @param ball to be added to the board
+     */
     public synchronized void addBall(Ball ball) {
         balls.add(ball);
     }
