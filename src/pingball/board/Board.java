@@ -72,6 +72,10 @@ public class Board {
         topBoard = null;
         bottomBoard = null;
     }
+    
+    public void addGadget(Gadget g){
+        boardGadgets.put(gadget.getPosition().toString(), gadget);
+}
 
     @Override
     public String toString() {
