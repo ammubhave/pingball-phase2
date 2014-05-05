@@ -26,15 +26,16 @@ public interface Gadget {
     // private boolean triggered - lets you know if the gadget is in the process
     // of performing an action.
 
-    // TODO: Implement this. Loop over all the hooked gadgets, and call action on them.
+    // TODO: Implement this. Loop over all the hooked gadgets, and call action
+    // on them.
     /**
      * Should call action method of all the hooked gadgets
      */
     public void trigger();
-    
+
     /**
-     * Decides whether the gadget has been triggered. If triggered, should 
-     * call action method of all the hooked gadgets
+     * Decides whether the gadget has been triggered. If triggered, should call
+     * action method of all the hooked gadgets
      * 
      * @param ball
      *            the Ball object inside this.containingSquare that may be
@@ -42,7 +43,7 @@ public interface Gadget {
      * @return the time before the trigger will occur (returns some ridiculous
      *         number if irrelevant)
      */
-    //TODO: Write spec, move code from trigger to this method
+    // TODO: Write spec, move code from trigger to this method
     public double leastCollisionTime(Ball ball);
 
     // TODO: Look up this code and make changes so that this does not affect the
@@ -58,10 +59,11 @@ public interface Gadget {
      *            interacting with the gadget
      */
     public void reactBall(Ball ball);
-    
-    // TODO: Implement this. Mostly move partial code from react (current action) so that
+
+    // TODO: Implement this. Mostly move partial code from react (current
+    // action) so that
     // the code that changes the gadget it self is here in action
-    
+
     /**
      * Performs action of the gadget
      */
@@ -94,12 +96,14 @@ public interface Gadget {
      * @return type of the gadget
      */
     public String type();
-    
+
     // TODO: Implement this
     /**
      * Hooks the action of another gadget to the trigger of this gadget
-     * @param gadget the gadget's whose action needs to be hooked
+     * 
+     * @param gadget
+     *            the gadget's whose action needs to be hooked
      */
-    public hookActionToTrigger(Gadget gadget);
-    
+    public void hookActionToTrigger(Gadget gadget);
+
 }
