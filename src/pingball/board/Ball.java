@@ -27,10 +27,13 @@ public class Ball {
     private Vect position;
     private Vect velocity;
 
-    public Ball(double xCoord, double yCoord, double xVel, double yVel) {
+    private String name;
+
+    public Ball(double xCoord, double yCoord, double xVel, double yVel, String ballName) {
         this.position = new Vect(xCoord, yCoord);
         this.circle = new Circle(position, RADIUS);
         this.velocity = new Vect(xVel, yVel);
+        name = ballName;
     }
 
     /**
