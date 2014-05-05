@@ -11,15 +11,15 @@ import physics.Vect;
 
 public class Absorber implements Gadget {
     /**
-     * Thread Safety Information: Absorber is threadsafe because it is only modifiable by one ball at a time due to the 
-     * setup of the client handler.
+     * Thread Safety Information: Absorber is threadsafe because it is only
+     * modifiable by one ball at a time due to the setup of the client handler.
      * 
      */
-    
+
     private final int width; // measured horizontally
     private final int height; // measured vertically
-    private final double xLocation; //Starting x-coordinate
-    private final double yLocation; //Starting y-coordinate
+    private final double xLocation; // Starting x-coordinate
+    private final double yLocation; // Starting y-coordinate
 
     private final Geometry.DoublePair position;
     private final Geometry.DoublePair bottomRight;
@@ -30,7 +30,7 @@ public class Absorber implements Gadget {
     private final static Vect SHOOT_VELOCITY = new Vect(0, 50);
     private final static double REFL_COEFF = 1;
     private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5; //Used as placeholder value
+    private final static double NULL = 5; // Used as placeholder value
 
     private final String name;
 
@@ -42,12 +42,19 @@ public class Absorber implements Gadget {
 
     /**
      * Creates an absorber gadget with the following user-inputted parameters.
-     * @param xLoc, starting x coordinate
-     * @param yLoc, starting y coordinate
-     * @param width, horizontal distance of absorber
-     * @param height, vertical distance of absorber
-     * @param isSelfTriggerable, whether absorber shoots out a ball when it's hit by one
-     * @param n, name of absorber
+     * 
+     * @param xLoc
+     *            , starting x coordinate
+     * @param yLoc
+     *            , starting y coordinate
+     * @param width
+     *            , horizontal distance of absorber
+     * @param height
+     *            , vertical distance of absorber
+     * @param isSelfTriggerable
+     *            , whether absorber shoots out a ball when it's hit by one
+     * @param n
+     *            , name of absorber
      */
     public Absorber(double xLoc, double yLoc, int width, int height, boolean isSelfTriggerable, String n) {
         name = n;
@@ -74,10 +81,12 @@ public class Absorber implements Gadget {
         isSelfTriggering = isSelfTriggerable;
     }
 
-    
-    /** Calculates time an inputted ball will take to hit this bumper.
-     * Returns a very large value if not nearby (5 seconds).
-     * @param ball to check if it's nearby
+    /**
+     * Calculates time an inputted ball will take to hit this bumper. Returns a
+     * very large value if not nearby (5 seconds).
+     * 
+     * @param ball
+     *            to check if it's nearby
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
@@ -95,9 +104,24 @@ public class Absorber implements Gadget {
         return NULL;
     }
 
+    public double leastCollisionTime(Ball ball) {
+        Vect velocity = ball.getFlippedVelocity();
+        for (LineSegment ls : sides) {
+            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+            if (!isInside(ball)) {
+                if (time < TIME_TO_TRIGGER) {
+                    return time;
+                }
+            }
+
+        }
+        return NULL;
+    }
+
     /**
-     * Called when inputted ball is less than 0.001 seconds from impacting gadget (as found out from the trigger function).
-     * Handles the resulting physics of when given ball collides with this bumper.
+     * Called when inputted ball is less than 0.001 seconds from impacting
+     * gadget (as found out from the trigger function). Handles the resulting
+     * physics of when given ball collides with this bumper.
      */
     @Override
     public void action(Ball ball) {
@@ -114,7 +138,7 @@ public class Absorber implements Gadget {
         }
 
     }
-    
+
     /**
      * @return the reflection coefficient.
      */
@@ -153,8 +177,10 @@ public class Absorber implements Gadget {
     }
 
     /**
-     * @param ball, ball to check if it's in absorber 
-     * @return: true if ball is inside absorber */
+     * @param ball
+     *            , ball to check if it's in absorber
+     * @return: true if ball is inside absorber
+     */
     public boolean isInside(Ball ball) {
         double x = ball.getPos().x();
         double y = ball.getPos().y();

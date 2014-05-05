@@ -354,8 +354,8 @@ public class Board {
     }
     
     // TODO: Implement removeBall
-    public void removeBall(String ballName) {
-        
+    public void removeBall(Ball ball) {
+        balls.remove(ball);
     }
     
     /**
