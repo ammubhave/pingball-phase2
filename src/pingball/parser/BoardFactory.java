@@ -1,5 +1,6 @@
 package pingball.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -10,18 +11,17 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import physics.Vect;
-import pingball.board.AbsorberGadget;
+import pingball.board.Absorber;
 import pingball.board.Ball;
 import pingball.board.Board;
-import pingball.board.CircularBumperGadget;
+import pingball.board.CircularBumper;
+import pingball.board.Flipper.FlipperOrientation;
 import pingball.board.Gadget;
-import pingball.board.LeftFlipperGadget;
-import pingball.board.OuterWallsGadget;
-import pingball.board.OuterWallsGadget.OuterWallsOrientation;
-import pingball.board.RightFlipperGadget;
-import pingball.board.SquareBumperGadget;
-import pingball.board.TriangularBumperGadget;
-import pingball.board.TriangularBumperGadget.TriangularBumperOrientation;
+import pingball.board.LeftFlipper;
+import pingball.board.RightFlipper;
+import pingball.board.SquareBumper;
+import pingball.board.TriangularBumper;
+//import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 public class BoardFactory {
     /**
@@ -82,13 +82,16 @@ public class BoardFactory {
         public void exitBoardObjectLine(BoardParser.BoardObjectLineContext ctx) {
             board = new Board(
                     attributes.get("name"),
+                    new ArrayList<Ball>(),
+                    new ArrayList<Gadget>(),
                     Double.parseDouble(attributes.get("gravity")), 
                     Double.parseDouble(attributes.get("friction1")),
                     Double.parseDouble(attributes.get("friction2")));
-            board.addGadget(new OuterWallsGadget(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL));
+            // The following code is not required since the Board constructor does this for us
+           /* board.addGadget(new OuterWallsGadget(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL));
             board.addGadget(new OuterWallsGadget(new Vect(0, 0), OuterWallsOrientation.VERTICAL));
             board.addGadget(new OuterWallsGadget(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL));
-            board.addGadget(new OuterWallsGadget(new Vect(21, 0), OuterWallsOrientation.VERTICAL));
+            board.addGadget(new OuterWallsGadget(new Vect(21, 0), OuterWallsOrientation.VERTICAL));*/
             attributes.clear();
         }
         
@@ -125,9 +128,9 @@ public class BoardFactory {
         }
         @Override
         public void exitSquareBumperObjectLine(BoardParser.SquareBumperObjectLineContext ctx) {
-            board.addGadget(new SquareBumperGadget(
-                    attributes.get("name"),
-                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")))));
+            board.addGadget(new SquareBumper(
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
+                    attributes.get("name")));
             attributes.clear();
         }
         
@@ -145,7 +148,7 @@ public class BoardFactory {
         }
         @Override
         public void exitTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx) {
-            TriangularBumperOrientation orientation = TriangularBumperOrientation.NW;
+            /*TriangularBumperOrientation orientation = TriangularBumperOrientation.NW;
             switch (Integer.parseInt(attributes.get("orientation"))) {
             case 0:
                 orientation = TriangularBumperOrientation.NW; break;
@@ -155,11 +158,11 @@ public class BoardFactory {
                 orientation = TriangularBumperOrientation.SE; break;
             case 270:
                 orientation = TriangularBumperOrientation.SW; break;
-            }
-            board.addGadget(new TriangularBumperGadget(
-                    attributes.get("name"),
+            }*/
+            board.addGadget(new TriangularBumper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                    orientation));
+                    Integer.parseInt(attributes.get("orientation")),
+                    attributes.get("name")));
             attributes.clear();
         }
         
@@ -178,22 +181,22 @@ public class BoardFactory {
         }
         @Override
         public void exitLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx) {
-            LeftFlipperGadget.VertexOrientation orientation = LeftFlipperGadget.VertexOrientation.NW;
+            FlipperOrientation orientation = FlipperOrientation.LEFT;
             switch (Integer.parseInt(attributes.get("orientation"))) {
             // CHECK ORIENTATIONS FOR EACH ANGLE
             case 0:
-                orientation = LeftFlipperGadget.VertexOrientation.NW; break;
+                orientation = FlipperOrientation.LEFT; break;
             case 90:
-                orientation = LeftFlipperGadget.VertexOrientation.NE; break;
+                orientation = FlipperOrientation.TOP; break;
             case 180:
-                orientation = LeftFlipperGadget.VertexOrientation.SE; break;
+                orientation = FlipperOrientation.RIGHT; break;
             case 270:
-                orientation = LeftFlipperGadget.VertexOrientation.SW; break;
+                orientation = FlipperOrientation.BOTTOM; break;
             }
-            board.addGadget(new LeftFlipperGadget(
-                    attributes.get("name"),
+            board.addGadget(new LeftFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                    orientation));
+                    orientation, 
+                    attributes.get("name")));
             attributes.clear();
         }
         
@@ -210,22 +213,22 @@ public class BoardFactory {
         }
         @Override
         public void exitRightFlipperObjectLine(BoardParser.RightFlipperObjectLineContext ctx) {
-            RightFlipperGadget.VertexOrientation orientation = RightFlipperGadget.VertexOrientation.NW;
+            FlipperOrientation orientation = FlipperOrientation.LEFT;
             switch (Integer.parseInt(attributes.get("orientation"))) {
             // CHECK ORIENTATIONS FOR EACH ANGLE
             case 0:
-                orientation = RightFlipperGadget.VertexOrientation.NW; break;
+                orientation = FlipperOrientation.LEFT; break;
             case 90:
-                orientation = RightFlipperGadget.VertexOrientation.NE; break;
+                orientation = FlipperOrientation.TOP; break;
             case 180:
-                orientation = RightFlipperGadget.VertexOrientation.SE; break;
+                orientation = FlipperOrientation.RIGHT; break;
             case 270:
-                orientation = RightFlipperGadget.VertexOrientation.SW; break;
+                orientation = FlipperOrientation.BOTTOM; break;
             }
-            board.addGadget(new RightFlipperGadget(
-                    attributes.get("name"),
+            board.addGadget(new RightFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                    orientation));
+                    orientation, 
+                    attributes.get("name")));
             attributes.clear();
         }
         
@@ -242,9 +245,9 @@ public class BoardFactory {
         }
         @Override
         public void exitCircleBumperObjectLine(BoardParser.CircleBumperObjectLineContext ctx) {
-            board.addGadget(new CircularBumperGadget(
-                    attributes.get("name"),
-                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y")))));
+            board.addGadget(new CircularBumper(
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
+                    attributes.get("name")));
             attributes.clear();
         }
         
@@ -262,10 +265,10 @@ public class BoardFactory {
         }
         @Override
         public void exitAbsorberObjectLine(BoardParser.AbsorberObjectLineContext ctx) {
-            board.addGadget(new AbsorberGadget(
-                    attributes.get("name"),
+            board.addGadget(new Absorber(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                            Integer.parseInt(attributes.get("width")), Integer.parseInt(attributes.get("height"))));
+                            Integer.parseInt(attributes.get("width")), Integer.parseInt(attributes.get("height")),
+                            attributes.get("name")));
             attributes.clear();
         }
         

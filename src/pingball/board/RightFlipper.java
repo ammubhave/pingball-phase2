@@ -15,7 +15,7 @@ public class RightFlipper extends Flipper {
     /**
      * Definition of orientation: 1: top 2: bottom 3: left 4: right
      */
-    private int orientation;
+    private FlipperOrientation orientation;
     /**
      * Definition of pivot: 1: topLeft 2: topRight 3: bottomLeft 4: bottomRight
      */
@@ -39,7 +39,7 @@ public class RightFlipper extends Flipper {
     private final double yLoc;
     private final String name;
 
-    public RightFlipper(double x, double y, int orient, String n) {
+    public RightFlipper(double x, double y, FlipperOrientation orient, String n) {
 
         super(x, y);
         xLoc = x;
@@ -47,15 +47,7 @@ public class RightFlipper extends Flipper {
 
         name = n;
 
-        if (orient == 0) {
-            orientation = 3;
-        } else if (orient == 90) {
-            orientation = 1;
-        } else if (orient == 180) {
-            orientation = 4;
-        } else {
-            orientation = 2;
-        }
+        this.orientation = orient;
         changeFlipperOrientation(orientation);
 
         sides.add(topLine);
@@ -63,11 +55,11 @@ public class RightFlipper extends Flipper {
         sides.add(rightLine);
         sides.add(bottomLine);
 
-        if (orientation == 1) {
+        if (orientation == FlipperOrientation.TOP) {
             pivot = 1;
-        } else if (orientation == 2) {
+        } else if (orientation == FlipperOrientation.BOTTOM) {
             pivot = 4;
-        } else if (orientation == 3) {
+        } else if (orientation == FlipperOrientation.LEFT) {
             pivot = 3;
         } else {
             pivot = 2;
@@ -89,19 +81,19 @@ public class RightFlipper extends Flipper {
      * right
      */
     private int findFlipperOrientation() {
-        if (orientation == 1) {
+        if (orientation == FlipperOrientation.TOP) {
             if (pivot == 1) {
                 return 3;
             } else {
                 return 4;
             }
-        } else if (orientation == 2) {
+        } else if (orientation == FlipperOrientation.BOTTOM) {
             if (pivot == 1) {
                 return 3;
             } else {
                 return 4;
             }
-        } else if (orientation == 3) {
+        } else if (orientation == FlipperOrientation.LEFT) {
             if (pivot == 1) {
                 return 1;
             } else {
@@ -119,20 +111,20 @@ public class RightFlipper extends Flipper {
     /**
      * Changes the orientation of the flipper to up, down, left, or right
      */
-    private void changeFlipperOrientation(int orientation) {
-        if (orientation == 1) {
+    private void changeFlipperOrientation(FlipperOrientation orientation) {
+        if (orientation == FlipperOrientation.TOP) {
             oneLineFlipper = new LineSegment(xLoc, yLoc, xLoc + 2, yLoc);
             topLine = new LineSegment(xLoc, yLoc, xLoc + 2, yLoc);
             leftLine = new LineSegment(xLoc, yLoc, xLoc, yLoc + 0.5);
             rightLine = new LineSegment(xLoc + 2, yLoc, xLoc + 2, yLoc + 0.5);
             bottomLine = new LineSegment(xLoc, yLoc + 0.5, xLoc + 2, yLoc + 0.5);
-        } else if (orientation == 2) {
+        } else if (orientation == FlipperOrientation.BOTTOM) {
             oneLineFlipper = new LineSegment(xLoc, yLoc + 2, xLoc + 2, yLoc + 2);
             topLine = new LineSegment(xLoc, yLoc + 1.5, xLoc + 2, yLoc + 1.5);
             leftLine = new LineSegment(xLoc, yLoc + 1.5, xLoc, yLoc + 2);
             rightLine = new LineSegment(xLoc + 2, yLoc + 1.5, xLoc + 2, yLoc + 2);
             bottomLine = new LineSegment(xLoc, yLoc + 2, xLoc + 2, yLoc + 2);
-        } else if (orientation == 3) {
+        } else if (orientation == FlipperOrientation.LEFT) {
             oneLineFlipper = new LineSegment(xLoc, yLoc, xLoc, yLoc + 2);
             topLine = new LineSegment(xLoc, yLoc, xLoc + 0.5, yLoc);
             leftLine = new LineSegment(xLoc, yLoc, xLoc, yLoc + 2);
@@ -229,29 +221,29 @@ public class RightFlipper extends Flipper {
     }
 
     public void moveFlipper() {
-        if (orientation == 1) {
+        if (orientation == FlipperOrientation.TOP) {
             if (pivot == 1) {
-                orientation = 3;
+                orientation = FlipperOrientation.LEFT;
             } else {
-                orientation = 4;
+                orientation = FlipperOrientation.RIGHT;
             }
-        } else if (orientation == 2) {
+        } else if (orientation == FlipperOrientation.BOTTOM) {
             if (pivot == 3) {
-                orientation = 3;
+                orientation = FlipperOrientation.LEFT;
             } else {
-                orientation = 4;
+                orientation = FlipperOrientation.RIGHT;
             }
-        } else if (orientation == 3) {
+        } else if (orientation == FlipperOrientation.LEFT) {
             if (pivot == 1) {
-                orientation = 1;
+                orientation = FlipperOrientation.TOP;
             } else {
-                orientation = 2;
+                orientation = FlipperOrientation.BOTTOM;
             }
         } else {
             if (pivot == 2) {
-                orientation = 1;
+                orientation = FlipperOrientation.TOP;
             } else {
-                orientation = 2;
+                orientation = FlipperOrientation.BOTTOM;
             }
         }
         changeFlipperOrientation(orientation);
@@ -264,7 +256,7 @@ public class RightFlipper extends Flipper {
 
     @Override
     public String toString() {
-        if (orientation == 1 || orientation == 2) {
+        if (orientation == FlipperOrientation.TOP || orientation == FlipperOrientation.BOTTOM) {
             return "_";
         } else {
             return "|";
@@ -276,16 +268,8 @@ public class RightFlipper extends Flipper {
      * 
      * @return orientation of flipper
      */
-    public String getOrientation() {
-        if (orientation == 1) {
-            return "top";
-        } else if (orientation == 2) {
-            return "bottom";
-        } else if (orientation == 3) {
-            return "left";
-        } else {
-            return "right";
-        }
+    public FlipperOrientation getOrientation() {
+        return this.orientation;
     }
 
     /** Returns the name of the gadget */
