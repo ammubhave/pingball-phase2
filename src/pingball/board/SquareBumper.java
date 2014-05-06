@@ -38,17 +38,15 @@ public class SquareBumper implements Gadget {
      * Creates a square bumper with the user-inputted parameters. Has a
      * side-length of 1.0
      * 
-     * @param topLeftX
-     *            , x coordinate of top-left point on the square
-     * @param topLeftY
-     *            , y coordinate of top-left point on the square
+     * @param loc
+     *            , a vector representing the top left point of the square
      * @param n
      *            , name
      */
-    public SquareBumper(double topLeftX, double topLeftY, String n) {
+    public SquareBumper(Vect loc, String n) {
         name = n;
-        xCoord = topLeftX;
-        yCoord = topLeftY;
+        xCoord = loc.x();
+        yCoord = loc.y();
         topLine = new LineSegment(xCoord, yCoord, xCoord + EDGE_LENGTH, yCoord);
         bottomLine = new LineSegment(xCoord, yCoord + EDGE_LENGTH, xCoord + EDGE_LENGTH, yCoord + EDGE_LENGTH);
         leftLine = new LineSegment(xCoord, yCoord, xCoord, yCoord + EDGE_LENGTH);

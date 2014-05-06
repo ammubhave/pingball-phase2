@@ -30,17 +30,15 @@ public class CircularBumper implements Gadget {
      * Creates a circle bumper with the user-inputted parameters. Has a radius
      * of 0.5
      * 
-     * @param x
-     *            , x coordinate of center point
-     * @param y
-     *            , y coordinate of center point
+     * @param loc
+     *            , vector of the center of the bumper
      * @param n
      *            , name
      */
-    public CircularBumper(double x, double y, String n) {
+    public CircularBumper(Vect loc, String n) {
         name = n;
-        double centerX = x + RADIUS;
-        double centerY = y + RADIUS;
+        double centerX = loc.x() + RADIUS;
+        double centerY = loc.y() + RADIUS;
         circleGadget = new Circle(centerX, centerY, RADIUS);
     }
 

@@ -1,6 +1,7 @@
 package pingball.board;
 
 import physics.LineSegment;
+import physics.Vect;
 
 /** Represents the Flipper gadget class */
 
@@ -25,11 +26,11 @@ public class Flipper implements Gadget {
     public Flipper(Vect vect) {
         xCoord = vect.x();
         yCoord = vect.y();
-        boundingBoxTop = new LineSegment(xLoc, yLoc, xLoc + boundingBoxLength, yLoc);
-        boundingBoxBottom = new LineSegment(xLoc, yLoc + boundingBoxLength, xLoc + boundingBoxLength, yLoc
+        boundingBoxTop = new LineSegment(xCoord, yCoord, xCoord + boundingBoxLength, yCoord);
+        boundingBoxBottom = new LineSegment(xCoord, yCoord + boundingBoxLength, xCoord + boundingBoxLength, yCoord
                 + boundingBoxLength);
-        boundingBoxLeft = new LineSegment(xLoc, yLoc, xLoc, yLoc + boundingBoxLength);
-        boundingBoxRight = new LineSegment(xLoc + boundingBoxLength, yLoc, xLoc + boundingBoxLength, yLoc
+        boundingBoxLeft = new LineSegment(xCoord, yCoord, xCoord, yCoord + boundingBoxLength);
+        boundingBoxRight = new LineSegment(xCoord + boundingBoxLength, yCoord, xCoord + boundingBoxLength, yCoord
                 + boundingBoxLength);
     }
 

@@ -39,11 +39,11 @@ public class RightFlipper extends Flipper {
     private final double yLoc;
     private final String name;
 
-    public RightFlipper(double x, double y, FlipperOrientation orient, String n) {
+    public RightFlipper(Vect loc, FlipperOrientation orient, String n) {
 
-        super(x, y);
-        xLoc = x;
-        yLoc = y;
+        super(loc);
+        xLoc = loc.x();
+        yLoc = loc.y();
 
         name = n;
 

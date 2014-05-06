@@ -15,7 +15,6 @@ public class Absorber implements Gadget {
      * modifiable by one ball at a time due to the setup of the client handler.
      * 
      */
-
     private final int width; // measured horizontally
     private final int height; // measured vertically
     private final double xLocation; // Starting x-coordinate
@@ -45,10 +44,8 @@ public class Absorber implements Gadget {
     /**
      * Creates an absorber gadget with the following user-inputted parameters.
      * 
-     * @param xLoc
-     *            , starting x coordinate
-     * @param yLoc
-     *            , starting y coordinate
+     * @param loc
+     *            , vector representing the starting location
      * @param width
      *            , horizontal distance of absorber
      * @param height
@@ -58,22 +55,22 @@ public class Absorber implements Gadget {
      * @param n
      *            , name of absorber
      */
-    public Absorber(double xLoc, double yLoc, int width, int height, boolean isSelfTriggerable, String n) {
+    public Absorber(Vect loc, int width, int height, boolean isSelfTriggerable, String n) {
         name = n;
         this.width = width;
         this.height = height;
 
-        this.xLocation = xLoc;
-        this.yLocation = yLoc;
+        xLocation = loc.x();
+        yLocation = loc.y();
 
-        this.position = new Geometry.DoublePair(xLoc, yLoc);
-        this.topRight = new Geometry.DoublePair(xLoc + width - 1, yLoc);
-        this.bottomRight = new Geometry.DoublePair(xLoc, yLoc + height - 1);
+        this.position = new Geometry.DoublePair(xLocation, yLocation);
+        this.topRight = new Geometry.DoublePair(xLocation + width - 1, yLocation);
+        this.bottomRight = new Geometry.DoublePair(xLocation, yLocation + height - 1);
 
-        top = new LineSegment(xLoc, yLoc, xLoc + width, yLoc);
-        bottom = new LineSegment(xLoc, yLoc + height, xLoc + width, yLoc + height);
-        left = new LineSegment(xLoc, yLoc, xLoc, yLoc + height);
-        right = new LineSegment(xLoc + width, yLoc, xLoc + width, yLoc + height);
+        top = new LineSegment(xLocation, yLocation, xLocation + width, yLocation);
+        bottom = new LineSegment(xLocation, yLocation + height, xLocation + width, yLocation + height);
+        left = new LineSegment(xLocation, yLocation, xLocation, yLocation + height);
+        right = new LineSegment(xLocation + width, yLocation, xLocation + width, yLocation + height);
 
         sides.add(top);
         sides.add(bottom);
@@ -205,5 +202,17 @@ public class Absorber implements Gadget {
 
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+
+    @Override
+    public void reactBall(Ball ball) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void action() {
+        // TODO Auto-generated method stub
+        
     }
 }

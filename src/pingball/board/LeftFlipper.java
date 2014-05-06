@@ -41,10 +41,10 @@ public class LeftFlipper extends Flipper {
     private final double yLoc;
     private final String name;
 
-    public LeftFlipper(double x, double y, FlipperOrientation orient, String n) {
-        super(x, y);
-        xLoc = x;
-        yLoc = y;
+    public LeftFlipper(Vect loc, FlipperOrientation orient, String n) {
+        super(loc);
+        xLoc = loc.x();
+        yLoc = loc.y();
 
         name = n;
 
