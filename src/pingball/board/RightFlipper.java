@@ -98,7 +98,9 @@ public class RightFlipper extends Flipper {
         // }
         double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
         ball.move(tx);
-        Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
+        final double FLIPPER_SPEED = 18.8495559;
+        //Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
+        Vect newDir = Geometry.reflectRotatingWall(wall, ball.getPos(), FLIPPER_SPEED, ball.getCircle(), velocity, 0.95);
         newDir = new Vect(newDir.x(), -newDir.y());
         ball.changeVelocity(newDir);
         ball.move(TIME_TO_TRIGGER - tx);
