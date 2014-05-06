@@ -115,11 +115,14 @@ public class Absorber implements Gadget {
      * physics of when given ball collides with this bumper.
      */
     @Override
-    public void action(Ball ball) {
+    public void action() {
         if (!heldBalls.isEmpty()) {
             Ball shootBall = heldBalls.remove(0);
             shootBall.changeVelocity(SHOOT_VELOCITY);
         }
+    }
+
+    public void reactBall(Ball ball) {
         ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
         // (should be -0.25, but then absorber is stopping its own balls)
         heldBalls.add(ball);
@@ -127,7 +130,6 @@ public class Absorber implements Gadget {
             Ball shootBall = heldBalls.remove(0);
             shootBall.changeVelocity(SHOOT_VELOCITY);
         }
-
     }
 
     /**
