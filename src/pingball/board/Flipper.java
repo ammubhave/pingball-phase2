@@ -1,12 +1,15 @@
 package pingball.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import physics.LineSegment;
 import physics.Vect;
 
 /** Represents the Flipper gadget class */
 
 public class Flipper implements Gadget {
-    
+
     public enum FlipperOrientation {
         TOP, BOTTOM, LEFT, RIGHT
     }
@@ -19,6 +22,8 @@ public class Flipper implements Gadget {
     private LineSegment boundingBoxBottom;
     private LineSegment boundingBoxLeft;
     private LineSegment boundingBoxRight;
+
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private double xCoord;
     private double yCoord;
@@ -57,8 +62,13 @@ public class Flipper implements Gadget {
     }
 
     /** Returns the time before collision */
-    public double trigger(Ball ball) {
+    public double leastCollisionTime(Ball ball) {
         return NULL;
+    }
+
+    @Override
+    public void trigger() {
+
     }
 
     /** Acts on a collision */
@@ -123,32 +133,18 @@ public class Flipper implements Gadget {
     }
 
     @Override
-    public void trigger() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public double leastCollisionTime(Ball ball) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public void reactBall(Ball ball) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void action() {
         // TODO Auto-generated method stub
-        
+
     }
 
-    @Override
     public void hookActionToTrigger(Gadget gadget) {
-        // TODO Auto-generated method stub
-        
+        gadgetsToBeHooked.add(gadget);
     }
 }

@@ -28,6 +28,7 @@ public interface Gadget {
 
     // TODO: Implement this. Loop over all the hooked gadgets, and call action
     // on them.
+
     /**
      * Should call action method of all the hooked gadgets
      */
@@ -36,7 +37,8 @@ public interface Gadget {
     /**
      * Determines the smallest time until the ball is going to collide with it.
      * 
-     * @param ball the Ball object with which it may collide
+     * @param ball
+     *            the Ball object with which it may collide
      * @return the time until collision will happen
      */
     public double leastCollisionTime(Ball ball);

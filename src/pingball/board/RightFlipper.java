@@ -33,6 +33,8 @@ public class RightFlipper extends Flipper {
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
 
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
+
     private LineSegment oneLineFlipper;
 
     private final double xLoc;
@@ -67,7 +69,15 @@ public class RightFlipper extends Flipper {
     }
 
     @Override
-    public double trigger(Ball ball) {
+    public void trigger() {
+
+    }
+
+    public void hookActionToTrigger(Gadget gadget) {
+        gadgetsToBeHooked.add(gadget);
+    }
+
+    public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         double time = Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity);
         if (time < TIME_TO_TRIGGER) {

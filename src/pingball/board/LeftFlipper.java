@@ -11,7 +11,6 @@ import physics.Vect;
 /** Represents the LeftFlipper gadget class */
 
 public class LeftFlipper extends Flipper {
-    
 
     /**
      * Definition of orientation: 1: top 2: bottom 3: left 4: right
@@ -35,6 +34,9 @@ public class LeftFlipper extends Flipper {
     private LineSegment bottomLine;
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
+
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
+
     private LineSegment oneLineFlipper;
 
     private final double xLoc;
@@ -68,7 +70,17 @@ public class LeftFlipper extends Flipper {
     }
 
     @Override
-    public double trigger(Ball ball) {
+    public void trigger() {
+
+    }
+
+    @Override
+    public void hookActionToTrigger(Gadget gadget) {
+        gadgetsToBeHooked.add(gadget);
+    }
+
+    @Override
+    public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         double time = Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity);
         if (time < TIME_TO_TRIGGER) {
