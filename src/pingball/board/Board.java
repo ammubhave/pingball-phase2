@@ -1,11 +1,18 @@
 package pingball.board;
 
+import Ball;
+import Edge;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import physics.Circle;
 import physics.Vect;
+import pingball.proto.BallMessage;
+import pingball.proto.Message;
 
 /**
  * 
@@ -356,6 +363,62 @@ public class Board {
     // TODO: Implement removeBall
     public void removeBall(Ball ball) {
         balls.remove(ball);
+    }
+    
+    /**
+     * This will find the balls that are outside of the bounds.
+     * 
+     * The balls that are out of bounds are also removed from the board.
+     * 
+     * @return a list of messages that should be sent to the server documenting
+     *   out of bounds balls
+     */
+    public synchronized List<Message> getOutOfBoundBallMessages(){
+        List<Message> messages = new ArrayList<Message>();
+        List<Ball> removedBalls = new ArrayList<Ball>();
+        for (Ball ball: balls) {
+            Vect position = ball.getPos();
+            double x = position.x();
+            double y = position.y();
+            
+            Vect velocity = ball.getVelocity();
+            double vx = velocity.x();
+            double vy = velocity.y();
+            
+            // HACK: Guess the edge that the ball crossed. This should have
+            //       really been handled by the walls.
+            Edge edge = null;
+            if (x < 0 && vx < 0)
+                edge = Edge.LEFT;
+            else if (x > 20 && vx > 0)
+                edge = Edge.RIGHT;
+            else if (y < 0 && vy < 0)
+                edge = Edge.TOP;
+            else if(y > 20 && vy > 0)
+                edge = Edge.BOTTOM;
+            
+            if (edge != null) {
+                // HACK: get the ball back on the board for teleporting.
+                double r = ball.getCircle().getRadius();
+                if (x < 0)
+                    x = 0;
+                if (y < 0)
+                    y = 0;
+                if (x > 20)
+                    x = 20;
+                if (y > 20)
+                    y = 20;
+                BallMessage message = new BallMessage(edge,
+                        new Circle(x,  y, r), velocity);
+                messages.add(message);
+                
+                removedBalls.add(ball);
+            }               
+        }
+        for (Ball ball : removedBalls) {
+            balls.remove(ball);
+        }
+        return messages;
     }
     
     /**
