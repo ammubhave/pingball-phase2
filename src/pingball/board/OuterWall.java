@@ -68,8 +68,7 @@ public class OuterWall implements Gadget {
         return "";
     }
     
-    @Override
-    public Vect getPosition() {
+    public Vect getPos() {
         return this.position;
     }
     
@@ -118,13 +117,13 @@ public class OuterWall implements Gadget {
         Vect delta;
         switch (this.orientation) {
         case HORIZONTAL:
-            ball.setVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(-1, 0)), this.position.plus(new Vect(21, 0))), ball.getVelocity(), this.coefficientOfReflection));
+            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(-1, 0)), this.position.plus(new Vect(21, 0))), ball.getVelocity(), this.coefficientOfReflection));
             break;
         case VERTICAL:
             delta = new Vect(0, 0);
             if (this.position.equals(new Vect(21, 0)))
                 delta = new Vect(-1, 0);
-            ball.setVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
+            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
             break;
         }
         
