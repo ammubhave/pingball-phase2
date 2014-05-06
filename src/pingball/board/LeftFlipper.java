@@ -22,7 +22,7 @@ public class LeftFlipper extends Flipper {
     private final int pivot;
 
     private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5;
+    private final static double NULL = Double.MAX_VALUE;
 
     private boolean initial = true;
 
