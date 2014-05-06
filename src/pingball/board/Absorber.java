@@ -80,6 +80,13 @@ public class Absorber implements Gadget {
         isSelfTriggering = isSelfTriggerable;
     }
 
+    @Override
+    public void trigger() {
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
+    }
+
     /**
      * Calculates time an inputted ball will take to hit this bumper. Returns a
      * very large value if not nearby (5 seconds).
@@ -89,12 +96,6 @@ public class Absorber implements Gadget {
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
-    public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
-    }
-
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         for (LineSegment ls : sides) {

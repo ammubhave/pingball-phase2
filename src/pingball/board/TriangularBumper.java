@@ -73,6 +73,12 @@ public class TriangularBumper implements Gadget {
         sides.add(hypotenuse);
     }
 
+    public void trigger() {
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
+    }
+
     /**
      * Calculates time an inputted ball will take to hit this bumper. Returns a
      * very large value if not nearby (5 seconds).
@@ -81,12 +87,7 @@ public class TriangularBumper implements Gadget {
      *            to check if it's nearby
      * @return amount of time to take to trigger object based on inputted ball.
      */
-    public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
-    }
-
+    @Override
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         for (LineSegment ls : sides) {
