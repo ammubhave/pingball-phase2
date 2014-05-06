@@ -1,9 +1,5 @@
 package pingball.board;
 
-import Ball;
-import Edge;
-import OuterWallsGadget;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import physics.Circle;
+import physics.Geometry;
 import physics.Vect;
+import physics.Geometry.VectPair;
 import pingball.proto.BallMessage;
 import pingball.proto.ConnectWallMessage;
 import pingball.proto.DisconnectWallMessage;
@@ -98,8 +96,8 @@ public class Board {
                 String currentCoords = coords.toString();
                 boolean isABall = false;
                 for (int k = 0; k < balls.size(); k++) {
-                    if (Math.round(balls.get(k).getX()) == j - 1
-                            && Math.round(balls.get(k).getY()) == i - 1) {
+                    if (Math.round(balls.get(k).getPos().x()) == j - 1
+                            && Math.round(balls.get(k).getPos().y()) == i - 1) {
                         board[i][j] = balls.get(k).toString();
                         isABall = true;
                         break; // TODO Should this really be here? What if there
@@ -140,7 +138,7 @@ public class Board {
         }
         return boardString;
     }
-
+/*
     public synchronized void go() {
         int j = 0;
         for (int i = 0; i < balls.size(); i++) {
@@ -173,15 +171,15 @@ public class Board {
             }
             n++;
         }
-    }
+    }*/
 
-    private synchronized Ball gravity(Ball b) {
+   /* private synchronized Ball gravity(Ball b) {
         double t = 50d; // In milliseconds. This should be equal to the thread
                         // refresh rate.
         double u = b.getVelocity().y();
         double a = g.y();
         double v = u + a * t;
-        return new Ball(b.getCenter(), new Vect(b.getVelocity().x(), v));
+        return new Ball(b.nameb.getCenter(), new Vect(b.getVelocity().x(), v));
     }
 
     private synchronized Ball friction(Ball b) {
@@ -192,7 +190,7 @@ public class Board {
         double scalingFactor = 1 - this.mu * deltaT - this.mu2 * speed * deltaT;
         Vect vNew = oldV.times(scalingFactor);
         return new Ball(b.getCenter(), vNew);
-    }
+    }*/
 
     public synchronized boolean hasName() {
         return name.length() > 0;
@@ -271,7 +269,7 @@ public class Board {
                 + " top: " + topBoard + " bottom: " + bottomBoard;
     }
 
-    private synchronized Ball contactTest(Ball b) {
+    /*private synchronized Ball contactTest(Ball b) {
         // Loop through all the gadgets and find the min time-before-collision
         // among all of them.
         HashMap<String, Gadget> allGadgets = new HashMap<String, Gadget>();
@@ -307,8 +305,7 @@ public class Board {
         Ball bounceFirst = null;
         // Do the same thing for all the balls.
         for (Ball aBall : this.balls) {
-            HashMap<String, Double> times = aBall.leastCollisionTime(b,
-                    b.getVelocity());
+            HashMap<String, Double> times = aBall.leastCollisionTime(b);
             double ballTime = times.get("BALL");
             if (ballTime <= finalMinTime) {
                 finalMinTime = ballTime;
@@ -352,7 +349,7 @@ public class Board {
             return minTimeGadget.bounce(b, side);
         }
         return b;
-    }
+    }*/
 
     /**
      * Adds a ball to the board
@@ -367,8 +364,48 @@ public class Board {
         balls.remove(ball);
     }
     
+    /**
+     * Returns shortest time until the next collision event will happen
+     * @return the shortest time until next collision
+     */
+    public synchronized double timeUntilCollision() { 
+        double shortestTime = Double.MAX_VALUE;
+        // gadget-ball collisions
+        for (Gadget gadget: boardGadgets.values()){
+            for (Ball ball: balls){
+                double time = gadget.leastCollisionTime(ball);
+                if (time == 0) continue;
+                if (time < shortestTime)
+                    shortestTime = time;
+            }
+        }
+        // ball-ball collisions
+        for (Ball ball1 : balls) {
+            for (Ball ball2 : balls){
+                if (ball1 == ball2) continue;
+                double time = Geometry.timeUntilBallBallCollision(ball1.getCircle(), ball1.getVelocity(), ball2.getCircle(), ball2.getVelocity());
+                if (time < shortestTime)
+                    shortestTime = time;
+            }
+        }
+        return shortestTime;
+    }
     
-    //TODO: THIS IS JUST A PROTOTYPE
+    /**
+     * For every ball, simulate a physics time increment for every ball with no collisions.
+     * @param time the time by which to increment, time should be very small
+     */
+    public synchronized void incrementNoCollisionTime(double time) {
+        for (Ball ball : balls) {
+            Vect oldV = ball.getVelocity();            
+            Vect newV = oldV.times(1-this.mu*time-this.mu2*oldV.length()*time).plus(this.g.times(time));
+            if (newV.length() < 0.05) // If velocity is too small, kill it
+                newV = new Vect(0, 0);
+            ball.changeVelocity(newV);
+            ball.changePos(ball.getPos().plus(oldV.times(time)));
+        }
+    }
+    
     /**
      * Simulates running of the given time
      * @param time the time in seconds for which to run
@@ -398,6 +435,57 @@ public class Board {
             }
         }
     }
+    
+    /**
+     * Simulates a collision with next ball and mutates ball with the new parameters
+     */
+     public synchronized void reflect() {
+         double shortestTime = Double.MAX_VALUE;
+         int shortestIndexGadget = -1;
+         int shortestIndexBall = -1;
+         int shortestIndexBall2 = -1;
+         List<Gadget> gadgets = new ArrayList<Gadget>(boardGadgets.values());
+         // gadget-ball collisions
+         for (int i = 0; i < gadgets.size(); i++)
+             for (int j = 0; j < balls.size(); j++){
+                 double time = gadgets.get(i).leastCollisionTime(balls.get(j));
+                 if (time < shortestTime) {
+                     shortestTime = time;
+                     shortestIndexGadget = i;
+                     shortestIndexBall = j;
+             } 
+         }
+         // ball-ball collisions
+         for (int i = 0; i < balls.size(); i++) {
+             Ball ball1 = balls.get(i);
+             for (int j = 0; j < balls.size(); j++) {
+                 Ball ball2 = balls.get(j);
+                 if (ball1 == ball2) 
+                     continue;
+                 double time = Geometry.timeUntilBallBallCollision(ball1.getCircle(), ball1.getVelocity(), ball2.getCircle(), ball2.getVelocity());
+                 if (time < shortestTime) {
+                     shortestIndexGadget = -1;
+                     shortestIndexBall = i;
+                     shortestIndexBall2 = j;
+                 }
+             }
+         }
+         
+         // perform collision
+         if (shortestIndexGadget == -1)
+             if (shortestIndexBall == -1)
+                 return;
+             else {
+                 Ball ball1 = balls.get(shortestIndexBall);
+                 Ball ball2 = balls.get(shortestIndexBall2);
+                 VectPair vels = Geometry.reflectBalls(ball1.getPos(), 1, ball1.getVelocity(), ball2.getPos(), 1, ball2.getVelocity());
+                 ball1.changeVelocity(vels.v1);
+                 ball2.changeVelocity(vels.v2);
+             }
+         else
+             gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
+     }
+     
     
     /**
      * Handles a message received from the server.
