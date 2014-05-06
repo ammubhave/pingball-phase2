@@ -1,4 +1,4 @@
-package pingball.board;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +10,10 @@ import org.junit.Test;
 
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Ball;
+import pingball.board.CircularBumper;
+import pingball.board.SquareBumper;
+import pingball.board.TriangularBumper;
 
 /**
  * Testing Strategy: The constructor, trigger, and action methods of the gadgets
@@ -45,16 +49,16 @@ public class BumperTest {
         t4 = new TriangularBumper(loc, 270, "t4");
         c1 = new CircularBumper(loc, "c1");
 
-        b1 = new Ball(4.0, 4.5, 0, 0); // on border of everything except for 90
+        b1 = new Ball("testBall 1", new Vect(4.0, 4.5), new Vect(0, 0)); // on border of everything except for 90
                                        // and 180 triangles
-        b2 = new Ball(5.0, 4.5, 0, 0); // on border of everything except for 0
+        b2 = new Ball("testBall 2", new Vect(5.0, 4.5), new Vect(0, 0)); // on border of everything except for 0
                                        // and 270 triangles
-        b3 = new Ball(4.5, 4.5, 2, 5); // on border/inside everything
-        b4 = new Ball(4.25, 4.5, 0, 0); // inside everything except for 90 and
+        b3 = new Ball("testBall 3", new Vect(4.5, 4.5), new Vect(2, 5)); // on border/inside everything
+        b4 = new Ball("testBall 4", new Vect(4.25, 4.5), new Vect(0, 0)); // inside everything except for 90 and
                                         // 180 triangles
-        b5 = new Ball(4.97, 4.95, 0, 0); // inside everything except for 0 and
+        b5 = new Ball("testBall 5", new Vect(4.97, 4.95), new Vect(0, 0)); // inside everything except for 0 and
                                          // 270 triangles and circles
-        b6 = new Ball(3, 2, 0, 0); // outside everything
+        b6 = new Ball("testBall 6", new Vect(3, 2), new Vect(0, 0)); // outside everything
     }
 
     @Test

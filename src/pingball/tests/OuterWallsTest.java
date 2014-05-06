@@ -1,4 +1,4 @@
-package pingball.board;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 

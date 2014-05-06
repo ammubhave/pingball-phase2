@@ -1,6 +1,8 @@
-package pingball.board;
+package pingball.tests;
 
 import org.junit.Test;
+
+import pingball.board.Board;
 
 public class Project1Test {
 

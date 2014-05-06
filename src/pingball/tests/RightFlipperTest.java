@@ -1,4 +1,4 @@
-package pingball.board;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Ball;
+import pingball.board.RightFlipper;
+import pingball.board.Flipper.FlipperOrientation;
 
 /**
  * Testing Strategy: The constructor, trigger, action, and move methods of the
@@ -27,10 +30,10 @@ public class RightFlipperTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        rf1 = new RightFlipper(new Vect(4, 4), 1, "rf1");
-        rf2 = new RightFlipper(new Vect(4, 8), 1, "rf2");
-        rf3 = new RightFlipper(new Vect(8, 4), 1, "rf3");
-        b1 = new Ball(5, 5, 5, 5);
+        rf1 = new RightFlipper(new Vect(4, 4), FlipperOrientation.TOP, "rf1");
+        rf2 = new RightFlipper(new Vect(4, 8), FlipperOrientation.TOP, "rf2");
+        rf3 = new RightFlipper(new Vect(8, 4), FlipperOrientation.TOP, "rf3");
+        b1 = new Ball("Test Ball", new Vect(5, 5), new Vect(5, 5));
     }
 
     @Test

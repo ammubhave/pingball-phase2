@@ -1,4 +1,4 @@
-package pingball.client;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pingball.board.Edge;
+import pingball.client.SocketPusher;
 import pingball.proto.ControlMessage;
 import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;

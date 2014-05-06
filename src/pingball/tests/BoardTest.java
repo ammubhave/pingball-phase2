@@ -1,10 +1,13 @@
-package skeletonSpecs;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import pingball.board.Board;
 
 /**
  * Tests that board objects equal the board files they were created from.

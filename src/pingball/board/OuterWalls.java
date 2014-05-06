@@ -49,29 +49,27 @@ public class OuterWalls implements Gadget {
         this.initializeWallVisibility();
     }
 
-    /** Calculates time an inputted ball will take to hit this bumper.
-     * Returns a very large value if not nearby (5 seconds).
-     * @param ball to check if it's nearby
-     * @return amount of time to take to trigger object based on inputted ball.
-     */
     @Override
-    public double trigger(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
+    public void trigger() {
+        // Walls do nothing when triggered
+        /*Vect velocity = ball.getFlippedVelocity();
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
             if (time < TIME_TO_TRIGGER) {
                 return time;
             }
         }
-        return NULL;
+        return NULL;*/
     }
     
-    /**
-     * Called when inputted ball is less than 0.001 seconds from impacting gadget (as found out from the trigger function).
-     * Handles the resulting physics of when given ball collides with this bumper.
-     */
+    
     @Override
-    public void action(Ball ball) {
+    public void action() {
+        // Do nothing
+    }
+    
+    @Override
+    public void reactBall(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         LineSegment wall = null;
         for (LineSegment ls : sides) {
