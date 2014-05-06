@@ -24,12 +24,10 @@ public class Board {
     private final int width;
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
-    private final String name;
-    private OuterWalls walls;
+    private final String name;    
     private Vect g; // In L / ms^2
     private double mu; // In per s.
     private double mu2; // In per L.
-    private String leftBoard, rightBoard, topBoard, bottomBoard;
 
     /**
      * Creates a new instance of Board.
@@ -64,16 +62,11 @@ public class Board {
 //        Gadget cornerSW = new OuterWallPart(this, true, new Vect(-1, 20), '.');
 //        boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
         
-        walls = new OuterWalls();
+        /*walls = new OuterWalls();
         boardGadgets.put(walls.getName(), walls);
         for (OuterWalls w : walls)
             reset(w);
-        
-        //I don't think the following four lines are still necessary.
-        leftBoard = null;
-        rightBoard = null;
-        topBoard = null;
-        bottomBoard = null;
+        */
     }
 
     /**
@@ -211,7 +204,7 @@ public class Board {
             name = name.append(".");
         return name.toString();
     }
-
+/*
     public synchronized void remove(String direction) {
         String defolt = "....................";
         if (direction.equals("left")) {
@@ -267,7 +260,7 @@ public class Board {
     public synchronized String getNeighbors() {
         return name + " left: " + leftBoard + " right: " + rightBoard
                 + " top: " + topBoard + " bottom: " + bottomBoard;
-    }
+    }*/
 
     /*private synchronized Ball contactTest(Ball b) {
         // Loop through all the gadgets and find the min time-before-collision
@@ -495,11 +488,11 @@ public class Board {
     public synchronized void onMessage(Message message) {
         if (message instanceof ConnectWallMessage) {
             ConnectWallMessage wallMessage = (ConnectWallMessage)message;
-            OuterWalls wall = findWall(wallMessage.getEdge());
+            OuterWall wall = findWall(wallMessage.getEdge());
             wall.setNeighborName(wallMessage.getNeighborName());
         } else if (message instanceof DisconnectWallMessage) {
             DisconnectWallMessage wallMessage = (DisconnectWallMessage)message;
-            OuterWalls wall = findWall(wallMessage.getEdge());
+            OuterWall wall = findWall(wallMessage.getEdge());
             wall.setNeighborName(null);         
         } else if (message instanceof BallMessage) {
             BallMessage ballMessage = (BallMessage)message;
@@ -509,6 +502,24 @@ public class Board {
             Ball ball = new Ball("teleported-ball", center, velocity);          
             addBall(ball);
         }
+    }
+    
+    /**
+     * Returns the wall next to a board edge.
+     * 
+     * @param edge the board edge
+     * @return the wall next to the given board edge
+     */
+    private synchronized OuterWall findWall(Edge edge) {
+        for (Gadget gadget : boardGadgets.values()) {
+            if (!(gadget instanceof OuterWall))
+                continue;
+            OuterWall wall = (OuterWall)gadget;
+            if (wall.getEdge() == edge)
+                return wall;
+        }
+        assert false;  // The board should have walls on all four sides.
+        return null;
     }
     
     /**

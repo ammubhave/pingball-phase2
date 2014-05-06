@@ -18,6 +18,8 @@ import pingball.board.CircularBumper;
 import pingball.board.Flipper.FlipperOrientation;
 import pingball.board.Gadget;
 import pingball.board.LeftFlipper;
+import pingball.board.OuterWall;
+import pingball.board.OuterWall.OuterWallsOrientation;
 import pingball.board.RightFlipper;
 import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
@@ -89,10 +91,10 @@ public class BoardFactory {
                     Double.parseDouble(attributes.get("friction1")),
                     Double.parseDouble(attributes.get("friction2")));
             // The following code is not required since the Board constructor does this for us
-           /* board.addGadget(new OuterWallsGadget(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL));
-            board.addGadget(new OuterWallsGadget(new Vect(0, 0), OuterWallsOrientation.VERTICAL));
-            board.addGadget(new OuterWallsGadget(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL));
-            board.addGadget(new OuterWallsGadget(new Vect(21, 0), OuterWallsOrientation.VERTICAL));*/
+            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL));
+            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL));
+            board.addGadget(new OuterWall(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL));
+            board.addGadget(new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL));
             attributes.clear();
         }
         
