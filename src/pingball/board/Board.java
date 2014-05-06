@@ -2,6 +2,7 @@ package pingball.board;
 
 import Ball;
 import Edge;
+import OuterWallsGadget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.Map;
 import physics.Circle;
 import physics.Vect;
 import pingball.proto.BallMessage;
+import pingball.proto.ConnectWallMessage;
+import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
 
 /**
@@ -360,9 +363,32 @@ public class Board {
         balls.add(ball);
     }
     
-    // TODO: Implement removeBall
     public void removeBall(Ball ball) {
         balls.remove(ball);
+    }
+    
+    /**
+     * Handles a message received from the server.
+     * 
+     * @param message the message received from the server.
+     */
+    public synchronized void onMessage(Message message) {
+        if (message instanceof ConnectWallMessage) {
+            ConnectWallMessage wallMessage = (ConnectWallMessage)message;
+            OuterWalls wall = findWall(wallMessage.getEdge());
+            wall.setNeighborName(wallMessage.getNeighborName());
+        } else if (message instanceof DisconnectWallMessage) {
+            DisconnectWallMessage wallMessage = (DisconnectWallMessage)message;
+            OuterWalls wall = findWall(wallMessage.getEdge());
+            wall.setNeighborName(null);         
+        } else if (message instanceof BallMessage) {
+            BallMessage ballMessage = (BallMessage)message;
+            Circle shape = ballMessage.getShape();
+            Vect center = shape.getCenter();
+            Vect velocity = ballMessage.getVelocity();
+            Ball ball = new Ball("teleported-ball", center, velocity);          
+            addBall(ball);
+        }
     }
     
     /**

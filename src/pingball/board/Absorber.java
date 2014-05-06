@@ -23,7 +23,7 @@ public class Absorber implements Gadget {
     private final Geometry.DoublePair position;
     private final Geometry.DoublePair bottomRight;
     private final Geometry.DoublePair topRight;
-    private boolean isSelfTriggering;
+
     private List<Ball> heldBalls = new ArrayList<Ball>();
 
     private final static Vect SHOOT_VELOCITY = new Vect(0, 50);
@@ -55,7 +55,7 @@ public class Absorber implements Gadget {
      * @param n
      *            , name of absorber
      */
-    public Absorber(Vect loc, int width, int height, boolean isSelfTriggerable, String n) {
+    public Absorber(Vect loc, int width, int height, String n) {
         name = n;
         this.width = width;
         this.height = height;
@@ -76,8 +76,6 @@ public class Absorber implements Gadget {
         sides.add(bottom);
         sides.add(left);
         sides.add(right);
-
-        isSelfTriggering = isSelfTriggerable;
     }
 
     @Override
@@ -127,10 +125,10 @@ public class Absorber implements Gadget {
         ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
         // (should be -0.25, but then absorber is stopping its own balls)
         heldBalls.add(ball);
-        if (isSelfTriggering) {
+       /* if (isSelfTriggering) {
             Ball shootBall = heldBalls.remove(0);
             shootBall.changeVelocity(SHOOT_VELOCITY);
-        }
+        }*/
     }
 
     /**
@@ -185,17 +183,7 @@ public class Absorber implements Gadget {
     public String getName() {
         return name;
     }
-
-    /** @param: boolean to set triggerable */
-    public void setTriggerable(boolean toSet) {
-        isSelfTriggering = toSet;
-    }
-
-    /** @return: true if triggerable */
-    public boolean isTriggerable() {
-        return isSelfTriggering;
-    }
-
+ 
     /**
      * @return string representing the type of gadget.
      */
