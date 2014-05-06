@@ -1,4 +1,4 @@
-package pingball.board;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +10,10 @@ import org.junit.Test;
 
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Ball;
+import pingball.board.CircularBumper;
+import pingball.board.SquareBumper;
+import pingball.board.TriangularBumper;
 
 /**
  * Testing Strategy: The constructor, trigger, and action methods of the gadgets

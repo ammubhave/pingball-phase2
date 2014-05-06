@@ -1,4 +1,4 @@
-package pingball.parser;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pingball.board.Board;
+import pingball.parser.BoardBuilder;
 
 /**
  * testing strategy:

@@ -1,4 +1,4 @@
-package pingball.board;
+package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Ball;
+import pingball.board.RightFlipper;
 import pingball.board.Flipper.FlipperOrientation;
 
 /**
