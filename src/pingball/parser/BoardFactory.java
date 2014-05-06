@@ -21,6 +21,7 @@ import pingball.board.LeftFlipper;
 import pingball.board.RightFlipper;
 import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
+import pingball.board.TriangularBumper.TriangularBumperOrientation;
 //import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 public class BoardFactory {
@@ -148,20 +149,20 @@ public class BoardFactory {
         }
         @Override
         public void exitTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx) {
-            /*TriangularBumperOrientation orientation = TriangularBumperOrientation.NW;
+            TriangularBumperOrientation orientation = TriangularBumperOrientation.TOP_LEFT;
             switch (Integer.parseInt(attributes.get("orientation"))) {
             case 0:
-                orientation = TriangularBumperOrientation.NW; break;
+                orientation = TriangularBumperOrientation.TOP_LEFT; break;
             case 90:
-                orientation = TriangularBumperOrientation.NE; break;
+                orientation = TriangularBumperOrientation.TOP_RIGHT; break;
             case 180:
-                orientation = TriangularBumperOrientation.SE; break;
+                orientation = TriangularBumperOrientation.BOTTOM_RIGHT; break;
             case 270:
-                orientation = TriangularBumperOrientation.SW; break;
-            }*/
+                orientation = TriangularBumperOrientation.BOTTOM_LEFT; break;
+            }
             board.addGadget(new TriangularBumper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                    Integer.parseInt(attributes.get("orientation")),
+                    orientation,
                     attributes.get("name")));
             attributes.clear();
         }

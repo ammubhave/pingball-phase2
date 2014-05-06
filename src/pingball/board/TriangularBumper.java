@@ -12,6 +12,9 @@ public class TriangularBumper implements Gadget {
      * Thread Safety Information: TriangularBumper is threadsafe because it is
      * never altered after creation.
      */
+    public enum TriangularBumperOrientation {
+        TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT
+    }
 
     private final static double REFL_COEFF = 1.0;
     private final static double TIME_TO_TRIGGER = 0.001;
@@ -21,7 +24,7 @@ public class TriangularBumper implements Gadget {
     private final double yCoord;
     private final double legLength = 1.0;
     private final double hypotenuseLength = Math.sqrt(2);
-    private final int orientation; // in terms of degrees
+    private final TriangularBumperOrientation orientation; // in terms of degrees
     private final String name;
 
     private final LineSegment leg1; // horizontal leg
@@ -42,20 +45,20 @@ public class TriangularBumper implements Gadget {
      *            , angle triangle bumper is rotated
      * @param name
      */
-    public TriangularBumper(Vect loc, int orientation, String name) {
+    public TriangularBumper(Vect loc, TriangularBumperOrientation orientation, String name) {
 
         this.xCoord = loc.x();
         this.yCoord = loc.y();
         this.name = name;
-        if (orientation == 0) { // Right angle is in top-left corner
+        if (orientation == TriangularBumperOrientation.TOP_LEFT) { // Right angle is in top-left corner
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord + legLength, yCoord, xCoord, yCoord + legLength);
-        } else if (orientation == 90) { // Right angle is in top-right corner
+        } else if (orientation == TriangularBumperOrientation.TOP_RIGHT) { // Right angle is in top-right corner
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
-        } else if (orientation == 180) { // Right angle is in bottom-right
+        } else if (orientation == TriangularBumperOrientation.BOTTOM_RIGHT) { // Right angle is in bottom-right
                                          // corner
             leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
@@ -153,7 +156,7 @@ public class TriangularBumper implements Gadget {
      */
     @Override
     public String toString() {
-        if (orientation == 0 || orientation == 180) {
+        if (orientation == TriangularBumperOrientation.TOP_LEFT || orientation == TriangularBumperOrientation.BOTTOM_RIGHT) {
             return "/";
         } else {
             return "\\";
