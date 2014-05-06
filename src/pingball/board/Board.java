@@ -367,6 +367,38 @@ public class Board {
         balls.remove(ball);
     }
     
+    
+    //TODO: THIS IS JUST A PROTOTYPE
+    /**
+     * Simulates running of the given time
+     * @param time the time in seconds for which to run
+     */
+    public synchronized void simulateTime(double timeLeft) {
+        
+        boolean isColliding = true;
+        double originalTime = timeLeft;
+
+        while (isColliding) {            
+            
+            double time = this.timeUntilCollision();
+            if (time < originalTime*0.05)// If time is too small then make it bigger
+                time = originalTime*0.05; 
+            
+            if (time < timeLeft){
+                isColliding = true;
+            } else {
+                isColliding = false;
+            }
+               
+            if (isColliding) {
+                this.reflect();
+                timeLeft = timeLeft - time;                    
+            } else {                   
+                this.incrementNoCollisionTime(timeLeft);
+            }
+        }
+    }
+    
     /**
      * Handles a message received from the server.
      * 
