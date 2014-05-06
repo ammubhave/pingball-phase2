@@ -34,16 +34,11 @@ public interface Gadget {
     public void trigger();
 
     /**
-     * Decides whether the gadget has been triggered. If triggered, should call
-     * action method of all the hooked gadgets
+     * Determines the smallest time until the ball is going to collide with it.
      * 
-     * @param ball
-     *            the Ball object inside this.containingSquare that may be
-     *            interacting with the gadget
-     * @return the time before the trigger will occur (returns some ridiculous
-     *         number if irrelevant)
+     * @param ball the Ball object with which it may collide
+     * @return the time until collision will happen
      */
-    // TODO: Write spec, move code from trigger to this method
     public double leastCollisionTime(Ball ball);
 
     // TODO: Look up this code and make changes so that this does not affect the
