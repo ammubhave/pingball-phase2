@@ -71,12 +71,25 @@ public class LeftFlipper extends Flipper {
 
     @Override
     public void trigger() {
-
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
     }
 
     @Override
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+
+    public void reactBall(Ball ball) {
+        Vect velocity = ball.getFlippedVelocity();
+        LineSegment wall = oneLineFlipper;
+        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
+        ball.move(tx);
+        Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
+        newDir = new Vect(newDir.x(), -newDir.y());
+        ball.changeVelocity(newDir);
+        ball.move(TIME_TO_TRIGGER - tx);
     }
 
     @Override
@@ -153,15 +166,8 @@ public class LeftFlipper extends Flipper {
     }
 
     @Override
-    public void action(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        LineSegment wall = oneLineFlipper;
-        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+    public void action() {
+
         if (initial == true) {
             initial = false;
         } else {

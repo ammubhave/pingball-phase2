@@ -70,7 +70,9 @@ public class RightFlipper extends Flipper {
 
     @Override
     public void trigger() {
-
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
     }
 
     public void hookActionToTrigger(Gadget gadget) {
@@ -84,6 +86,22 @@ public class RightFlipper extends Flipper {
             return time;
         }
         return NULL;
+    }
+
+    public void reactBall(Ball ball) {
+        Vect velocity = ball.getFlippedVelocity();
+        LineSegment wall = null;
+        // for (LineSegment ls : sides) {
+        if (Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity) < TIME_TO_TRIGGER) {
+            wall = oneLineFlipper;
+        }
+        // }
+        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
+        ball.move(tx);
+        Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
+        newDir = new Vect(newDir.x(), -newDir.y());
+        ball.changeVelocity(newDir);
+        ball.move(TIME_TO_TRIGGER - tx);
     }
 
     /**
@@ -207,20 +225,7 @@ public class RightFlipper extends Flipper {
     }
 
     @Override
-    public void action(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        LineSegment wall = null;
-        // for (LineSegment ls : sides) {
-        if (Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity) < TIME_TO_TRIGGER) {
-            wall = oneLineFlipper;
-        }
-        // }
-        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+    public void action() {
         if (initial == true) {
             initial = false;
         } else {
