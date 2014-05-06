@@ -423,9 +423,11 @@ public class Board {
     
     /**
      * Gets a gadget from the board with the given name.
-     * If does not exists, throws exception
+     * If does not exists, returns null
      * @param name the name of the gadget to find.
      * @return
      */
-    public Gadget getGadgetFromName(String name);
+    public Gadget getGadgetFromName(String name) {
+        return boardGadgets.get(name);
+    }
 }
