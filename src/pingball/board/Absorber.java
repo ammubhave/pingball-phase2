@@ -206,15 +206,4 @@ public class Absorber implements Gadget {
         gadgetsToBeHooked.add(gadget);
     }
 
-    @Override
-    public void reactBall(Ball ball) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void action() {
-        // TODO Auto-generated method stub
-        
-    }
 }

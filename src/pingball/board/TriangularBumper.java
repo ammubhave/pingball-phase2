@@ -35,38 +35,35 @@ public class TriangularBumper implements Gadget {
     /**
      * Creates a 45-45-90 triangle bumper with the user-inputted parameters
      * 
-     * @param xLoc
-     *            , x coordinate of top-left point of square which contains the
-     *            triangle
-     * @param yLoc
-     *            , y coordinate of top-left point of square which contains the
+     * @param loc
+     *            , Vect location of top-left point of square which contains the
      *            triangle
      * @param orientation
      *            , angle triangle bumper is rotated
      * @param name
      */
-    public TriangularBumper(double xLoc, double yLoc, int orientation, String name) {
+    public TriangularBumper(Vect loc, int orientation, String name) {
 
-        this.xCoord = xLoc;
-        this.yCoord = yLoc;
+        this.xCoord = loc.x();
+        this.yCoord = loc.y();
         this.name = name;
         if (orientation == 0) { // Right angle is in top-left corner
-            leg1 = new LineSegment(xLoc, yLoc, xLoc + legLength, yLoc);
-            leg2 = new LineSegment(xLoc, yLoc, xLoc, yLoc + legLength);
-            hypotenuse = new LineSegment(xLoc + legLength, yLoc, xLoc, yLoc + legLength);
+            leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
+            leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
+            hypotenuse = new LineSegment(xCoord + legLength, yCoord, xCoord, yCoord + legLength);
         } else if (orientation == 90) { // Right angle is in top-right corner
-            leg1 = new LineSegment(xLoc, yLoc, xLoc + legLength, yLoc);
-            leg2 = new LineSegment(xLoc + legLength, yLoc, xLoc + legLength, yLoc + legLength);
-            hypotenuse = new LineSegment(xLoc, yLoc, xLoc + legLength, yLoc + legLength);
+            leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
+            leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
+            hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
         } else if (orientation == 180) { // Right angle is in bottom-right
                                          // corner
-            leg1 = new LineSegment(xLoc, yLoc + legLength, xLoc + legLength, yLoc + legLength);
-            leg2 = new LineSegment(xLoc + legLength, yLoc, xLoc + legLength, yLoc + legLength);
-            hypotenuse = new LineSegment(xLoc, yLoc + legLength, xLoc + legLength, yLoc);
+            leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
+            leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
+            hypotenuse = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord);
         } else { // Right angle is in bottom-left corner
-            leg1 = new LineSegment(xLoc, yLoc + legLength, xLoc + legLength, yLoc + legLength);
-            leg2 = new LineSegment(xLoc, yLoc, xLoc, yLoc + legLength);
-            hypotenuse = new LineSegment(xLoc, yLoc, xLoc + legLength, yLoc + legLength);
+            leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
+            leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
+            hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
         }
 
         this.orientation = orientation;

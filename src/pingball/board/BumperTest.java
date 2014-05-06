@@ -37,12 +37,13 @@ public class BumperTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        s1 = new SquareBumper(4.0, 5.0, "s1");
-        t1 = new TriangularBumper(4.0, 5.0, 0, "t1");
-        t2 = new TriangularBumper(4.0, 5.0, 90, "t2");
-        t3 = new TriangularBumper(4.0, 5.0, 180, "t3");
-        t4 = new TriangularBumper(4.0, 5.0, 270, "t4");
-        c1 = new CircularBumper(4.0, 5.0, "c1");
+        Vect loc = new Vect(4.0,5.0);
+        s1 = new SquareBumper(loc, "s1");
+        t1 = new TriangularBumper(loc, 0, "t1");
+        t2 = new TriangularBumper(loc, 90, "t2");
+        t3 = new TriangularBumper(loc, 180, "t3");
+        t4 = new TriangularBumper(loc, 270, "t4");
+        c1 = new CircularBumper(loc, "c1");
 
         b1 = new Ball(4.0, 4.5, 0, 0); // on border of everything except for 90
                                        // and 180 triangles

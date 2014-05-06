@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import physics.LineSegment;
+import physics.Vect;
 
 /**
  * Testing Strategy: The constructor, trigger, action, and move methods of the
@@ -26,9 +27,9 @@ public class LeftFlipperTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        lf1 = new LeftFlipper(4, 4, 3, "lf1");
-        lf2 = new LeftFlipper(4, 8, 1, "lf2");
-        lf3 = new LeftFlipper(8, 4, 1, "lf3");
+        lf1 = new LeftFlipper(new Vect(4, 4), 3, "lf1");
+        lf2 = new LeftFlipper(new Vect(4, 8), 1, "lf2");
+        lf3 = new LeftFlipper(new Vect(8, 4), 1, "lf3");
         b1 = new Ball(5, 5, 5, 5);
     }
 
