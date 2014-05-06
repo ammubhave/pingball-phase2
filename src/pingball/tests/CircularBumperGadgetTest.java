@@ -33,7 +33,6 @@ public class CircularBumperGadgetTest {
     public void testRenderNWCorner() {
         CircularBumper gadget = new CircularBumper(new Vect(0, 0), "test");
         String renderedString = gadget.render(emptyBoardString);
-        // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
