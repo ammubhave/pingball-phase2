@@ -118,6 +118,8 @@ public class CircularBumperGadgetTest {
         assertEquals(ball.getVelocity(),new Vect(0, 1));
     }
     
+    //LEAST COLLISION TIME
+    
     @Test
     public void testPerpendicularReflectionTopRight() {
         Ball ball = new Ball("ball", new Vect(6, 4), new Vect(-1, 1));
@@ -145,4 +147,60 @@ public class CircularBumperGadgetTest {
         gadget.reactBall(ball);
         assertEquals(ball.getVelocity(),new Vect(-1, 1));
     }
+    
+    @Test
+    public void testLeastCollisionTimeZero(){
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, 1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+        
+    }
+    
+    @Test
+    public void testLeastCollisionTimeTop() {
+        Ball ball = new Ball("ball", new Vect(5, 4), new Vect(0, 1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 5), new Vect(1, 0));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeRight() {
+        Ball ball = new Ball("ball", new Vect(6, 5), new Vect(-1, 0));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeBottom() {
+        Ball ball = new Ball("ball", new Vect(5, 6), new Vect(0, -1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeTopRight() {
+        Ball ball = new Ball("ball", new Vect(6, 4), new Vect(-1, 1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeTopLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 4), new Vect(1, 1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeBottomRight() {
+        Ball ball = new Ball("ball", new Vect(6, 6), new Vect(-1, -1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+
+    @Test
+    public void testLeastCollisionTimeBottomLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 6), new Vect(1, -1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+    }
+    
 }

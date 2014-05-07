@@ -76,14 +76,15 @@ public class SquareBumper implements Gadget {
 
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
+        Vect velocity = ball.getVelocity();
+        double smallestTime = Double.MAX_VALUE;
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < TIME_TO_TRIGGER) {
-                return time;
+            if (time < smallestTime) {
+                smallestTime = time;
             }
         }
-        return NULL;
+        return smallestTime;
     }
 
     /**
