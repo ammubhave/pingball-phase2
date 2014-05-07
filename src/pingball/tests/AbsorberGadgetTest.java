@@ -92,16 +92,9 @@ public class AbsorberGadgetTest {
     @Test
     public void testPerpendicularReflection() {
         Absorber gadget = new Absorber(new Vect(0, 0), 2, 2, "test");
-        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
-        System.out.println(gadget.leastCollisionTime(ball));
-        assertEquals(gadget.leastCollisionTime(ball), 3 / 4., 0.0001);
+        Ball ball = new Ball("ball", new Vect(3, 2), new Vect(-1, 0));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 1);
-
-        ball = new Ball("ball", new Vect(0.5, -1), new Vect(0, 1));
-        assert gadget.leastCollisionTime(ball) == 1;
-        gadget.reactBall(ball);
-        assert ball.getVelocity().equals(new Vect(6, -1));
+        assert ball.getVelocity() == new Vect(1, 0);
     }
 
     @Test

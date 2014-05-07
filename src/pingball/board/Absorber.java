@@ -24,7 +24,7 @@ public class Absorber implements Gadget {
     private final Vect bottomRight;
     private final Vect topRight;
 
-    private List<Ball> heldBalls = new ArrayList<Ball>();
+    private Ball heldBall = null;
 
     private final static Vect SHOOT_VELOCITY = new Vect(0, 50);
     private final static double REFL_COEFF = 1;
@@ -115,20 +115,32 @@ public class Absorber implements Gadget {
      */
     @Override
     public void action() {
-        if (!heldBalls.isEmpty()) {
-            Ball shootBall = heldBalls.remove(0);
-            shootBall.changeVelocity(SHOOT_VELOCITY);
+        if (heldBall != null) {            
+            heldBall.changeVelocity(SHOOT_VELOCITY);
+            heldBall = null;
         }
     }
 
     public void reactBall(Ball ball) {
-        ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
+        if (heldBall != null && !isInside(ball)) {
+            Vect velocity = ball.getVelocity();
+            double smallestTime = Double.MAX_VALUE;
+            LineSegment smallestTimeWall = null;
+            for (LineSegment ls : sides) {
+                double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+                if (time < smallestTime) {
+                    smallestTime = time;
+                    smallestTimeWall = ls;
+                }
+            }
+            
+            ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        } else if (heldBall == null) {
+            ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
+            ball.changeVelocity(new Vect(0, 0));
         // (should be -0.25, but then absorber is stopping its own balls)
-        heldBalls.add(ball);
-       /* if (isSelfTriggering) {
-            Ball shootBall = heldBalls.remove(0);
-            shootBall.changeVelocity(SHOOT_VELOCITY);
-        }*/
+            heldBall = ball;
+        }
     }
 
     /**

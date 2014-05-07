@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import physics.Vect;
 import pingball.board.Ball;
+import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
@@ -105,12 +106,38 @@ public class TriangularBumperGadgetTest {
     }
 
     @Test
-    public void testEquals() {
-        TriangularBumper g1 = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "Bilbo");
-        TriangularBumper g2 = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "Bilbo");
-        TriangularBumper g3 = new TriangularBumper(new Vect(5, 0), TriangularBumperOrientation.TOP_LEFT, "Baggins");
+    public void testPerpendicularTLReflectionBottomRight() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
+        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(1, 1);
+    }
 
-        assertEquals(g1, g2);
-        assertNotEquals(g1, g3);
+    @Test
+    public void testPerpendicularTRReflectionBottomLeft() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(0, 1), new Vect(1, -1));
+        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(-1, 1);
+    }
+    
+    @Test
+    public void testPerpendicularBRReflectionTopLeft() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(0, 0), new Vect(1, 1));
+        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(-1, -1);
+    }
+
+    @Test
+    public void testPerpendicularBLReflectionTopRight() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 0), new Vect(-1, 1));
+        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(1, -1);
     }
 }
