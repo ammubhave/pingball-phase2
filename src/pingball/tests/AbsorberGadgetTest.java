@@ -17,6 +17,7 @@ import pingball.board.Ball;
  */
 public class AbsorberGadgetTest {
     String emptyBoardString;
+    Absorber gadget;
 
     @Before
     public void setUp() throws Exception {
@@ -27,6 +28,7 @@ public class AbsorberGadgetTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
+        gadget = new Absorber(new Vect(0, 0), 2, 2, "test");
     }
 
     @Test
@@ -91,11 +93,12 @@ public class AbsorberGadgetTest {
 
     @Test
     public void testPerpendicularReflection() {
-        Absorber gadget = new Absorber(new Vect(0, 0), 2, 2, "test");
         Ball ball = new Ball("ball", new Vect(3, 2), new Vect(-1, 0));
         gadget.reactBall(ball);
         assert ball.getVelocity() == new Vect(1, 0);
     }
+    
+    
 
     @Test
     public void testEquals() {
