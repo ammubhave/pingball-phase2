@@ -89,4 +89,20 @@ public class BallTest {
         Circle newCircle = ball.getCircle();
         assertEquals(newCircle, new Circle(new Vect(19,19), 0.25));
     }
+    
+    @Test
+    public void testChangePos() {
+        Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
+        ball.changePos(new Vect(20, 21));
+        assertEquals(new Vect(20, 21), ball.getPos());
+        assertEquals(new Vect(1, 1), ball.getVelocity());
+    }
+
+    @Test
+    public void testChangeVelocity() {
+        Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
+        ball.changeVelocity(new Vect(2, 1));
+        assertEquals(new Vect(2, 1), ball.getVelocity());
+        assertEquals(new Vect(19, 19), ball.getPos());
+    }
 }
