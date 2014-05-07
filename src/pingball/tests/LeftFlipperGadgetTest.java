@@ -90,4 +90,67 @@ public class LeftFlipperGadgetTest {
             }
         }
     }
+    
+    @Test
+    public void testRenderMutatedNWCorner() {
+        LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.LEFT, "test");
+        String renderedString = gadget.render(emptyBoardString);
+        
+        for (int y = 1; y < 21; y++) {
+            for (int x = 1; x < 21; x++) {
+                if (y == 1 && x >= 1 && x <= 2 )
+                    assertTrue(renderedString.charAt(y*23+x) == '-');
+                else{
+                    assertTrue(renderedString.charAt(y*23+x) == ' ');
+                }
+            }
+        }
+    }
+    
+    @Test
+    public void testRenderMutatedNECorner() {
+        LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.TOP, "test");
+        String renderedString = gadget.render(emptyBoardString);
+        for (int y = 1; y < 21; y++) {
+            for (int x = 1; x < 21; x++) {
+                if (x == 2 && y >= 1 && y <= 2 )
+                    assertTrue(renderedString.charAt(y*23+x) == '|');
+                else{
+                    assertTrue(renderedString.charAt(y*23+x) == ' ');
+                }
+            }
+        }
+    }
+    
+    @Test
+    public void testRenderMutatedSECorner() {
+        LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
+        String renderedString = gadget.render(emptyBoardString);
+        
+        for (int y = 1; y < 21; y++) {
+            for (int x = 1; x < 21; x++) {
+                if (y == 2 && x >= 1 && x <= 2 )
+                    assertTrue(renderedString.charAt(y*23+x) == '-');
+                else{
+                    assertTrue(renderedString.charAt(y*23+x) == ' ');
+                }
+            }
+        }
+    }
+    
+    @Test
+    public void testRenderMutatedSWCorner() {
+        LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
+        String renderedString = gadget.render(emptyBoardString);
+        
+        for (int y = 1; y < 21; y++) {
+            for (int x = 1; x < 21; x++) {
+                if (x == 1 && y >= 1 && y <= 2 )
+                    assertTrue(renderedString.charAt(y*23+x) == '|');
+                else{
+                    assertTrue(renderedString.charAt(y*23+x) == ' ');
+                }
+            }
+        }
+    }
 }
