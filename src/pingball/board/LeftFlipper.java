@@ -7,7 +7,6 @@ import physics.Angle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
-import pingball.board.Flipper.FlipperOrientation;
 
 /** Represents the LeftFlipper gadget class */
 
@@ -83,15 +82,18 @@ public class LeftFlipper extends Flipper {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        LineSegment wall = oneLineFlipper;
-        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        final double FLIPPER_SPEED = 18.8495559;
-        Vect newDir = Geometry.reflectRotatingWall(wall, ball.getPos(), -FLIPPER_SPEED, ball.getCircle(), velocity, 0.95);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+        Vect velocity = ball.getVelocity();
+        LineSegment smallestTimeWall = oneLineFlipper;
+        double smallestTime = Geometry.timeUntilWallCollision(smallestTimeWall, ball.getCircle(), velocity);
+        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+
+        // final double FLIPPER_SPEED = 18.8495559;
+        // Vect newDir = Geometry.reflectRotatingWall(oneLineFlipper,
+        // ball.getPos(), -FLIPPER_SPEED, ball.getCircle(),
+        // velocity, 0.95);
+        // newDir = new Vect(newDir.x(), -newDir.y());
+        // ball.changeVelocity(newDir);
+        // ball.move(TIME_TO_TRIGGER - tx);
     }
 
     @Override
@@ -299,30 +301,25 @@ public class LeftFlipper extends Flipper {
     public FlipperOrientation getOrientation() {
         return this.orientation;
     }
-    
+
     @Override
     public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         Vect position = new Vect(this.xLoc, this.yLoc);
-        //I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM
+        // I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM
         if (this.orientation == FlipperOrientation.TOP) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '-');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position)+1, '-');
-        } else
-        if (this.orientation == FlipperOrientation.RIGHT) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,0))), '|');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,1))), '|');
-        } else 
-        if (this.orientation == FlipperOrientation.LEFT) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,0))), '|');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,1))), '|');
-        } else 
-        if (this.orientation == FlipperOrientation.BOTTOM) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,1))), '-');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,1))), '-');
-        } 
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position) + 1, '-');
+        } else if (this.orientation == FlipperOrientation.RIGHT) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1, 0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1, 1))), '|');
+        } else if (this.orientation == FlipperOrientation.LEFT) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0, 0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0, 1))), '|');
+        } else if (this.orientation == FlipperOrientation.BOTTOM) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0, 1))), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1, 1))), '-');
+        }
         return sb.toString();
     }
-
-
 }

@@ -109,12 +109,6 @@ public class SquareBumper implements Gadget {
             }
         }
         ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
-        /*
-         * double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(),
-         * velocity); ball.move(tx); Vect newDir = Geometry.reflectWall(wall,
-         * velocity); newDir = new Vect(newDir.x(), -newDir.y());
-         * ball.changeVelocity(newDir); ball.move(TIME_TO_TRIGGER - tx);
-         */
     }
 
     /**
