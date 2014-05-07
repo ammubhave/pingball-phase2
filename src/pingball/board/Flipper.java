@@ -24,7 +24,6 @@ public class Flipper implements Gadget {
 //    private LineSegment boundingBoxRight;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-
     private double xCoord;
     private double yCoord;
     private Vect position;
@@ -144,7 +143,7 @@ public class Flipper implements Gadget {
 
     @Override
     public String render(String input) {
-        // TODO Auto-generated method stub
-        return null;
+        return "SHOULDN'T BE AT FLIPPER'S RENDER";
     }
+    
 }

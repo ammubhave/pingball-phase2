@@ -17,6 +17,7 @@ import pingball.board.CircularBumper;
  */
 public class CircularBumperGadgetTest {
     String emptyBoardString;
+    CircularBumper gadget;
 
     @Before
     public void setUp() throws Exception {
@@ -27,6 +28,7 @@ public class CircularBumperGadgetTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
+        gadget = new CircularBumper(new Vect(5, 5), "test");
     }
 
     @Test
@@ -89,18 +91,62 @@ public class CircularBumperGadgetTest {
     }
 
     @Test
-    public void testPerpendicularReflection() {
-        CircularBumper gadget = new CircularBumper(new Vect(0, 0), "test");
-        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
-        assertEquals(gadget.leastCollisionTime(ball), 0.0, 0.0001);
+    public void testPerpendicularReflectionTop() {
+        Ball ball = new Ball("ball", new Vect(5, 4), new Vect(0, 1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 1);
-
-        ball = new Ball("ball", new Vect(0.5, -1), new Vect(0, 1));
-        assert gadget.leastCollisionTime(ball) == 1;
-        gadget.reactBall(ball);
-        assert ball.getVelocity().equals(new Vect(6, -1));
+        assertEquals(ball.getVelocity(),new Vect(0, -1));
     }
+    
+    @Test
+    public void testPerpendicularReflectionLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 5), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(-1, 0));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionRight() {
+        Ball ball = new Ball("ball", new Vect(6, 5), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(1, 0));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionBottom() {
+        Ball ball = new Ball("ball", new Vect(5, 6), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(0, 1));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionTopRight() {
+        Ball ball = new Ball("ball", new Vect(6, 4), new Vect(-1, 1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(1, -1));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionTopLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 4), new Vect(1, 1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(-1, -1));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionBottomRight() {
+        Ball ball = new Ball("ball", new Vect(6, 6), new Vect(-1, -1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(1, 1));
+    }
+    
+    @Test
+    public void testPerpendicularReflectionBottomLeft() {
+        Ball ball = new Ball("ball", new Vect(4, 6), new Vect(1, -1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(),new Vect(-1, 1));
+    }
+    
+
 
     @Test
     public void testEquals() {

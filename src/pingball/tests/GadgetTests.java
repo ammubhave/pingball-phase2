@@ -53,7 +53,7 @@ public class GadgetTests {
      * assertTrue(b.getVelocity().x() == 0); assertTrue(b.getVelocity().y() ==
      * -1); }
      */
-
+    
     // NEED TO FIX THIS
     /*
      * @Test public void squareBumperBounceRightTest() { Ball b = new Ball("b3",
