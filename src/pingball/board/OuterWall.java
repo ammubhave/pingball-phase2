@@ -196,10 +196,4 @@ public class OuterWall implements Gadget {
     public double getY() {
         return 0;
     }
-
-    @Override
-    public String type() {
-        return null;
-    }
-    
 }

@@ -17,7 +17,7 @@ import pingball.proto.Message;
  * 
  */
 public class Board {
-    private static final int DEFAULT_SIZE = 20;
+    public static final int DEFAULT_SIZE = 20;
     private final int height;
     private final int width;
     private final List<Ball> balls;
