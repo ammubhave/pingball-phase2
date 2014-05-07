@@ -92,20 +92,6 @@ public class TriangularBumperGadgetTest {
     }
 
     @Test
-    public void testPerpendicularReflection() {
-        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
-        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
-        assertEquals(gadget.leastCollisionTime(ball), ((3 + Math.sqrt(2)) / (4 * (2 + Math.sqrt(2)))), 0.0001);
-        gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 1);
-
-        ball = new Ball("ball", new Vect(0.5, -1), new Vect(0, 1));
-        assert gadget.leastCollisionTime(ball) == 1;
-        gadget.reactBall(ball);
-        assert ball.getVelocity().equals(new Vect(6, -1));
-    }
-
-    @Test
     public void testPerpendicularTLReflectionBottomRight() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
