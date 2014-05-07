@@ -122,7 +122,7 @@ public class Absorber implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        if (heldBall != null) {
+        if (heldBall != null && !isInside(ball)) {
             Vect velocity = ball.getVelocity();
             double smallestTime = Double.MAX_VALUE;
             LineSegment smallestTimeWall = null;
@@ -135,16 +135,12 @@ public class Absorber implements Gadget {
             }
             
             ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
-        } else {
+        } else if (heldBall == null) {
             ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
             ball.changeVelocity(new Vect(0, 0));
         // (should be -0.25, but then absorber is stopping its own balls)
             heldBall = ball;
         }
-       /* if (isSelfTriggering) {
-            Ball shootBall = heldBalls.remove(0);
-            shootBall.changeVelocity(SHOOT_VELOCITY);
-        }*/
     }
 
     /**

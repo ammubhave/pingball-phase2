@@ -66,12 +66,8 @@ public class CircularBumper implements Gadget {
      */
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        double time = Geometry.timeUntilCircleCollision(circleGadget, ball.getCircle(), velocity);
-        if (time < TIME_TO_TRIGGER) {
-            return time;
-        }
-        return NULL;
+        Vect velocity = ball.getVelocity();
+        return Geometry.timeUntilCircleCollision(circleGadget, ball.getCircle(), velocity);
     }
 
     /**
@@ -117,17 +113,7 @@ public class CircularBumper implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        Circle wall = null;
-        if (Geometry.timeUntilCircleCollision(circleGadget, ball.getCircle(), velocity) < TIME_TO_TRIGGER) {
-            wall = circleGadget;
-        }
-        double tx = Geometry.timeUntilCircleCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        Vect newDir = Geometry.reflectCircle(wall.getCenter(), ball.getPos(), velocity, REFL_COEFF);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+        ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(), REFL_COEFF));
     }
 
     public void hookActionToTrigger(Gadget gadget) {
