@@ -68,11 +68,12 @@ public class GadgetTests {
     // SQUARE BUMPERS
     @Test
     public void squareBumperBounceTopTest() {
-        Ball b = new Ball("b2", coord6, vel2);
+        Ball b = new Ball("b2", new Vect(6,2), new Vect(0,1));
 
-        SquareBumper squareBump = new SquareBumper(coord3, "SQUARE");
+        SquareBumper squareBump = new SquareBumper(new Vect(6,5), "SQUARE");
         squareBump.reactBall(b);
-
+        System.out.println(b.getVelocity().x());
+        System.out.println(b.getVelocity().y());
         assertTrue(b.getVelocity().x() == 0);
         assertTrue(b.getVelocity().y() == -1);
     }

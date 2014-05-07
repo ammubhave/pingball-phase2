@@ -24,7 +24,6 @@ public class Flipper implements Gadget {
 //    private LineSegment boundingBoxRight;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-
     private double xCoord;
     private double yCoord;
     private Vect position;
@@ -144,7 +143,28 @@ public class Flipper implements Gadget {
 
     @Override
     public String render(String input) {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder(input);
+        if (this.vertexOrientation == VertexOrientation.NW && this.orientation == FlipperOrientation.HORIZONTAL ||
+            this.vertexOrientation == VertexOrientation.NE && this.orientation == FlipperOrientation.HORIZONTAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position)+1, '-');
+        } else
+        if ((this.vertexOrientation == VertexOrientation.NE && this.orientation == FlipperOrientation.VERTICAL ||
+                this.vertexOrientation == VertexOrientation.SE && this.orientation == FlipperOrientation.VERTICAL)) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(2,0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(2,0)))+Board.size+1, '|');
+        } else 
+        if (this.vertexOrientation == VertexOrientation.SE && this.orientation == FlipperOrientation.HORIZONTAL ||
+            this.vertexOrientation == VertexOrientation.SW && this.orientation == FlipperOrientation.HORIZONTAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(0,2))), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(0,2)))+1, '-');
+        } else 
+        if (this.vertexOrientation == VertexOrientation.SW && this.orientation == FlipperOrientation.VERTICAL ||
+            this.vertexOrientation == VertexOrientation.NW && this.orientation == FlipperOrientation.VERTICAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position)+Board.size+1, '|');
+        } 
+        return sb.toString();
     }
+    
 }
