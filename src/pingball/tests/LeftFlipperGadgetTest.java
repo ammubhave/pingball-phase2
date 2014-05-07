@@ -60,7 +60,7 @@ public class LeftFlipperGadgetTest {
     }
     
     @Test
-    public void testRenderSWCorner() {
+    public void testRenderSECorner() {
         LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
         String renderedString = gadget.render(emptyBoardString);
         
@@ -76,7 +76,7 @@ public class LeftFlipperGadgetTest {
     }
     
     @Test
-    public void testRenderSECorner() {
+    public void testRenderSWCorner() {
         LeftFlipper gadget = new LeftFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
         String renderedString = gadget.render(emptyBoardString);
         
