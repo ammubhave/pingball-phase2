@@ -20,9 +20,9 @@ public class Absorber implements Gadget {
     private final double xLocation; // Starting x-coordinate
     private final double yLocation; // Starting y-coordinate
 
-    private final Geometry.DoublePair position;
-    private final Geometry.DoublePair bottomRight;
-    private final Geometry.DoublePair topRight;
+    private final Vect position;
+    private final Vect bottomRight;
+    private final Vect topRight;
 
     private List<Ball> heldBalls = new ArrayList<Ball>();
 
@@ -63,9 +63,9 @@ public class Absorber implements Gadget {
         xLocation = loc.x();
         yLocation = loc.y();
 
-        this.position = new Geometry.DoublePair(xLocation, yLocation);
-        this.topRight = new Geometry.DoublePair(xLocation + width - 1, yLocation);
-        this.bottomRight = new Geometry.DoublePair(xLocation, yLocation + height - 1);
+        this.position = new Vect(xLocation, yLocation);
+        this.topRight = new Vect(xLocation + width - 1, yLocation);
+        this.bottomRight = new Vect(xLocation, yLocation + height - 1);
 
         top = new LineSegment(xLocation, yLocation, xLocation + width, yLocation);
         bottom = new LineSegment(xLocation, yLocation + height, xLocation + width, yLocation + height);
@@ -183,16 +183,20 @@ public class Absorber implements Gadget {
     public String getName() {
         return name;
     }
- 
-    /**
-     * @return string representing the type of gadget.
-     */
-    public String type() {
-        return "absorber";
-    }
 
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+    
+    @Override
+    public String render(String input) {
+        StringBuilder sb = new StringBuilder(input);
+
+        for (int y = (int)position.y(); y < (int)position.y() + height; y++)
+            for (int x = (int)position.x(); x < (int)position.x() + width; x++)
+                sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)), '=');
+        
+        return sb.toString();
     }
 
 }

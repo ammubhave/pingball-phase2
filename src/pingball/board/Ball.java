@@ -142,5 +142,16 @@ public class Ball {
         double newY = newVel.y();
         this.velocity = new Vect(newX, newY);
     }
+    
+    /**
+     * Renders the ball onto input and returns the final board
+     * @param input the board string on which to render
+     * @return the final rendered board string
+     */
+    public String render(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '*');
+        return sb.toString();
+    }
 
 }

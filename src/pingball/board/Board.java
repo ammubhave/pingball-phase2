@@ -2,9 +2,7 @@ package pingball.board;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import physics.Circle;
 import physics.Geometry;
@@ -80,54 +78,18 @@ public class Board {
 
     @Override
     public String toString() {
-        String[][] board = new String[this.height + 2][this.width + 2]; // Array
-                                                                        // of
-                                                                        // rows.
-        for (int i = 0; i <= height + 1; i++) { // i is y coordinates
-            for (int j = 0; j <= width + 1; j++) { // j is x coordinates
-                Vect coords = new Vect(j - 1, i - 1);
-                String currentCoords = coords.toString();
-                boolean isABall = false;
-                for (int k = 0; k < balls.size(); k++) {
-                    if (Math.round(balls.get(k).getPos().x()) == j - 1
-                            && Math.round(balls.get(k).getPos().y()) == i - 1) {
-                        board[i][j] = balls.get(k).toString();
-                        isABall = true;
-                        break; // TODO Should this really be here? What if there
-                               // are multiple balls?
-                    }
-                }
-                if ((!isABall) && (board[i][j] != "=")) {
-                    if (boardGadgets.get(currentCoords) != null) {
-                        if (boardGadgets.get(currentCoords).getType() == "ABSORBER") {
-                            // This is an absorber. This encompasses multiple
-                            // levels.
-                            Absorber absorb = (Absorber) boardGadgets
-                                    .get(currentCoords);
-                            for (int n = j; n <= j + absorb.getWidth(); n++) {
-                                for (int p = i; p <= i + absorb.getHeight(); p++) {
-                                    /*
-                                     * n => x-coordinate p => y-coordinate
-                                     */
-                                    board[p][n] = absorb.toString();
-                                }
-                            }
-                        } else {
-                            board[i][j] = boardGadgets.get(currentCoords)
-                                    .toString();
-                        }
-                    } else {
-                        board[i][j] = " ";
-                    }
-                }
-            }
+        StringBuilder sb = new StringBuilder();
+        for(int y = 0; y < 22; y++) {
+            for(int x = 0; x < 22;x++)
+                sb.append(' ');
+            sb.append('\n');
         }
-        String boardString = "";
-        for (int k = 0; k <= height + 1; k++) {
-            for (int m = 0; m <= width + 1; m++) {
-                boardString += board[k][m];
-            }
-            boardString += "\r\n";
+        String boardString = sb.toString();
+        for (Ball ball : this.balls) {
+            boardString = ball.render(boardString);
+        }
+        for (Gadget gadget : this.boardGadgets.values()) {
+            boardString = gadget.render(boardString);
         }
         return boardString;
     }
@@ -587,4 +549,14 @@ public class Board {
     public Gadget getGadgetFromName(String name) {
         return boardGadgets.get(name);
     }
+    
+    /**
+     * Gets a board string index (row major) from position.
+     * @param position the position to convert to index
+     * @return the index in board string
+     */
+    public static int getBoardStringIndexFromVect(Vect position) {
+        return ((int)position.y() + 1) * (DEFAULT_SIZE + 3) + (int)position.x() + 1;
+    }
+    
 }

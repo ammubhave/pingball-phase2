@@ -21,9 +21,8 @@ public class CircularBumper implements Gadget {
     private final static double NULL = 5; // Used as placeholder value
 
     private final String name;
-
+    private Vect position;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-
     private Circle circleGadget;
 
     /**
@@ -37,6 +36,7 @@ public class CircularBumper implements Gadget {
      */
     public CircularBumper(Vect loc, String n) {
         name = n;
+        position = loc;
         double centerX = loc.x() + RADIUS;
         double centerY = loc.y() + RADIUS;
         circleGadget = new Circle(centerX, centerY, RADIUS);
@@ -116,13 +116,6 @@ public class CircularBumper implements Gadget {
         return name;
     }
 
-    /**
-     * @return string representing the type of gadget.
-     */
-    public String type() {
-        return "circular";
-    }
-
     public void reactBall(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
         Circle wall = null;
@@ -139,6 +132,13 @@ public class CircularBumper implements Gadget {
 
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+    
+    @Override
+    public String render(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'O');
+        return sb.toString();
     }
 
 }

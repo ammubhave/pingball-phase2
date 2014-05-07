@@ -39,12 +39,15 @@ public class LeftFlipper extends Flipper {
 
     private LineSegment oneLineFlipper;
 
-    private final double xLoc;
-    private final double yLoc;
     private final String name;
+    private double xLoc;
+    private double yLoc;
+    
+    private Vect position;
 
     public LeftFlipper(Vect loc, FlipperOrientation orient, String n) {
         super(loc);
+        position = loc;
         xLoc = loc.x();
         yLoc = loc.y();
 
@@ -297,13 +300,34 @@ public class LeftFlipper extends Flipper {
     public FlipperOrientation getOrientation() {
         return this.orientation;
     }
-
-    /**
-     * Returns a string representing the type of gadget.
-     */
+    
     @Override
-    public String type() {
-        return "flipper";
+    public String render(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        
+        //I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM
+        if (this.orientation == orientation.TOP && this.orientation == FlipperOrientation.HORIZONTAL ||
+            this.orientation == orientation.RIGHT && this.orientation == FlipperOrientation.HORIZONTAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position)+1, '-');
+        } else
+        if ((this.orientation == orientation.RIGHT && this.orientation == FlipperOrientation.VERTICAL ||
+                this.orientation == orientation.LEFT && this.orientation == FlipperOrientation.VERTICAL)) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(2,0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(2,0)))+Board.size+1, '|');
+        } else 
+        if (this.orientation == orientation.LEFT && this.orientation == FlipperOrientation.HORIZONTAL ||
+            this.orientation == orientation.BOTTOM && this.orientation == FlipperOrientation.HORIZONTAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(0,2))), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position.plus(new Vect(0,2)))+1, '-');
+        } else 
+        if (this.orientation == orientation.BOTTOM && this.orientation == FlipperOrientation.VERTICAL ||
+            this.orientation == orientation.TOP && this.orientation == FlipperOrientation.VERTICAL) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(this.position)+21, '|');
+        } 
+        return sb.toString();
     }
+
 
 }

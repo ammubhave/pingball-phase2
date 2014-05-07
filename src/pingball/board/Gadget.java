@@ -88,13 +88,6 @@ public interface Gadget {
      */
     public String getName();
 
-    // TODO: Try not to use this method anywhere, similar to instanceOf
-    /**
-     * @return type of the gadget
-     */
-    public String type();
-
-    // TODO: Implement this
     /**
      * Hooks the action of another gadget to the trigger of this gadget
      * 
@@ -102,5 +95,12 @@ public interface Gadget {
      *            the gadget's whose action needs to be hooked
      */
     public void hookActionToTrigger(Gadget gadget);
+    
+    /**
+     * Renders this gadget onto input and returns the final result
+     * @param input the input string to render upon
+     * @return the final rendered text
+     */
+    public String render(String input);
 
 }

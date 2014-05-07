@@ -18,25 +18,28 @@ public class Flipper implements Gadget {
     private final double boundingBoxLength = 2.0;
     private final static double NULL = 5;
 
-    private LineSegment boundingBoxTop;
-    private LineSegment boundingBoxBottom;
-    private LineSegment boundingBoxLeft;
-    private LineSegment boundingBoxRight;
+//    private LineSegment boundingBoxTop;
+//    private LineSegment boundingBoxBottom;
+//    private LineSegment boundingBoxLeft;
+//    private LineSegment boundingBoxRight;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private double xCoord;
     private double yCoord;
+    private Vect position;
 
     public Flipper(Vect vect) {
         xCoord = vect.x();
         yCoord = vect.y();
-        boundingBoxTop = new LineSegment(xCoord, yCoord, xCoord + boundingBoxLength, yCoord);
-        boundingBoxBottom = new LineSegment(xCoord, yCoord + boundingBoxLength, xCoord + boundingBoxLength, yCoord
-                + boundingBoxLength);
-        boundingBoxLeft = new LineSegment(xCoord, yCoord, xCoord, yCoord + boundingBoxLength);
-        boundingBoxRight = new LineSegment(xCoord + boundingBoxLength, yCoord, xCoord + boundingBoxLength, yCoord
-                + boundingBoxLength);
+        position = vect;
+        
+//        boundingBoxTop = new LineSegment(xCoord, yCoord, xCoord + boundingBoxLength, yCoord);
+//        boundingBoxBottom = new LineSegment(xCoord, yCoord + boundingBoxLength, xCoord + boundingBoxLength, yCoord
+//                + boundingBoxLength);
+//        boundingBoxLeft = new LineSegment(xCoord, yCoord, xCoord, yCoord + boundingBoxLength);
+//        boundingBoxRight = new LineSegment(xCoord + boundingBoxLength, yCoord, xCoord + boundingBoxLength, yCoord
+//                + boundingBoxLength);
     }
 
     /** Returns the top line segment of the bounding box */
@@ -110,13 +113,6 @@ public class Flipper implements Gadget {
     }
 
     /**
-     * Returns a string representing the type of gadget.
-     */
-    public String type() {
-        return "flipper";
-    }
-
-    /**
      * Returns a string describing the orientation of the flipper.
      * 
      * @return orientation of flipper
@@ -135,16 +131,20 @@ public class Flipper implements Gadget {
     @Override
     public void reactBall(Ball ball) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void action() {
         // TODO Auto-generated method stub
-
     }
 
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+
+    @Override
+    public String render(String input) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
