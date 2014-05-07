@@ -15,6 +15,7 @@ public class OuterWall implements Gadget {
     private Vect position;
     private OuterWallsOrientation orientation;
     private double coefficientOfReflection;
+    private String name;
     
     /**
      * Abstraction Function:
@@ -44,13 +45,14 @@ public class OuterWall implements Gadget {
      * @param orientation the orientation of the wall
      * @param coefficientOfReflection the coefficient of reflection
      */
-    public OuterWall(Vect position, OuterWallsOrientation orientation, double coefficientOfReflection) {
+    public OuterWall(Vect position, OuterWallsOrientation orientation, double coefficientOfReflection, String name) {
         this.height = 20;
         this.width = 20;
         this.position = position;
         this.orientation = orientation;
         this.coefficientOfReflection = coefficientOfReflection;
-        this.neighborName = null;
+        this.neighborName = "";
+        this.name = name;
         checkRep();
     }
     
@@ -59,13 +61,13 @@ public class OuterWall implements Gadget {
      * @param position the position of the top left vertex of the wall.
      * @param orientation the orientation of the wall
      */
-    public OuterWall(Vect position, OuterWallsOrientation orientation) {
-        this(position, orientation, 1.0);
+    public OuterWall(Vect position, OuterWallsOrientation orientation, String name) {
+        this(position, orientation, 1.0, name);
     }
     
     @Override
     public String getName() {
-        return "";
+        return this.name;
     }
     
     public Vect getPos() {
@@ -91,7 +93,7 @@ public class OuterWall implements Gadget {
 
     @Override
     public double leastCollisionTime(Ball ball) {
-        if (this.neighborName != null)
+        if (this.neighborName != "")
             return Double.MAX_VALUE;
     	
         Vect delta;
@@ -108,25 +110,6 @@ public class OuterWall implements Gadget {
             return Geometry.timeUntilWallCollision(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getCircle(), ball.getVelocity());  
         }
         throw new RuntimeException("This wall is in illegal state");
-    }
-
-    public void reflect(Ball ball) {
-        if (this.neighborName != null)
-            return;
-        
-        Vect delta;
-        switch (this.orientation) {
-        case HORIZONTAL:
-            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(-1, 0)), this.position.plus(new Vect(21, 0))), ball.getVelocity(), this.coefficientOfReflection));
-            break;
-        case VERTICAL:
-            delta = new Vect(0, 0);
-            if (this.position.equals(new Vect(21, 0)))
-                delta = new Vect(-1, 0);
-            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
-            break;
-        }
-        
     }
 
     public void doAction() {
@@ -160,7 +143,7 @@ public class OuterWall implements Gadget {
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), '.');
             for (int y = nameStartIndex; y < nameStartIndex + label.length(); y++)
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), label.charAt(y - nameStartIndex));
-            for (int y = nameStartIndex + label.length(); y < this.height + 3; y++)
+            for (int y = nameStartIndex + label.length(); y < this.height + 2; y++)
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), '.');
         }
         return sb.toString();
@@ -176,6 +159,21 @@ public class OuterWall implements Gadget {
 
     @Override
     public void reactBall(Ball ball) {
+        if (this.neighborName != "")
+            return;
+        
+        Vect delta;
+        switch (this.orientation) {
+        case HORIZONTAL:
+            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(-1, 0)), this.position.plus(new Vect(21, 0))), ball.getVelocity(), this.coefficientOfReflection));
+            break;
+        case VERTICAL:
+            delta = new Vect(0, 0);
+            if (this.position.equals(new Vect(21, 0)))
+                delta = new Vect(-1, 0);
+            ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
+            break;
+        }
     }
 
     @Override

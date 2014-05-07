@@ -31,7 +31,7 @@ public class OuterWallsGadgetTest {
 
     @Test
     public void testRenderNoNameTopWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "wall");
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
         assertEquals("......................\n", renderedString.substring(0, 23));
@@ -48,7 +48,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderWithNameTopWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "wall");
         gadget.setNeighborName("Jimmy Neutron");
         String renderedString = gadget.render(emptyBoardString);
         assertEquals("....Jimmy Neutron.....\n", renderedString.substring(0, 23));
@@ -65,7 +65,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderNoNameLeftWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "wall");
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
         //System.out.println(renderedString);
@@ -85,7 +85,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderWithNameLeftWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "wall");
         gadget.setNeighborName("Jimmy Neutron");
         String renderedString = gadget.render(emptyBoardString);
         for (int y = 0; y < 4; y++) {
@@ -110,7 +110,7 @@ public class OuterWallsGadgetTest {
 
     @Test
     public void testRenderNoNameBottomWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 22), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 22), OuterWallsOrientation.HORIZONTAL, "wall");
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
         //System.out.println(renderedString);
@@ -127,7 +127,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderWithNameBottomWall() {
-        OuterWall gadget = new OuterWall(new Vect(0, 22), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 22), OuterWallsOrientation.HORIZONTAL, "wall");
         gadget.setNeighborName("Jimmy Neutron");
         String renderedString = gadget.render(emptyBoardString);
         assertEquals("....Jimmy Neutron.....\n", renderedString.substring(23*22, 23*23));
@@ -144,7 +144,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderNoNameRightWall() {
-        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL, "wall");
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
         System.out.println(renderedString);
@@ -160,7 +160,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderWithNameRightWall() {
-        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL, "wall");
         gadget.setNeighborName("Jimmy Neutron");
         String renderedString = gadget.render(emptyBoardString);
         //System.out.println(renderedString);
@@ -184,19 +184,19 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testPerpendicularReflection() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "wall");
         Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, -1));
         assertEquals(4.75, gadget.leastCollisionTime(ball), 0.001);
-        gadget.reflect(ball);
+        gadget.reactBall(ball);
         assertEquals(new Vect(0, 1), ball.getVelocity());
     }
 
     @Test
     public void testAngledReflection() {
-        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL);
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "wall");
         Ball ball = new Ball("ball", new Vect(10, 5), new Vect(-1, -1));
         assertEquals(4.75, gadget.leastCollisionTime(ball), 0.001);
-        gadget.reflect(ball);
+        gadget.reactBall(ball);
         assertTrue(ball.getVelocity().minus(new Vect(-1, 1)).length() < 0.001);
     }
 }

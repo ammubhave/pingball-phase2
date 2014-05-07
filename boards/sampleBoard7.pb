@@ -23,9 +23,9 @@ board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
 
   # define an absorber to catch the ball at the bottom
   absorber name=Abs x=0 y=19 width=20 height=1 
-  absorber name=Abs x=11 y=5 width=8 height=1 
-  absorber name=Abs x=0 y=10 width=8 height=1 
-  absorber name=Abs x=11 y=15 width=8 height=1 
+  absorber name=Abs2 x=11 y=5 width=8 height=1 
+  absorber name=Abs3 x=0 y=10 width=8 height=1 
+  absorber name=Abs4 x=11 y=15 width=8 height=1 
 
   # make the absorber self-triggering
   fire trigger=Abs action=Abs 
