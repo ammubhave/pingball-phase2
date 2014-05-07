@@ -97,19 +97,23 @@ public class SquareBumper implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        LineSegment wall = null;
+        Vect velocity = ball.getVelocity();
+        double smallestTime = Double.MAX_VALUE;
+        LineSegment smallestTimeWall = null;
         for (LineSegment ls : sides) {
-            if (Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity) < TIME_TO_TRIGGER) {
-                wall = ls;
+            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+            if (time < smallestTime) {
+                smallestTime = time;
+                smallestTimeWall = ls;
             }
         }
-        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        Vect newDir = Geometry.reflectWall(wall, velocity);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        /*
+         * double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(),
+         * velocity); ball.move(tx); Vect newDir = Geometry.reflectWall(wall,
+         * velocity); newDir = new Vect(newDir.x(), -newDir.y());
+         * ball.changeVelocity(newDir); ball.move(TIME_TO_TRIGGER - tx);
+         */
     }
 
     /**
