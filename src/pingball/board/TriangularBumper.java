@@ -195,4 +195,18 @@ public class TriangularBumper implements Gadget {
         gadgetsToBeHooked.add(gadget);
     }
 
+    @Override
+    public String render(String input) {
+        Vect position = new Vect(this.xCoord, this.yCoord);
+        StringBuilder sb = new StringBuilder(input);
+        
+        if (this.orientation == orientation.TOP_LEFT || this.orientation == orientation.BOTTOM_RIGHT){
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position), '/');
+        }
+        if (this.orientation == orientation.TOP_RIGHT || this.orientation == orientation.BOTTOM_LEFT){
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position), '\\');
+        }
+        return sb.toString();
+    }
+
 }
