@@ -306,21 +306,21 @@ public class RightFlipper extends Flipper {
         StringBuilder sb = new StringBuilder(input);
         Vect position = new Vect(this.xLoc, this.yLoc);
         //I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM
-        if (this.orientation == orientation.TOP) {
+        if (this.orientation == FlipperOrientation.TOP) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '-');
             sb.setCharAt(Board.getBoardStringIndexFromVect(position)+1, '-');
         } else
-        if (this.orientation == orientation.RIGHT) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(2,0))), '|');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(2,0)))+Board.DEFAULT_SIZE+1, '|');
+        if (this.orientation == FlipperOrientation.RIGHT) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,1))), '|');
         } else 
-        if (this.orientation == orientation.LEFT) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,2))), '-');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,2)))+1, '-');
+        if (this.orientation == FlipperOrientation.LEFT) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,0))), '|');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,1))), '|');
         } else 
-        if (this.orientation == orientation.BOTTOM) {
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position), '|');
-            sb.setCharAt(Board.getBoardStringIndexFromVect(position)+Board.DEFAULT_SIZE+1, '|');
+        if (this.orientation == FlipperOrientation.BOTTOM) {
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(0,1))), '-');
+            sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1,1))), '-');
         } 
         return sb.toString();
     }
