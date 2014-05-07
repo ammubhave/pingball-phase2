@@ -29,7 +29,7 @@ public class SquareBumper implements Gadget {
     private final LineSegment rightLine;
 
     private final String name;
-
+    private Vect position;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
@@ -45,6 +45,7 @@ public class SquareBumper implements Gadget {
      */
     public SquareBumper(Vect loc, String n) {
         name = n;
+        position = loc;
         xCoord = loc.x();
         yCoord = loc.y();
         topLine = new LineSegment(xCoord, yCoord, xCoord + EDGE_LENGTH, yCoord);
@@ -172,6 +173,13 @@ public class SquareBumper implements Gadget {
 
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+    }
+
+    @Override
+    public String render(String input) {
+        StringBuilder sb = new StringBuilder(input);
+        sb.setCharAt(Board.getBoardStringIndexFromVect(position), '#');
+        return sb.toString();
     }
 
 }
