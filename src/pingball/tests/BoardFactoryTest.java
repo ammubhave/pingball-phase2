@@ -76,7 +76,7 @@ public class BoardFactoryTest {
         }
         board += ".====================.\n";
         board += "......................\n";
-        assertEquals(s, board);
+        assertEquals(board, s);
     }
     
     @Test
@@ -208,8 +208,8 @@ public class BoardFactoryTest {
         board += emptyRow;
         board += emptyRow;
         board += ".          *         .\n";
-        board += emptyRow;
         board += ".     --             .\n";
+        board += emptyRow;
         board += emptyRow;
         board += emptyRow;
         board += emptyRow;
@@ -223,7 +223,7 @@ public class BoardFactoryTest {
         board += emptyRow;
         board += emptyRow;
         board += "......................\n";
-        assertEquals(s, board);
+        assertEquals(board, s);
     }
     
     @Test
@@ -249,7 +249,7 @@ public class BoardFactoryTest {
         }
         board += ".====================.\n";
         board += "......................\n";
-        assertEquals(s, board);
+        assertEquals(board, s);
     }
     
     @Test
@@ -265,8 +265,8 @@ public class BoardFactoryTest {
         board += ".########            .\n";
         board += ".           ======== .\n";
         board += emptyRow;
-        board += ".        --  |       .\n";
-        board += ".            |       .\n";
+        board += ".        -- |        .\n";
+        board += ".           |        .\n";
         board += ".          \\         .\n";
         board += ".========            .\n";
         board += emptyRow;
@@ -279,6 +279,6 @@ public class BoardFactoryTest {
         board += emptyRow;
         board += ".====================.\n";
         board += "......................\n";
-        assertEquals(s, board);
+        assertEquals(board, s);
     }
 }

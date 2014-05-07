@@ -90,11 +90,11 @@ public class BoardFactory {
                     Double.parseDouble(attributes.get("gravity")), 
                     Double.parseDouble(attributes.get("friction1")),
                     Double.parseDouble(attributes.get("friction2")));
-            // The following code is not required since the Board constructor does this for us
-            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL));
-            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL));
-            board.addGadget(new OuterWall(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL));
-            board.addGadget(new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL));
+         
+            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "w1"));
+            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "w2"));
+            board.addGadget(new OuterWall(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL, "w3"));
+            board.addGadget(new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL, "w4"));
             attributes.clear();
         }
         
@@ -220,13 +220,13 @@ public class BoardFactory {
             switch (Integer.parseInt(attributes.get("orientation"))) {
             // CHECK ORIENTATIONS FOR EACH ANGLE
             case 0:
-                orientation = FlipperOrientation.LEFT; break;
-            case 90:
                 orientation = FlipperOrientation.TOP; break;
-            case 180:
+            case 90:
                 orientation = FlipperOrientation.RIGHT; break;
-            case 270:
+            case 180:
                 orientation = FlipperOrientation.BOTTOM; break;
+            case 270:
+                orientation = FlipperOrientation.LEFT; break;
             }
             board.addGadget(new RightFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),

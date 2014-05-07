@@ -47,8 +47,8 @@ public class Board {
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
         for (Gadget gadget : gadgets) {
-            Vect pos = new Vect(gadget.getX(),gadget.getY());
-            boardGadgets.put(pos.toString(), gadget);
+            //Vect pos = new Vect(gadget.getX(),gadget.getY());
+            boardGadgets.put(gadget.getName(), gadget);
         }
         // add corner walls to gadgets
 //        Gadget cornerNE = new OuterWallPart(this, true, new Vect(20, -1), '.');
