@@ -163,6 +163,14 @@ public class SquareBumperGadgetTest {
     }
 
     // LEAST COLLISION TIME TESTING
+    
+    @Test
+    public void testLeastCollisionTimeZero(){
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, 1));
+        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+        
+    }
+    
     @Test
     public void testLeastCollisionTimeTop() {
         Ball ball = new Ball("ball", new Vect(5, 4), new Vect(0, 1));
