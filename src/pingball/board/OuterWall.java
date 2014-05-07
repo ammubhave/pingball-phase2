@@ -160,7 +160,7 @@ public class OuterWall implements Gadget {
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), '.');
             for (int y = nameStartIndex; y < nameStartIndex + label.length(); y++)
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), label.charAt(y - nameStartIndex));
-            for (int y = nameStartIndex + label.length(); y < this.height + 2; y++)
+            for (int y = nameStartIndex + label.length(); y < this.height + 3; y++)
                 sb.setCharAt(((int)this.position.y() + y) * (this.width + 3) + (int)this.position.x(), '.');
         }
         return sb.toString();

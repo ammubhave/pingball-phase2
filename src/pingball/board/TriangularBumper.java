@@ -93,13 +93,14 @@ public class TriangularBumper implements Gadget {
     @Override
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getFlippedVelocity();
+        double smallestTime = Double.MAX_VALUE;
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < TIME_TO_TRIGGER) {
-                return time;
+            if (time < smallestTime) {
+                smallestTime = time;
             }
         }
-        return NULL;
+        return smallestTime;
     }
 
     /**
@@ -113,19 +114,18 @@ public class TriangularBumper implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        LineSegment wall = null;
+        Vect velocity = ball.getVelocity();
+        double smallestTime = Double.MAX_VALUE;
+        LineSegment smallestTimeWall = null;
         for (LineSegment ls : sides) {
-            if (Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity) < TIME_TO_TRIGGER) {
-                wall = ls;
+            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+            if (time < smallestTime) {
+                smallestTime = time;
+                smallestTimeWall = ls;
             }
         }
-        double tx = Geometry.timeUntilWallCollision(wall, ball.getCircle(), velocity);
-        ball.move(tx);
-        Vect newDir = Geometry.reflectWall(wall, velocity, REFL_COEFF);
-        newDir = new Vect(newDir.x(), -newDir.y());
-        ball.changeVelocity(newDir);
-        ball.move(TIME_TO_TRIGGER - tx);
+
+        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
     }
 
     /**
