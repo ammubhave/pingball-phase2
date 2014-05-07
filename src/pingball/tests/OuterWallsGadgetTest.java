@@ -144,7 +144,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderNoNameRightWall() {
-        OuterWall gadget = new OuterWall(new Vect(22, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL);
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
         System.out.println(renderedString);
@@ -160,7 +160,7 @@ public class OuterWallsGadgetTest {
     
     @Test
     public void testRenderWithNameRightWall() {
-        OuterWall gadget = new OuterWall(new Vect(22, 0), OuterWallsOrientation.VERTICAL);
+        OuterWall gadget = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL);
         gadget.setNeighborName("Jimmy Neutron");
         String renderedString = gadget.render(emptyBoardString);
         //System.out.println(renderedString);
