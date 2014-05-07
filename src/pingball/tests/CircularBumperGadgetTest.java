@@ -145,16 +145,4 @@ public class CircularBumperGadgetTest {
         gadget.reactBall(ball);
         assertEquals(ball.getVelocity(),new Vect(-1, 1));
     }
-    
-
-
-    @Test
-    public void testEquals() {
-        CircularBumper g1 = new CircularBumper(new Vect(0, 0), "Bilbo");
-        CircularBumper g2 = new CircularBumper(new Vect(0, 0), "Bilbo");
-        CircularBumper g3 = new CircularBumper(new Vect(5, 0), "Baggins");
-
-        assertEquals(g1, g2);
-        assertNotEquals(g1, g3);
-    }
 }
