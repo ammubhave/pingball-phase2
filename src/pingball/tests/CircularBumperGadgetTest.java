@@ -28,7 +28,7 @@ public class CircularBumperGadgetTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
-        gadget = new CircularBumper(new Vect(5, 5), "test");
+        gadget = new CircularBumper(new Vect(4.5, 4.5), "test");
     }
 
     @Test
