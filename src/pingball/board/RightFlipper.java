@@ -80,12 +80,10 @@ public class RightFlipper extends Flipper {
     }
 
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        double time = Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity);
-        if (time < TIME_TO_TRIGGER) {
-            return time;
-        }
-        return NULL;
+        Vect velocity = ball.getVelocity();
+        LineSegment smallestTimeWall = oneLineFlipper;
+        double smallestTime = Geometry.timeUntilWallCollision(smallestTimeWall, ball.getCircle(), velocity);
+        return smallestTime;
     }
 
     public void reactBall(Ball ball) {
