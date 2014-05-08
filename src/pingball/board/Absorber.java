@@ -141,6 +141,8 @@ public class Absorber implements Gadget {
         // (should be -0.25, but then absorber is stopping its own balls)
             heldBall = ball;
         }
+
+        this.trigger();
     }
 
     /**

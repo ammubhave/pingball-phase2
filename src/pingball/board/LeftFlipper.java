@@ -87,6 +87,7 @@ public class LeftFlipper extends Flipper {
         double smallestTime = Geometry.timeUntilWallCollision(smallestTimeWall, ball.getCircle(), velocity);
         ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
 
+        this.trigger();
         // final double FLIPPER_SPEED = 18.8495559;
         // Vect newDir = Geometry.reflectRotatingWall(oneLineFlipper,
         // ball.getPos(), -FLIPPER_SPEED, ball.getCircle(),
