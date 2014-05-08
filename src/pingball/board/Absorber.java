@@ -26,7 +26,7 @@ public class Absorber implements Gadget {
 
     private Ball heldBall = null;
 
-    private final static Vect SHOOT_VELOCITY = new Vect(0, 50);
+    private final static Vect SHOOT_VELOCITY = new Vect(0, -50);
     private final static double REFL_COEFF = 1;
     private final static double TIME_TO_TRIGGER = 0.001;
     private final static double NULL = 5; // Used as placeholder value
@@ -95,17 +95,15 @@ public class Absorber implements Gadget {
      */
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
+        Vect velocity = ball.getVelocity();
+        double smallestTime = Double.MAX_VALUE;
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (!isInside(ball)) {
-                if (time < TIME_TO_TRIGGER) {
-                    return time;
-                }
+            if (time < smallestTime) {
+                smallestTime = time;
             }
-
         }
-        return NULL;
+        return smallestTime;
     }
 
     /**
@@ -117,6 +115,8 @@ public class Absorber implements Gadget {
     public void action() {
         if (heldBall != null) {            
             heldBall.changeVelocity(SHOOT_VELOCITY);
+            heldBall.changePos(new Vect(xLocation + width - 0.25, yLocation - 0.25));
+            System.out.println(heldBall.getVelocity());
             heldBall = null;
         }
     }
@@ -140,6 +140,9 @@ public class Absorber implements Gadget {
             ball.changeVelocity(new Vect(0, 0));
         // (should be -0.25, but then absorber is stopping its own balls)
             heldBall = ball;
+        } else {
+            heldBall.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
+            heldBall.changeVelocity(new Vect(0, 0));
         }
 
         this.trigger();
