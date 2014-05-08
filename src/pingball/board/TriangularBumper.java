@@ -126,6 +126,7 @@ public class TriangularBumper implements Gadget {
         }
 
         ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        this.trigger();
     }
 
     /**
