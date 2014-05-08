@@ -132,6 +132,7 @@ public class SquareBumper implements Gadget {
                 smallestWall = ls;
             }
         }
+<<<<<<< HEAD
         Circle smallestCircle = null;
         double smallestTimeCircle = Double.MAX_VALUE;
         double timeToCircle = 0;
@@ -148,6 +149,10 @@ public class SquareBumper implements Gadget {
             ball.changeVelocity(Geometry.reflectCircle(smallestCircle.getCenter(), ball.getPos(), ball.getVelocity()));
         }
 
+=======
+        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        this.trigger();
+>>>>>>> 9d2fa19cb0f63cbf3d4c6861bb07490c9d6566f1
     }
 
     /**

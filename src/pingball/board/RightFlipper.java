@@ -80,12 +80,10 @@ public class RightFlipper extends Flipper {
     }
 
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
-        double time = Geometry.timeUntilWallCollision(oneLineFlipper, ball.getCircle(), velocity);
-        if (time < TIME_TO_TRIGGER) {
-            return time;
-        }
-        return NULL;
+        Vect velocity = ball.getVelocity();
+        LineSegment smallestTimeWall = oneLineFlipper;
+        double smallestTime = Geometry.timeUntilWallCollision(smallestTimeWall, ball.getCircle(), velocity);
+        return smallestTime;
     }
 
     public void reactBall(Ball ball) {
@@ -94,6 +92,7 @@ public class RightFlipper extends Flipper {
         double smallestTime = Geometry.timeUntilWallCollision(smallestTimeWall, ball.getCircle(), velocity);
         ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
 
+        this.trigger();
         // final double FLIPPER_SPEED = 18.8495559;
         // Vect newDir = Geometry.reflectWall(wall, velocity, 0.95);
         // Vect newDir = Geometry.reflectRotatingWall(wall, ball.getPos(),

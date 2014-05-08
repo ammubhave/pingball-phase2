@@ -38,6 +38,7 @@ board name=sampleBoard2_1 gravity=20.0 friction1=0.020 friction2=0.020
   # define some triangular bumpers
   triangleBumper name=Tri1 x=17 y=11 orientation=270
   triangleBumper name=Tri2 x=18 y=12 orientation=270
+  triangleBumper name=Tri3 x=19 y=7 orientation=90
   
   # add some flippers
   leftFlipper name=FlipL1 x=16 y=2 orientation=0

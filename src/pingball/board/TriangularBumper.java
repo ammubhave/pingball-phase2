@@ -92,7 +92,7 @@ public class TriangularBumper implements Gadget {
      */
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getFlippedVelocity();
+        Vect velocity = ball.getVelocity();
         double smallestTime = Double.MAX_VALUE;
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
@@ -100,6 +100,7 @@ public class TriangularBumper implements Gadget {
                 smallestTime = time;
             }
         }
+
         return smallestTime;
     }
 
@@ -126,6 +127,7 @@ public class TriangularBumper implements Gadget {
         }
 
         ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        this.trigger();
     }
 
     /**

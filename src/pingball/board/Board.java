@@ -23,7 +23,7 @@ public class Board {
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
     private final String name;    
-    private Vect g; // In L / ms^2
+    private Vect g; // In L / s^2
     private double mu; // In per s.
     private double mu2; // In per L.
 
@@ -38,7 +38,7 @@ public class Board {
             List<Gadget> gadgets, double gravity, double friction1,
             double friction2) {
         this.name = name;
-        this.g = new Vect(0, gravity / (1000 * 1000)); // L / ms^2
+        this.g = new Vect(0, gravity); // L / s^2
 
         this.mu = friction1;
         this.mu2 = friction2;
