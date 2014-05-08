@@ -111,6 +111,9 @@ public class AbsorberGadgetTest {
         assertEquals(ball.getVelocity(),new Vect(1,1));
     }
 
+    
+    //LEAST COLLISION TIME TESTS
+    
     @Test
     public void testLeastCollisionTimeRight(){
         Ball ball = new Ball ("ball", new Vect(3, 2), new Vect(-1, 0));
