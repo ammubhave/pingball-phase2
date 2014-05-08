@@ -51,7 +51,7 @@ public class OuterWall implements Gadget {
         this.position = position;
         this.orientation = orientation;
         this.coefficientOfReflection = coefficientOfReflection;
-        this.neighborName = "";
+        this.neighborName = null;
         this.name = name;
         checkRep();
     }
