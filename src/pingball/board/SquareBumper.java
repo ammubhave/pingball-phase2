@@ -3,6 +3,7 @@ package pingball.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
@@ -28,11 +29,17 @@ public class SquareBumper implements Gadget {
     private final LineSegment leftLine;
     private final LineSegment rightLine;
 
+    private final Circle topLeft;
+    private final Circle topRight;
+    private final Circle bottomLeft;
+    private final Circle bottomRight;
+
     private final String name;
     private Vect position;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
+    private final List<Circle> cornerCircles = new ArrayList<Circle>();
 
     /**
      * Creates a square bumper with the user-inputted parameters. Has a
@@ -57,6 +64,16 @@ public class SquareBumper implements Gadget {
         sides.add(bottomLine);
         sides.add(leftLine);
         sides.add(rightLine);
+
+        topLeft = new Circle(xCoord, yCoord, 0);
+        topRight = new Circle(xCoord + 1, yCoord, 0);
+        bottomLeft = new Circle(xCoord, yCoord + 1, 0);
+        bottomRight = new Circle(xCoord + 1, yCoord + 1, 0);
+
+        cornerCircles.add(topLeft);
+        cornerCircles.add(topRight);
+        cornerCircles.add(bottomLeft);
+        cornerCircles.add(bottomRight);
     }
 
     /**
@@ -84,6 +101,12 @@ public class SquareBumper implements Gadget {
                 smallestTime = time;
             }
         }
+        for (Circle circ : cornerCircles) {
+            double time = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), velocity);
+            if (time < smallestTime) {
+                smallestTime = time;
+            }
+        }
         return smallestTime;
     }
 
@@ -99,16 +122,32 @@ public class SquareBumper implements Gadget {
 
     public void reactBall(Ball ball) {
         Vect velocity = ball.getVelocity();
-        double smallestTime = Double.MAX_VALUE;
-        LineSegment smallestTimeWall = null;
+        double smallestTimeWall = Double.MAX_VALUE;
+        LineSegment smallestWall = null;
+        double timeToWall = 0;
         for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-                smallestTimeWall = ls;
+            timeToWall = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+            if (timeToWall < smallestTimeWall) {
+                smallestTimeWall = timeToWall;
+                smallestWall = ls;
             }
         }
-        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        Circle smallestCircle = null;
+        double smallestTimeCircle = Double.MAX_VALUE;
+        double timeToCircle = 0;
+        for (Circle circ : cornerCircles) {
+            timeToCircle = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), velocity);
+            if (timeToCircle < smallestTimeCircle) {
+                smallestTimeCircle = timeToCircle;
+                smallestCircle = circ;
+            }
+        }
+        if (smallestTimeWall < smallestTimeCircle) {
+            ball.changeVelocity(Geometry.reflectWall(smallestWall, velocity));
+        } else {
+            ball.changeVelocity(Geometry.reflectCircle(smallestCircle.getCenter(), ball.getPos(), ball.getVelocity()));
+        }
+
     }
 
     /**
