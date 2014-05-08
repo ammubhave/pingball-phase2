@@ -93,7 +93,7 @@ public class OuterWall implements Gadget {
 
     @Override
     public double leastCollisionTime(Ball ball) {
-        if (this.neighborName != "")
+        if (this.neighborName != null)
             return Double.MAX_VALUE;
     	
         Vect delta;
@@ -159,7 +159,7 @@ public class OuterWall implements Gadget {
 
     @Override
     public void reactBall(Ball ball) {
-        if (this.neighborName != "")
+        if (this.neighborName != null)
             return;
         
         Vect delta;
