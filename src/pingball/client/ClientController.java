@@ -8,10 +8,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.SwingUtilities;
+
 import pingball.board.Board;
 import pingball.proto.HelloMessage;
 import pingball.proto.Message;
 import pingball.proto.WelcomeMessage;
+import pingball.ui.MainWindow;
 
 public class ClientController {
     private final double BOARD_REFRESH_INTERVAL = 0.050; // seconds
@@ -21,7 +24,7 @@ public class ClientController {
 	private final Connection serverConnection;
 	private final BlockingQueue<Message> sendQueue;
 	private final BlockingQueue<Message> recvQueue;
-    
+	MainWindow window;
 	/**
 	 * Sets up a controller for a new client.
 	 * 
@@ -32,7 +35,7 @@ public class ClientController {
 	 *   drawn
 	 * @throws IOException
 	 */
-	public ClientController(Board board, String host, int port)
+	public ClientController(final Board board, String host, int port)
 			throws IOException {
 		assert board != null;
 
@@ -46,7 +49,12 @@ public class ClientController {
 			handshake();
 		} else {
 			this.serverConnection = null;
-		}
+		}         // set up the UI (on the event-handling thread)
+		SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	               window = new MainWindow(board);
+	            }
+	    });
 	}
     
     /**
@@ -61,6 +69,7 @@ public class ClientController {
         exec.scheduleAtFixedRate(new BoardPrinterTask(), 0, (long)(BOARD_REFRESH_INTERVAL*1000*1000), TimeUnit.MICROSECONDS);
 
         exec.scheduleWithFixedDelay(new HeartbeatTask(), 0, (long)(DT*1000*1000), TimeUnit.MICROSECONDS);
+        
     }
     
     
@@ -95,6 +104,8 @@ public class ClientController {
         public void run() {
             synchronized(board) {
                 System.out.println(board.toString());
+                if (window != null)
+                    window.repaint();
             }
         }                
     }

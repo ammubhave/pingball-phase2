@@ -1,6 +1,6 @@
 package pingball.ui.board;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public interface GadgetPainter {
-    public void paint(Graphics g);
+    public void paint(final Graphics2D g);
 }

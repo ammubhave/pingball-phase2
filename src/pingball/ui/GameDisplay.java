@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import pingball.board.Board;
+import pingball.ui.board.GadgetPainter;
 
 /**
  * 
@@ -35,6 +36,7 @@ public class GameDisplay extends JPanel {
      * @param board game board 
      */
     public GameDisplay(Board board){        
+        this.board = board;
         this.setPreferredSize(new Dimension(width, height));
     }
     
@@ -54,7 +56,9 @@ public class GameDisplay extends JPanel {
     }
     
     private void drawGadgets(final Graphics2D g){
-        
+        for (GadgetPainter painter : board.getGadgetPainters()) {
+            painter.paint(g);
+        }
     }
     
     private void drawBalls(final Graphics2D g){

@@ -30,7 +30,7 @@ import pingball.ui.board.CircularBumperPainter;
 import pingball.ui.board.LeftFlipperPainter;
 import pingball.ui.board.OuterWallPainter;
 import pingball.ui.board.RightFlipperPainter;
-import pingball.ui.board.SquareBumberPainter;
+import pingball.ui.board.SquareBumperPainter;
 import pingball.ui.board.TriangularBumperPainter;
 //import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
@@ -157,7 +157,7 @@ public class BoardFactory {
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
                     attributes.get("name"));
             board.addGadget(gadget);
-            board.addGadgetPainter(new SquareBumberPainter(gadget));
+            board.addGadgetPainter(new SquareBumperPainter(gadget));
             attributes.clear();
         }
         

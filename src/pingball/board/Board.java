@@ -87,6 +87,10 @@ public class Board {
     public void addGadgetPainter(GadgetPainter gadgetPainter) {
         boardGadgetPainters.add(gadgetPainter);
     }
+    
+    public List<GadgetPainter> getGadgetPainters() {
+        return this.boardGadgetPainters;
+    }
 
     @Override
     public String toString() {

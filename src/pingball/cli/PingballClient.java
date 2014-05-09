@@ -91,12 +91,7 @@ public class PingballClient {
 			final Board board = BoardBuilder.buildBoard(boardFile);
 			ClientController controller = new ClientController(board, host,
 					port);
-			// set up the UI (on the event-handling thread)
-	        SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	                MainWindow window = new MainWindow(board);
-	            }
-	        });
+
 			controller.start();
 		} catch (IOException e) {
 			e.printStackTrace();
