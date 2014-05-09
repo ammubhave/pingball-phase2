@@ -3,6 +3,7 @@ package pingball.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
@@ -30,10 +31,14 @@ public class TriangularBumper implements Gadget {
     private final LineSegment leg1; // horizontal leg
     private final LineSegment leg2; // vertical leg
     private final LineSegment hypotenuse;
+    private final Circle angle1; // horizontal leg
+    private final Circle angle2; // vertical leg
+    private final Circle rightAngle;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
+    private final List<Circle> corners = new ArrayList<Circle>();
 
     /**
      * Creates a 45-45-90 triangle bumper with the user-inputted parameters
@@ -54,19 +59,30 @@ public class TriangularBumper implements Gadget {
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord + legLength, yCoord, xCoord, yCoord + legLength);
+            angle1 = new Circle(xCoord + legLength, yCoord, 0);
+            angle2 = new Circle(xCoord, yCoord + legLength, 0);
+            rightAngle = new Circle(xCoord, yCoord, 0);
         } else if (orientation == TriangularBumperOrientation.TOP_RIGHT) { // Right angle is in top-right corner
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
-        } else if (orientation == TriangularBumperOrientation.BOTTOM_RIGHT) { // Right angle is in bottom-right
-                                         // corner
+            angle1 = new Circle(xCoord + legLength, yCoord + legLength, 0);
+            angle2 = new Circle(xCoord, yCoord, 0);
+            rightAngle = new Circle(xCoord + legLength, yCoord, 0);
+        } else if (orientation == TriangularBumperOrientation.BOTTOM_RIGHT) { // Right angle is in bottom-right corner
             leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord);
+            angle1 = new Circle(xCoord, yCoord + legLength, 0);
+            angle2 = new Circle(xCoord + legLength, yCoord, 0);
+            rightAngle = new Circle(xCoord + legLength, yCoord + legLength, 0);
         } else { // Right angle is in bottom-left corner
             leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
             leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
+            angle1 = new Circle(xCoord, yCoord, 0);
+            angle2 = new Circle(xCoord + legLength, yCoord + legLength, 0);
+            rightAngle = new Circle(xCoord, yCoord + legLength, 0);
         }
 
         this.orientation = orientation;
@@ -74,6 +90,9 @@ public class TriangularBumper implements Gadget {
         sides.add(leg1);
         sides.add(leg2);
         sides.add(hypotenuse);
+        corners.add(angle1);
+        corners.add(angle2);
+        corners.add(rightAngle);
     }
 
     public void trigger() {
@@ -94,8 +113,15 @@ public class TriangularBumper implements Gadget {
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getVelocity();
         double smallestTime = Double.MAX_VALUE;
+        
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
+            if (time < smallestTime) {
+                smallestTime = time;
+            }
+        }
+        for (Circle ls : corners) {
+            double time = Geometry.timeUntilCircleCollision(ls, ball.getCircle(), velocity);
             if (time < smallestTime) {
                 smallestTime = time;
             }
@@ -117,7 +143,9 @@ public class TriangularBumper implements Gadget {
     public void reactBall(Ball ball) {
         Vect velocity = ball.getVelocity();
         double smallestTime = Double.MAX_VALUE;
+        
         LineSegment smallestTimeWall = null;
+        Circle smallestTimeCorner = null;
         for (LineSegment ls : sides) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
             if (time < smallestTime) {
@@ -125,8 +153,18 @@ public class TriangularBumper implements Gadget {
                 smallestTimeWall = ls;
             }
         }
-
-        ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        for (Circle ls : corners) {
+            double time = Geometry.timeUntilCircleCollision(ls, ball.getCircle(), velocity);
+            if (time < smallestTime) {
+                smallestTime = time;
+                smallestTimeWall = null;
+                smallestTimeCorner = ls;
+            }
+        }
+        if (smallestTimeWall != null)
+            ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
+        else
+            ball.changeVelocity(Geometry.reflectCircle(smallestTimeCorner.getCenter(), ball.getPos(), velocity));
         this.trigger();
     }
 

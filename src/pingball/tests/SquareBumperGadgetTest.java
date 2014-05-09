@@ -2,6 +2,7 @@ package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static pingball.tests.TestHelpers.assertEqualsVect;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -94,46 +95,41 @@ public class SquareBumperGadgetTest {
     @Test
     public void testPerpendicularReflectionBottomRight() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
-        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        Ball ball = new Ball("ball", new Vect(2, 2), new Vect(-1, -1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 1);
+        assertEqualsVect(new Vect(1, 1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionBottomLeft() {
-        SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
-        Ball ball = new Ball("ball", new Vect(1, 2), new Vect(1, -1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
+        Ball ball = new Ball("ball", new Vect(-1, 2), new Vect(1, -1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(-1, 1);
+        assertEqualsVect(new Vect(-1, 1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTopLeft() {
-        SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
-        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(1, 1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
+        Ball ball = new Ball("ball", new Vect(-1, -1), new Vect(1, 1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(-1, -1);
+        assertEqualsVect(new Vect(-1, -1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTopRight() {
-        SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
-        Ball ball = new Ball("ball", new Vect(2, 1), new Vect(-1, 1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
+        Ball ball = new Ball("ball", new Vect(2, -1), new Vect(-1, 1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, -1);
+        assertEqualsVect(new Vect(1, -1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionBottomSide() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
-        Ball ball = new Ball("ball", new Vect(0.5, 1), new Vect(0, -1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
+        Ball ball = new Ball("ball", new Vect(0.5, 2), new Vect(0, -1));
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(0, 1);
+        assertEqualsVect(new Vect(0, 1), ball.getVelocity());
     }
 
     @Test
@@ -142,7 +138,7 @@ public class SquareBumperGadgetTest {
         Ball ball = new Ball("ball", new Vect(1, 1.5), new Vect(1, 0));
         // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(-1, 0);
+        assertEqualsVect(new Vect(-1, 0), ball.getVelocity());
     }
 
     @Test
@@ -151,7 +147,7 @@ public class SquareBumperGadgetTest {
         Ball ball = new Ball("ball", new Vect(1.5, 1), new Vect(-1, 0));
         // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 0);
+        assertEqualsVect(new Vect(1, 0), ball.getVelocity());
     }
 
     @Test
@@ -160,7 +156,7 @@ public class SquareBumperGadgetTest {
         Ball ball = new Ball("ball", new Vect(2, 1.5), new Vect(-1, 0));
         // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assert ball.getVelocity() == new Vect(1, 0);
+        assertEqualsVect(new Vect(1, 0), ball.getVelocity());
     }
 
     // LEAST COLLISION TIME TESTING

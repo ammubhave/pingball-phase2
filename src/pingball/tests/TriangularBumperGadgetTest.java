@@ -98,7 +98,6 @@ public class TriangularBumperGadgetTest {
     public void testPerpendicularTLReflectionBottomRight() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, -1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(1, 1), ball.getVelocity());
     }
@@ -106,7 +105,6 @@ public class TriangularBumperGadgetTest {
     public void testPerpendicularTLReflectionTop() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(0.5, -1), new Vect(0, 1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(0, -1), ball.getVelocity());
     }
@@ -114,7 +112,6 @@ public class TriangularBumperGadgetTest {
     public void testPerpendicularTLReflectionLeft() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(-1, 0.5), new Vect(1, 0));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(-1, 0), ball.getVelocity());
     }
@@ -122,25 +119,22 @@ public class TriangularBumperGadgetTest {
     public void testCornerTLReflectionTopRight() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(2, -1), new Vect(-1, 1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assertEquals(new Vect(1, -1), ball.getVelocity());
+        assertEqualsVect(new Vect(1, -1), ball.getVelocity());
     }
     @Test
     public void testCornerTLReflectionTopLeft() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(-1, -1), new Vect(1, 1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assertEquals(new Vect(-1, -1), ball.getVelocity());
+        assertEqualsVect(new Vect(-1, -1), ball.getVelocity());
     }
     @Test
     public void testCornerTLReflectionBottomLeft() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(-1, 2), new Vect(1, -1));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
-        assertEquals(new Vect(-1, 1), ball.getVelocity());
+        assertEqualsVect(new Vect(-1, 1), ball.getVelocity());
     }
 
     // TOP_RIGHT
