@@ -24,6 +24,14 @@ import pingball.board.RightFlipper;
 import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
+import pingball.ui.board.AbsorberPainter;
+import pingball.ui.board.BallPainter;
+import pingball.ui.board.CircularBumperPainter;
+import pingball.ui.board.LeftFlipperPainter;
+import pingball.ui.board.OuterWallPainter;
+import pingball.ui.board.RightFlipperPainter;
+import pingball.ui.board.SquareBumberPainter;
+import pingball.ui.board.TriangularBumperPainter;
 //import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 public class BoardFactory {
@@ -90,11 +98,23 @@ public class BoardFactory {
                     Double.parseDouble(attributes.get("gravity")), 
                     Double.parseDouble(attributes.get("friction1")),
                     Double.parseDouble(attributes.get("friction2")));
-         
-            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "w1"));
-            board.addGadget(new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "w2"));
-            board.addGadget(new OuterWall(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL, "w3"));
-            board.addGadget(new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL, "w4"));
+            
+            OuterWall w1 = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "w1");         
+            board.addGadget(w1);
+            board.addGadgetPainter(new OuterWallPainter(w1));
+            
+            OuterWall w2 = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "w2");         
+            board.addGadget(w2);
+            board.addGadgetPainter(new OuterWallPainter(w2));
+            
+            OuterWall w3 = new OuterWall(new Vect(0, 21), OuterWallsOrientation.HORIZONTAL, "w3");         
+            board.addGadget(w3);
+            board.addGadgetPainter(new OuterWallPainter(w3));
+            
+            OuterWall w4 = new OuterWall(new Vect(21, 0), OuterWallsOrientation.VERTICAL, "w4");         
+            board.addGadget(w4);
+            board.addGadgetPainter(new OuterWallPainter(w4));
+            
             attributes.clear();
         }
         
@@ -111,10 +131,12 @@ public class BoardFactory {
         }
         @Override
         public void exitBallObjectLine(BoardParser.BallObjectLineContext ctx) {
-            board.addBall(new Ball(
+            Ball ball = new Ball(
                     attributes.get("name"),
                     new Vect(Double.parseDouble(attributes.get("x")), Double.parseDouble(attributes.get("y"))), 
-                    new Vect(Double.parseDouble(attributes.get("xVelocity")), Double.parseDouble(attributes.get("yVelocity")))));
+                    new Vect(Double.parseDouble(attributes.get("xVelocity")), Double.parseDouble(attributes.get("yVelocity"))));
+            board.addBall(ball);
+            board.addGadgetPainter(new BallPainter(ball));
             attributes.clear();
         }
         
@@ -131,9 +153,11 @@ public class BoardFactory {
         }
         @Override
         public void exitSquareBumperObjectLine(BoardParser.SquareBumperObjectLineContext ctx) {
-            board.addGadget(new SquareBumper(
+            SquareBumper gadget = new SquareBumper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
-                    attributes.get("name")));
+                    attributes.get("name"));
+            board.addGadget(gadget);
+            board.addGadgetPainter(new SquareBumberPainter(gadget));
             attributes.clear();
         }
         
@@ -162,10 +186,12 @@ public class BoardFactory {
             case 270:
                 orientation = TriangularBumperOrientation.BOTTOM_LEFT; break;
             }
-            board.addGadget(new TriangularBumper(
+            TriangularBumper gadget = new TriangularBumper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     orientation,
-                    attributes.get("name")));
+                    attributes.get("name")); 
+            board.addGadget(gadget);
+            board.addGadgetPainter(new TriangularBumperPainter(gadget));
             attributes.clear();
         }
         
@@ -196,10 +222,12 @@ public class BoardFactory {
             case 270:
                 orientation = FlipperOrientation.BOTTOM; break;
             }
-            board.addGadget(new LeftFlipper(
+            LeftFlipper gadget = new LeftFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     orientation, 
-                    attributes.get("name")));
+                    attributes.get("name")); 
+            board.addGadget(gadget);
+            board.addGadgetPainter(new LeftFlipperPainter(gadget));
             attributes.clear();
         }
         
@@ -228,10 +256,12 @@ public class BoardFactory {
             case 270:
                 orientation = FlipperOrientation.LEFT; break;
             }
-            board.addGadget(new RightFlipper(
+            RightFlipper gadget = new RightFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     orientation, 
-                    attributes.get("name")));
+                    attributes.get("name")); 
+            board.addGadget(gadget);
+            board.addGadgetPainter(new RightFlipperPainter(gadget));
             attributes.clear();
         }
         
@@ -248,9 +278,11 @@ public class BoardFactory {
         }
         @Override
         public void exitCircleBumperObjectLine(BoardParser.CircleBumperObjectLineContext ctx) {
-            board.addGadget(new CircularBumper(
+            CircularBumper gadget = new CircularBumper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))), 
-                    attributes.get("name")));
+                    attributes.get("name")); 
+            board.addGadget(gadget);
+            board.addGadgetPainter(new CircularBumperPainter(gadget));
             attributes.clear();
         }
         
@@ -268,10 +300,12 @@ public class BoardFactory {
         }
         @Override
         public void exitAbsorberObjectLine(BoardParser.AbsorberObjectLineContext ctx) {
-            board.addGadget(new Absorber(
+            Absorber gadget = new Absorber(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                            Integer.parseInt(attributes.get("width")), Integer.parseInt(attributes.get("height")),
-                            attributes.get("name")));
+                    Integer.parseInt(attributes.get("width")), Integer.parseInt(attributes.get("height")),
+                    attributes.get("name"));
+            board.addGadget(gadget);
+            board.addGadgetPainter(new AbsorberPainter(gadget));
             attributes.clear();
         }
         

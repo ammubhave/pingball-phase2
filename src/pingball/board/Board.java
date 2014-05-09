@@ -12,6 +12,7 @@ import pingball.proto.BallMessage;
 import pingball.proto.ConnectWallMessage;
 import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
+import pingball.ui.board.GadgetPainter;
 
 /**
  * 
@@ -22,6 +23,7 @@ public class Board {
     private final int width;
     private final List<Ball> balls;
     private final HashMap<String, Gadget> boardGadgets;
+    private final List<GadgetPainter> boardGadgetPainters;
     private final String name;    
     private Vect g; // In L / s^2
     private double mu; // In per s.
@@ -50,6 +52,7 @@ public class Board {
             //Vect pos = new Vect(gadget.getX(),gadget.getY());
             boardGadgets.put(gadget.getName(), gadget);
         }
+        boardGadgetPainters = new ArrayList<GadgetPainter>();
         // add corner walls to gadgets
 //        Gadget cornerNE = new OuterWallPart(this, true, new Vect(20, -1), '.');
 //        boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
@@ -74,6 +77,15 @@ public class Board {
      */
     public void addGadget(Gadget gadget) {
         boardGadgets.put(gadget.getName(), gadget);
+    }
+    
+    /**
+     * Adds a gadget painter to the board
+     * 
+     * @param gadget painter to be added to board
+     */
+    public void addGadgetPainter(GadgetPainter gadgetPainter) {
+        boardGadgetPainters.add(gadgetPainter);
     }
 
     @Override

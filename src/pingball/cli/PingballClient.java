@@ -7,8 +7,11 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
+import javax.swing.SwingUtilities;
+
 import pingball.board.Board;
 import pingball.parser.BoardBuilder;
+import pingball.ui.MainWindow;
 import pingball.client.ClientController;
 
 public class PingballClient {
@@ -57,10 +60,11 @@ public class PingballClient {
                     		"unable to parse number for " + flag);
                 }
             }
-            
-            if (arguments.size() < 1)
-            	throw new IllegalArgumentException("missing file name");
-            boardFile = new File(arguments.remove());
+            String boardPath = "boards/sampleBoard3.pb";
+            if (arguments.size() >= 1)
+                boardPath = arguments.remove();
+            	
+            boardFile = new File(boardPath);
             if (!boardFile.isFile()) {
                 throw new IllegalArgumentException(
                 		"file not found: \"" + boardFile + "\"");
@@ -84,9 +88,15 @@ public class PingballClient {
 	 */
 	public static void runClient(File boardFile, String host, int port) {
 		try {
-			Board board = BoardBuilder.buildBoard(boardFile);
+			final Board board = BoardBuilder.buildBoard(boardFile);
 			ClientController controller = new ClientController(board, host,
 					port);
+			// set up the UI (on the event-handling thread)
+	        SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	                MainWindow window = new MainWindow(board);
+	            }
+	        });
 			controller.start();
 		} catch (IOException e) {
 			e.printStackTrace();
