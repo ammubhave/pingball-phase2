@@ -56,12 +56,6 @@ public class Portal implements Gadget {
     public void action() {
     }
 
-    @Override
-    public double getReflCoeff() {
-        return 0;
-    }
-
-    @Override
     public double getX() {
         return portal.getCenter().x();
     }

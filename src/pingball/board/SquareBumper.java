@@ -14,25 +14,13 @@ public class SquareBumper implements Gadget {
      * Thread Safety Information: SquareBumper is threadsafe because it is never
      * altered after creation.
      */
-    private final static double REFL_COEFF = 1.0;
 
-    private final double xCoord;
-    private final double yCoord;
+    private final double x;
+    private final double y;
 
     // Following are constants specified by the project
     private final static double EDGE_LENGTH = 1.0;
-    private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5; // Used as placeholder value
-
-    private final LineSegment topLine;
-    private final LineSegment bottomLine;
-    private final LineSegment leftLine;
-    private final LineSegment rightLine;
-
-    private final Circle topLeft;
-    private final Circle topRight;
-    private final Circle bottomLeft;
-    private final Circle bottomRight;
+    private final static double REFL_COEFF = 1.0;
 
     private final String name;
     private Vect position;
@@ -53,27 +41,18 @@ public class SquareBumper implements Gadget {
     public SquareBumper(Vect loc, String n) {
         name = n;
         position = loc;
-        xCoord = loc.x();
-        yCoord = loc.y();
-        topLine = new LineSegment(xCoord, yCoord, xCoord + EDGE_LENGTH, yCoord);
-        bottomLine = new LineSegment(xCoord, yCoord + EDGE_LENGTH, xCoord + EDGE_LENGTH, yCoord + EDGE_LENGTH);
-        leftLine = new LineSegment(xCoord, yCoord, xCoord, yCoord + EDGE_LENGTH);
-        rightLine = new LineSegment(xCoord + EDGE_LENGTH, yCoord, xCoord + EDGE_LENGTH, yCoord + EDGE_LENGTH);
+        x = loc.x();
+        y = loc.y();
 
-        sides.add(topLine);
-        sides.add(bottomLine);
-        sides.add(leftLine);
-        sides.add(rightLine);
+        sides.add(new LineSegment(x, y, x + EDGE_LENGTH, y));
+        sides.add(new LineSegment(x, y + EDGE_LENGTH, x + EDGE_LENGTH, y + EDGE_LENGTH));
+        sides.add(new LineSegment(x, y, x, y + EDGE_LENGTH));
+        sides.add(new LineSegment(x + EDGE_LENGTH, y, x + EDGE_LENGTH, y + EDGE_LENGTH));
 
-        topLeft = new Circle(xCoord, yCoord, 0);
-        topRight = new Circle(xCoord + 1, yCoord, 0);
-        bottomLeft = new Circle(xCoord, yCoord + 1, 0);
-        bottomRight = new Circle(xCoord + 1, yCoord + 1, 0);
-
-        cornerCircles.add(topLeft);
-        cornerCircles.add(topRight);
-        cornerCircles.add(bottomLeft);
-        cornerCircles.add(bottomRight);
+        cornerCircles.add(new Circle(x, y, 0));
+        cornerCircles.add(new Circle(x + 1, y, 0));
+        cornerCircles.add(new Circle(x, y + 1, 0));
+        cornerCircles.add(new Circle(x + 1, y + 1, 0));
     }
 
     /**
@@ -93,21 +72,7 @@ public class SquareBumper implements Gadget {
 
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getVelocity();
-        double smallestTime = Double.MAX_VALUE;
-        for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-            }
-        }
-        for (Circle circ : cornerCircles) {
-            double time = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-            }
-        }
-        return smallestTime;
+        return GadgetHelpers.leastCollisionTime(sides, cornerCircles, ball);
     }
 
     /**
@@ -121,77 +86,31 @@ public class SquareBumper implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getVelocity();
-        double smallestTimeWall = Double.MAX_VALUE;
-        LineSegment smallestWall = null;
-        double timeToWall = 0;
-        for (LineSegment ls : sides) {
-            timeToWall = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (timeToWall < smallestTimeWall) {
-                smallestTimeWall = timeToWall;
-                smallestWall = ls;
-            }
-        }
-        Circle smallestCircle = null;
-        double smallestTimeCircle = Double.MAX_VALUE;
-        double timeToCircle = 0;
-        for (Circle circ : cornerCircles) {
-            timeToCircle = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), velocity);
-            if (timeToCircle < smallestTimeCircle) {
-                smallestTimeCircle = timeToCircle;
-                smallestCircle = circ;
-            }
-        }
-        if (smallestTimeWall < smallestTimeCircle) {
-            ball.changeVelocity(Geometry.reflectWall(smallestWall, velocity));
-        } else {
-            ball.changeVelocity(Geometry.reflectCircle(smallestCircle.getCenter(), ball.getPos(), ball.getVelocity()));
-        }
+        GadgetHelpers.reflectBall(sides, cornerCircles, ball, REFL_COEFF);
+        this.trigger();
     }
 
     /**
-     * @return the reflection coefficient
-     */
-    @Override
-    public double getReflCoeff() {
-        return REFL_COEFF;
-    }
-
-    /**
-     * Returns a list of the lines used to make the square: top line, bottom
-     * line, left line, right line
+     * Returns a list of the lines used to make the gadget
      * 
      * @return list of lines that make up this bumper
      */
     public List<LineSegment> getLineSegments() {
-        List<LineSegment> ans = new ArrayList<LineSegment>();
-        ans.add(topLine);
-        ans.add(bottomLine);
-        ans.add(leftLine);
-        ans.add(rightLine);
-        return ans;
-    }
-
-    /**
-     * Returns a string representation of a square bumper as seen on the board.
-     */
-    @Override
-    public String toString() {
-        return "#";
+        return new ArrayList<LineSegment>(sides);
     }
 
     /**
      * @return x coordinate of top-left corner of bumper.
      */
     public double getX() {
-        return this.xCoord;
+        return x;
     }
 
     /**
      * @return y coordinate of top-left corner of bumper.
      */
     public double getY() {
-        return this.yCoord;
+        return y;
     }
 
     /**
@@ -199,13 +118,6 @@ public class SquareBumper implements Gadget {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Returns a string representing the type of gadget.
-     */
-    public String type() {
-        return "square";
     }
 
     public void hookActionToTrigger(Gadget gadget) {
@@ -218,5 +130,4 @@ public class SquareBumper implements Gadget {
         sb.setCharAt(Board.getBoardStringIndexFromVect(position), '#');
         return sb.toString();
     }
-
 }

@@ -18,22 +18,14 @@ public class TriangularBumper implements Gadget {
     }
 
     private final static double REFL_COEFF = 1.0;
-    private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5; // Used as placeholder value
 
     private final double xCoord;
     private final double yCoord;
     private final double legLength = 1.0;
-    private final double hypotenuseLength = Math.sqrt(2);
+
     private final TriangularBumperOrientation orientation; // in terms of degrees
     private final String name;
 
-    private final LineSegment leg1; // horizontal leg
-    private final LineSegment leg2; // vertical leg
-    private final LineSegment hypotenuse;
-    private final Circle angle1; // horizontal leg
-    private final Circle angle2; // vertical leg
-    private final Circle rightAngle;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
@@ -52,6 +44,13 @@ public class TriangularBumper implements Gadget {
      */
     public TriangularBumper(Vect loc, TriangularBumperOrientation orientation, String name) {
 
+        LineSegment leg1; // horizontal leg
+        LineSegment leg2; // vertical leg
+        LineSegment hypotenuse;
+        Circle angle1; // horizontal leg
+        Circle angle2; // vertical leg
+        Circle rightAngle;
+        
         this.xCoord = loc.x();
         this.yCoord = loc.y();
         this.name = name;
@@ -111,23 +110,7 @@ public class TriangularBumper implements Gadget {
      */
     @Override
     public double leastCollisionTime(Ball ball) {
-        Vect velocity = ball.getVelocity();
-        double smallestTime = Double.MAX_VALUE;
-        
-        for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-            }
-        }
-        for (Circle ls : corners) {
-            double time = Geometry.timeUntilCircleCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-            }
-        }
-
-        return smallestTime;
+        return GadgetHelpers.leastCollisionTime(sides, corners, ball);
     }
 
     /**
@@ -141,39 +124,8 @@ public class TriangularBumper implements Gadget {
     }
 
     public void reactBall(Ball ball) {
-        Vect velocity = ball.getVelocity();
-        double smallestTime = Double.MAX_VALUE;
-        
-        LineSegment smallestTimeWall = null;
-        Circle smallestTimeCorner = null;
-        for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-                smallestTimeWall = ls;
-            }
-        }
-        for (Circle ls : corners) {
-            double time = Geometry.timeUntilCircleCollision(ls, ball.getCircle(), velocity);
-            if (time < smallestTime) {
-                smallestTime = time;
-                smallestTimeWall = null;
-                smallestTimeCorner = ls;
-            }
-        }
-        if (smallestTimeWall != null)
-            ball.changeVelocity(Geometry.reflectWall(smallestTimeWall, velocity));
-        else
-            ball.changeVelocity(Geometry.reflectCircle(smallestTimeCorner.getCenter(), ball.getPos(), velocity));
+        GadgetHelpers.reflectBall(sides, corners, ball, REFL_COEFF);
         this.trigger();
-    }
-
-    /**
-     * @return the reflection coefficient
-     */
-    @Override
-    public double getReflCoeff() {
-        return REFL_COEFF;
     }
 
     /**
@@ -183,11 +135,7 @@ public class TriangularBumper implements Gadget {
      * @return list of all the line segments that make up the bumper
      */
     public List<LineSegment> getLineSegments() {
-        List<LineSegment> ans = new ArrayList<LineSegment>();
-        ans.add(leg1);
-        ans.add(leg2);
-        ans.add(hypotenuse);
-        return ans;
+        return new ArrayList<LineSegment>(this.sides);
     }
 
     /**

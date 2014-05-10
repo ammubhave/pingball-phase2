@@ -26,8 +26,6 @@ public interface Gadget {
     // private boolean triggered - lets you know if the gadget is in the process
     // of performing an action.
 
-    // TODO: Implement this. Loop over all the hooked gadgets, and call action
-    // on them.
 
     /**
      * Should call action method of all the hooked gadgets
@@ -43,8 +41,7 @@ public interface Gadget {
      */
     public double leastCollisionTime(Ball ball);
 
-    // TODO: Look up this code and make changes so that this does not affect the
-    // gadget themselved
+
     /**
      * Performs the action required once a trigger has occurred. This could
      * involve changing the velocity/angle/position of the ball. (NOTE: The
@@ -57,21 +54,10 @@ public interface Gadget {
      */
     public void reactBall(Ball ball);
 
-    // TODO: Implement this. Mostly move partial code from react (current
-    // action) so that
-    // the code that changes the gadget it self is here in action
-
     /**
      * Performs action of the gadget
      */
     public void action();
-
-    /**
-     * Gets the reflection coefficient of the gadget.
-     * 
-     * @return this.reflCoeff
-     */
-    public double getReflCoeff();
 
     /**
      * @return x coordinate of the upper-leftmost point of the gadget

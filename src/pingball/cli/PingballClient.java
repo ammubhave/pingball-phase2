@@ -60,7 +60,7 @@ public class PingballClient {
                     		"unable to parse number for " + flag);
                 }
             }
-            String boardPath = "boards/sampleBoard2-1.pb";
+            String boardPath = "boards/sampleBoard3.pb";
             if (arguments.size() >= 1)
                 boardPath = arguments.remove();
             	

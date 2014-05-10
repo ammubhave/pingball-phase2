@@ -6,10 +6,10 @@ public class GraphicsConstants {
     public static final int STROKE_WIDTH = 3;
     
     public static int convertX(double x) {
-        return (int)(x + 1) * CELL_SIZE;
+        return (int)((x + 1) * CELL_SIZE);
     }
     
     public static int convertY(double y) {
-        return (int)(y + 1) * CELL_SIZE;
+        return (int)((y + 1) * CELL_SIZE);
     }
 }
