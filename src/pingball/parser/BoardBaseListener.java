@@ -24,11 +24,17 @@ public class BoardBaseListener implements BoardListener {
 	@Override public void enterBallObjectLine(BoardParser.BallObjectLineContext ctx) { }
 	@Override public void exitBallObjectLine(BoardParser.BallObjectLineContext ctx) { }
 
+	@Override public void enterAttributeOtherportal(BoardParser.AttributeOtherportalContext ctx) { }
+	@Override public void exitAttributeOtherportal(BoardParser.AttributeOtherportalContext ctx) { }
+
 	@Override public void enterBoardObjectLine(BoardParser.BoardObjectLineContext ctx) { }
 	@Override public void exitBoardObjectLine(BoardParser.BoardObjectLineContext ctx) { }
 
 	@Override public void enterTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx) { }
 	@Override public void exitTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx) { }
+
+	@Override public void enterPortalAttributes(BoardParser.PortalAttributesContext ctx) { }
+	@Override public void exitPortalAttributes(BoardParser.PortalAttributesContext ctx) { }
 
 	@Override public void enterAttributeX(BoardParser.AttributeXContext ctx) { }
 	@Override public void exitAttributeX(BoardParser.AttributeXContext ctx) { }
@@ -42,11 +48,23 @@ public class BoardBaseListener implements BoardListener {
 	@Override public void enterAttributeY(BoardParser.AttributeYContext ctx) { }
 	@Override public void exitAttributeY(BoardParser.AttributeYContext ctx) { }
 
+	@Override public void enterKeydownAttributes(BoardParser.KeydownAttributesContext ctx) { }
+	@Override public void exitKeydownAttributes(BoardParser.KeydownAttributesContext ctx) { }
+
+	@Override public void enterKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) { }
+	@Override public void exitKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) { }
+
 	@Override public void enterAbsorberAttributes(BoardParser.AbsorberAttributesContext ctx) { }
 	@Override public void exitAbsorberAttributes(BoardParser.AbsorberAttributesContext ctx) { }
 
+	@Override public void enterKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) { }
+	@Override public void exitKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) { }
+
 	@Override public void enterRightFlipperAttributes(BoardParser.RightFlipperAttributesContext ctx) { }
 	@Override public void exitRightFlipperAttributes(BoardParser.RightFlipperAttributesContext ctx) { }
+
+	@Override public void enterKeyupAttributes(BoardParser.KeyupAttributesContext ctx) { }
+	@Override public void exitKeyupAttributes(BoardParser.KeyupAttributesContext ctx) { }
 
 	@Override public void enterObjectLine(BoardParser.ObjectLineContext ctx) { }
 	@Override public void exitObjectLine(BoardParser.ObjectLineContext ctx) { }
@@ -60,6 +78,9 @@ public class BoardBaseListener implements BoardListener {
 	@Override public void enterLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx) { }
 	@Override public void exitLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx) { }
 
+	@Override public void enterAttributeKey(BoardParser.AttributeKeyContext ctx) { }
+	@Override public void exitAttributeKey(BoardParser.AttributeKeyContext ctx) { }
+
 	@Override public void enterFireObjectLine(BoardParser.FireObjectLineContext ctx) { }
 	@Override public void exitFireObjectLine(BoardParser.FireObjectLineContext ctx) { }
 
@@ -72,17 +93,23 @@ public class BoardBaseListener implements BoardListener {
 	@Override public void enterBoard(BoardParser.BoardContext ctx) { }
 	@Override public void exitBoard(BoardParser.BoardContext ctx) { }
 
+	@Override public void enterPortalObjectLine(BoardParser.PortalObjectLineContext ctx) { }
+	@Override public void exitPortalObjectLine(BoardParser.PortalObjectLineContext ctx) { }
+
 	@Override public void enterAttributeYVelocity(BoardParser.AttributeYVelocityContext ctx) { }
 	@Override public void exitAttributeYVelocity(BoardParser.AttributeYVelocityContext ctx) { }
 
 	@Override public void enterAttributeName(BoardParser.AttributeNameContext ctx) { }
 	@Override public void exitAttributeName(BoardParser.AttributeNameContext ctx) { }
 
-	@Override public void enterFireAttributes(BoardParser.FireAttributesContext ctx) { }
-	@Override public void exitFireAttributes(BoardParser.FireAttributesContext ctx) { }
+	@Override public void enterAttributeOtherboard(BoardParser.AttributeOtherboardContext ctx) { }
+	@Override public void exitAttributeOtherboard(BoardParser.AttributeOtherboardContext ctx) { }
 
 	@Override public void enterAttributeFriction1(BoardParser.AttributeFriction1Context ctx) { }
 	@Override public void exitAttributeFriction1(BoardParser.AttributeFriction1Context ctx) { }
+
+	@Override public void enterFireAttributes(BoardParser.FireAttributesContext ctx) { }
+	@Override public void exitFireAttributes(BoardParser.FireAttributesContext ctx) { }
 
 	@Override public void enterAttributeWidth(BoardParser.AttributeWidthContext ctx) { }
 	@Override public void exitAttributeWidth(BoardParser.AttributeWidthContext ctx) { }

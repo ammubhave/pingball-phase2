@@ -20,6 +20,7 @@ import pingball.board.Gadget;
 import pingball.board.LeftFlipper;
 import pingball.board.OuterWall;
 import pingball.board.OuterWall.OuterWallsOrientation;
+import pingball.board.Portal;
 import pingball.board.RightFlipper;
 import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
@@ -29,6 +30,7 @@ import pingball.ui.board.BallPainter;
 import pingball.ui.board.CircularBumperPainter;
 import pingball.ui.board.LeftFlipperPainter;
 import pingball.ui.board.OuterWallPainter;
+import pingball.ui.board.PortalPainter;
 import pingball.ui.board.RightFlipperPainter;
 import pingball.ui.board.SquareBumperPainter;
 import pingball.ui.board.TriangularBumperPainter;
@@ -310,6 +312,30 @@ public class BoardFactory {
             board.addGadgetPainter(new AbsorberPainter(gadget));
             attributes.clear();
         }
+
+        
+        // portal
+        
+        @Override
+        public void enterPortalObjectLine(BoardParser.PortalObjectLineContext ctx) {
+            attributes.clear();
+            attributes.put("otherBoard", board.getName());
+        }
+        @Override
+        public void exitPortalAttributes(BoardParser.PortalAttributesContext ctx) {
+            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
+        }
+        @Override
+        public void exitPortalObjectLine(BoardParser.PortalObjectLineContext ctx) {
+            Portal gadget = new Portal(
+                    new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
+                    attributes.get("name"));
+            gadget.setTargetBoard(attributes.get("targetBoard"));
+            gadget.setTargetPortal(attributes.get("targetPortal"));
+            board.addGadget(gadget);
+            board.addGadgetPainter(new PortalPainter(gadget));
+            attributes.clear();
+        }
         
         public Board getBoard() {
             return board;
@@ -329,6 +355,34 @@ public class BoardFactory {
         public void exitFireObjectLine(BoardParser.FireObjectLineContext ctx) {
             Gadget gadget = board.getGadgetFromName(attributes.get("trigger"));
             gadget.hookActionToTrigger(board.getGadgetFromName(attributes.get("action")));
+        }
+        
+        // keydownAttributes : attributeKey | attributeAction ;
+        @Override
+        public void enterKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) {
+            attributes.clear();
+        }
+        @Override
+        public void exitKeydownAttributes(BoardParser.KeydownAttributesContext ctx) {
+            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
+        }
+        @Override
+        public void exitKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) {
+            board.addKeyDownBinding(attributes.get("key"), board.getGadgetFromName(attributes.get("action")));
+        }
+        
+        // keyupAttributes : attributeKey | attributeAction ;
+        @Override
+        public void enterKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) {
+            attributes.clear();
+        }
+        @Override
+        public void exitKeyupAttributes(BoardParser.KeyupAttributesContext ctx) {
+            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
+        }
+        @Override
+        public void exitKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) {
+            board.addKeyUpBinding(attributes.get("key"), board.getGadgetFromName(attributes.get("action")));
         }
     }
 }

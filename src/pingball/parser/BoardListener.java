@@ -21,11 +21,17 @@ public interface BoardListener extends ParseTreeListener {
 	void enterBallObjectLine(BoardParser.BallObjectLineContext ctx);
 	void exitBallObjectLine(BoardParser.BallObjectLineContext ctx);
 
+	void enterAttributeOtherportal(BoardParser.AttributeOtherportalContext ctx);
+	void exitAttributeOtherportal(BoardParser.AttributeOtherportalContext ctx);
+
 	void enterBoardObjectLine(BoardParser.BoardObjectLineContext ctx);
 	void exitBoardObjectLine(BoardParser.BoardObjectLineContext ctx);
 
 	void enterTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx);
 	void exitTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx);
+
+	void enterPortalAttributes(BoardParser.PortalAttributesContext ctx);
+	void exitPortalAttributes(BoardParser.PortalAttributesContext ctx);
 
 	void enterAttributeX(BoardParser.AttributeXContext ctx);
 	void exitAttributeX(BoardParser.AttributeXContext ctx);
@@ -39,11 +45,23 @@ public interface BoardListener extends ParseTreeListener {
 	void enterAttributeY(BoardParser.AttributeYContext ctx);
 	void exitAttributeY(BoardParser.AttributeYContext ctx);
 
+	void enterKeydownAttributes(BoardParser.KeydownAttributesContext ctx);
+	void exitKeydownAttributes(BoardParser.KeydownAttributesContext ctx);
+
+	void enterKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx);
+	void exitKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx);
+
 	void enterAbsorberAttributes(BoardParser.AbsorberAttributesContext ctx);
 	void exitAbsorberAttributes(BoardParser.AbsorberAttributesContext ctx);
 
+	void enterKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx);
+	void exitKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx);
+
 	void enterRightFlipperAttributes(BoardParser.RightFlipperAttributesContext ctx);
 	void exitRightFlipperAttributes(BoardParser.RightFlipperAttributesContext ctx);
+
+	void enterKeyupAttributes(BoardParser.KeyupAttributesContext ctx);
+	void exitKeyupAttributes(BoardParser.KeyupAttributesContext ctx);
 
 	void enterObjectLine(BoardParser.ObjectLineContext ctx);
 	void exitObjectLine(BoardParser.ObjectLineContext ctx);
@@ -57,6 +75,9 @@ public interface BoardListener extends ParseTreeListener {
 	void enterLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx);
 	void exitLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx);
 
+	void enterAttributeKey(BoardParser.AttributeKeyContext ctx);
+	void exitAttributeKey(BoardParser.AttributeKeyContext ctx);
+
 	void enterFireObjectLine(BoardParser.FireObjectLineContext ctx);
 	void exitFireObjectLine(BoardParser.FireObjectLineContext ctx);
 
@@ -69,17 +90,23 @@ public interface BoardListener extends ParseTreeListener {
 	void enterBoard(BoardParser.BoardContext ctx);
 	void exitBoard(BoardParser.BoardContext ctx);
 
+	void enterPortalObjectLine(BoardParser.PortalObjectLineContext ctx);
+	void exitPortalObjectLine(BoardParser.PortalObjectLineContext ctx);
+
 	void enterAttributeYVelocity(BoardParser.AttributeYVelocityContext ctx);
 	void exitAttributeYVelocity(BoardParser.AttributeYVelocityContext ctx);
 
 	void enterAttributeName(BoardParser.AttributeNameContext ctx);
 	void exitAttributeName(BoardParser.AttributeNameContext ctx);
 
-	void enterFireAttributes(BoardParser.FireAttributesContext ctx);
-	void exitFireAttributes(BoardParser.FireAttributesContext ctx);
+	void enterAttributeOtherboard(BoardParser.AttributeOtherboardContext ctx);
+	void exitAttributeOtherboard(BoardParser.AttributeOtherboardContext ctx);
 
 	void enterAttributeFriction1(BoardParser.AttributeFriction1Context ctx);
 	void exitAttributeFriction1(BoardParser.AttributeFriction1Context ctx);
+
+	void enterFireAttributes(BoardParser.FireAttributesContext ctx);
+	void exitFireAttributes(BoardParser.FireAttributesContext ctx);
 
 	void enterAttributeWidth(BoardParser.AttributeWidthContext ctx);
 	void exitAttributeWidth(BoardParser.AttributeWidthContext ctx);
