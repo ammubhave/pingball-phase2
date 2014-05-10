@@ -28,7 +28,7 @@ public class RequestTest {
 
 	@Test
 	public void testNonHelloConstruction() {
-		BallMessage message = new BallMessage(Edge.LEFT,
+		BallMessage message = new BallMessage("testball", Edge.LEFT,
 				new Circle(new Vect(10, 20), 30), new Vect(0.2, 0.3));
 		Request helloRequest = new Request("board1", message);
 			

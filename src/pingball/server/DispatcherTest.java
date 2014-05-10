@@ -130,7 +130,7 @@ public class DispatcherTest {
 			String line = ins[0].readLine();
 			Message welcome = Message.fromLine(line);
 			assertTrue(welcome instanceof WelcomeMessage);
-			Message ballOut = new BallMessage(Edge.LEFT,
+			Message ballOut = new BallMessage("testball", Edge.LEFT,
 					new Circle(0.12, iteration + 2, 0.25), new Vect(-0.2, 0.3));
 			outs[0].println(ballOut.toLine());
 			line = ins[0].readLine();
@@ -162,7 +162,7 @@ public class DispatcherTest {
 			assertTrue(welcome instanceof WelcomeMessage);
 		}
 		for (int i = 0; i < clientCount; ++i) {		
-			Message ballOut = new BallMessage(Edge.LEFT,
+			Message ballOut = new BallMessage("testball", Edge.LEFT,
 					new Circle(0.12, i + 2, 0.25), new Vect(-0.2, 0.3));
 			outs[i].println(ballOut.toLine());
 		}

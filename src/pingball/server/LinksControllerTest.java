@@ -139,7 +139,7 @@ public class LinksControllerTest {
 		// dispatched correctly.
 		
 		requestQueue.put(new Request("player1",
-				new BallMessage(Edge.LEFT, new Circle(0.12, 5, 0.25),
+				new BallMessage("testball", Edge.LEFT, new Circle(0.12, 5, 0.25),
 						new Vect(-0.2, 0.3))));
 
 		Message ballMessage = player1.take();

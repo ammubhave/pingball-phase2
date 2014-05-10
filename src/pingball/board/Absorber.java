@@ -184,6 +184,10 @@ public class Absorber implements Gadget {
     public int getHeight() {
         return height;
     }
+    
+    public List<LineSegment> getLineSegments() {
+        return this.sides;
+    }
 
     /**
      * @param ball

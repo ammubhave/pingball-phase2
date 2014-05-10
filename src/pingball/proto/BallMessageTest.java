@@ -18,7 +18,7 @@ import pingball.board.Edge;
 public class BallMessageTest {
     @Test
     public void testConstruction() {
-        BallMessage message = new BallMessage(Edge.LEFT, new Circle(new Vect(1.0,1.0), 1.0), new Vect(1.0, 1.0));
+        BallMessage message = new BallMessage("test", Edge.LEFT, new Circle(new Vect(1.0,1.0), 1.0), new Vect(1.0, 1.0));
         assertEquals(Edge.LEFT, message.getEdge());
         assertEquals(new Circle(new Vect(1.0,1.0), 1.0), message.getShape());
         assertEquals(new Vect(1.0, 1.0), message.getVelocity());
@@ -26,7 +26,7 @@ public class BallMessageTest {
     
     @Test
     public void testSerialization() {
-        BallMessage message = new BallMessage(Edge.RIGHT, new Circle(new Vect(10.0,10.0), 1.0), new Vect(1.0, 1.0));
+        BallMessage message = new BallMessage("Test", Edge.RIGHT, new Circle(new Vect(10.0,10.0), 1.0), new Vect(1.0, 1.0));
         String messageLine = message.toLine();
         
         Message message2 = Message.fromLine(messageLine);

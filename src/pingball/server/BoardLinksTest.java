@@ -387,7 +387,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.LEFT, new Circle(0.12, 5, 0.25),
+		BallMessage ball = new BallMessage("testball", Edge.LEFT, new Circle(0.12, 5, 0.25),
 				new Vect(-0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player2",
 				ball);
@@ -407,7 +407,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.RIGHT,
+		BallMessage ball = new BallMessage("testball", Edge.RIGHT,
 				new Circle(20 - 0.13, 7, 0.25), new Vect(0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player1",
 				ball);
@@ -427,7 +427,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.TOP, new Circle(6, 0.14, 0.25),
+		BallMessage ball = new BallMessage("testball", Edge.TOP, new Circle(6, 0.14, 0.25),
 				new Vect(0.2, -0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player2",
 				ball);
@@ -448,7 +448,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.BOTTOM,
+		BallMessage ball = new BallMessage("testball", Edge.BOTTOM,
 				new Circle(8, 20 - 0.15, 0.25), new Vect(0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player1",
 				ball);
@@ -468,7 +468,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.LEFT, new Circle(0.12, 5, 0.25),
+		BallMessage ball = new BallMessage("testball", Edge.LEFT, new Circle(0.12, 5, 0.25),
 				new Vect(-0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player1",
 				ball);
@@ -488,7 +488,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.RIGHT,
+		BallMessage ball = new BallMessage("testball", Edge.RIGHT,
 				new Circle(20 - 0.13, 7, 0.25), new Vect(0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player2",
 				ball);
@@ -508,7 +508,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.TOP, new Circle(6, 0.14, 0.25),
+		BallMessage ball = new BallMessage("testball", Edge.TOP, new Circle(6, 0.14, 0.25),
 				new Vect(0.2, -0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player1",
 				ball);
@@ -529,7 +529,7 @@ public class BoardLinksTest {
 		boardLinks.connected("player1");
 		boardLinks.connected("player2");
 		
-		BallMessage ball = new BallMessage(Edge.BOTTOM,
+		BallMessage ball = new BallMessage("testball", Edge.BOTTOM,
 				new Circle(8, 20 - 0.15, 0.25), new Vect(0.2, 0.3));
 		BoardLinks.TargetedMessage message = boardLinks.teleport("player2",
 				ball);

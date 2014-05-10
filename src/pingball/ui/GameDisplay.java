@@ -19,8 +19,8 @@ import pingball.ui.board.GadgetPainter;
 public class GameDisplay extends JPanel {
     Board board;
     Color backgroundColor = Color.white;
-    final int width = 400;
-    final int height = 800;
+    final int width = 440;
+    final int height = 440;
     
     /**
      * Default constructor that displays only the menu options

@@ -182,16 +182,20 @@ public class OuterWall implements Gadget {
 
     @Override
     public double getReflCoeff() {
-        return 0;
+        return 1;
+    }
+    
+    public OuterWallsOrientation getOrientation() {
+        return this.orientation;
     }
 
     @Override
     public double getX() {
-        return 0;
+        return this.position.x();
     }
 
     @Override
     public double getY() {
-        return 0;
+        return this.position.y();
     }
 }

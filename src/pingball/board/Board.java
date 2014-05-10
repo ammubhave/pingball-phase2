@@ -12,6 +12,7 @@ import pingball.proto.BallMessage;
 import pingball.proto.ConnectWallMessage;
 import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
+import pingball.ui.board.BallPainter;
 import pingball.ui.board.GadgetPainter;
 
 /**
@@ -477,8 +478,9 @@ public class Board {
             Circle shape = ballMessage.getShape();
             Vect center = shape.getCenter();
             Vect velocity = ballMessage.getVelocity();
-            Ball ball = new Ball("teleported-ball", center, velocity);          
+            Ball ball = new Ball(ballMessage.getName(), center, velocity);          
             addBall(ball);
+            this.boardGadgetPainters.add(new BallPainter(ball));
         }
     }
     
@@ -543,7 +545,7 @@ public class Board {
                     x = 20;
                 if (y > 20)
                     y = 20;
-                BallMessage message = new BallMessage(edge,
+                BallMessage message = new BallMessage(ball.getName(), edge,
                         new Circle(x,  y, r), velocity);
                 messages.add(message);
                 
@@ -552,6 +554,12 @@ public class Board {
         }
         for (Ball ball : removedBalls) {
             balls.remove(ball);
+            int i = 0;
+            for (i = 0; i < this.boardGadgetPainters.size(); i++)
+                if (this.boardGadgetPainters.get(i) instanceof BallPainter)
+                    if (((BallPainter)this.boardGadgetPainters.get(i)).getBall().getName() == ball.getName())
+                        break;
+            this.boardGadgetPainters.remove(i);
         }
         return messages;
     }

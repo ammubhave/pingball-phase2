@@ -172,7 +172,7 @@ public class BoardLinks {
 					targetCenter = new Vect(20.0 - center.x(),
 							center.y());					
 				}
-				final BallMessage target = new BallMessage(edge.opposite(),
+				final BallMessage target = new BallMessage(source.getName(), edge.opposite(),
 						new Circle(targetCenter, shape.getRadius()),
 						source.getVelocity());
 				return new TargetedMessage(target, to);
@@ -189,7 +189,7 @@ public class BoardLinks {
 			targetVelocity = new Vect(velocity.x(), -velocity.y());
 		else
 			targetVelocity = new Vect(-velocity.x(), velocity.y());			
-		final BallMessage target = new BallMessage(edge, source.getShape(),
+		final BallMessage target = new BallMessage(source.getName(), edge, source.getShape(),
 				targetVelocity);
 		
 		TargetedMessage message = new TargetedMessage(target, to); 

@@ -17,6 +17,8 @@ public class BallMessage extends Message {
 	/** The velocity of the ball that is teleported. */
 	private final Vect velocity;
 	
+	private final String name;
+	
 	// Rep invariant:
 	//   everything is non-null
 	// Thread safety:
@@ -29,10 +31,11 @@ public class BallMessage extends Message {
 	 * @param center the ball's center
 	 * @param velocity the ball's velocity
 	 */
-	public BallMessage(Edge edge, Circle shape, Vect velocity) {
+	public BallMessage(String name, Edge edge, Circle shape, Vect velocity) {
 		assert edge != null;
 		assert shape != null;
 		assert velocity != null;
+		this.name = name;
 		this.edge = edge;
 		this.shape = shape;
 		this.velocity = velocity;
@@ -55,6 +58,10 @@ public class BallMessage extends Message {
 		return velocity;
 	}
 	
+	public String getName() {
+	    return this.name;
+	}
+	
 	@Override
 	protected String name() {
 		return NAME;
@@ -65,7 +72,7 @@ public class BallMessage extends Message {
 		return NAME + " " + edge.name() + " " +
 				shape.getCenter().x() + " " + shape.getCenter().y() + " " +
 				shape.getRadius() + " " +
-				velocity.x() + " " + velocity.y();
+				velocity.x() + " " + velocity.y() + " " + name;
 	}
 		
 	// NOTE: The stuff below is package-private on purpose.
@@ -89,6 +96,7 @@ public class BallMessage extends Message {
 			double vx = Double.parseDouble(tokens[5]);
 			double vy = Double.parseDouble(tokens[6]);
 			
+			this.name = tokens[7];
 			this.shape = new Circle(new Point2D.Double(cx, cy), radius);
 			this.velocity = new Vect(vx, vy);
 		} catch(NumberFormatException e) {
