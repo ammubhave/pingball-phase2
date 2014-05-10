@@ -74,6 +74,8 @@ public class BoardFactory {
        // private Stack<Expression> stack = new Stack<>();
         Board board;
         HashMap<String, String> attributes = new HashMap<String, String>();
+        HashMap<String, Gadget> keyUMap = new HashMap<String, Gadget>();
+        HashMap<String, Gadget> keyDMap = new HashMap<String, Gadget>();
 
         // board
         
@@ -97,7 +99,7 @@ public class BoardFactory {
                     new ArrayList<Gadget>(),
                     Double.parseDouble(attributes.get("gravity")), 
                     Double.parseDouble(attributes.get("friction1")),
-                    Double.parseDouble(attributes.get("friction2")));
+                    Double.parseDouble(attributes.get("friction2")), keyUMap, keyDMap);
             
             OuterWall w1 = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "w1");         
             board.addGadget(w1);
