@@ -17,8 +17,6 @@ public class CircularBumper implements Gadget {
     // Following are constants specified by the project
     private final double REFL_COEFF = 1.0;
     private final static double RADIUS = 0.5;
-    private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5; // Used as placeholder value
 
     private final String name;
     private Vect position;
