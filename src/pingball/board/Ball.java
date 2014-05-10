@@ -19,7 +19,7 @@ public class Ball {
 
     private final static double RADIUS = 0.25;
 
-    private Vect position;
+    private Vect position;    
     private Vect velocity;
 
     private final String name;
@@ -41,10 +41,8 @@ public class Ball {
      * 
      * @return Vect form of position
      */
-    public Vect getPos() {
-        double newX = position.x();
-        double newY = position.y();
-        return new Vect(newX, newY);
+    public synchronized Vect getPos() {        
+        return position;
     }
 
     /**
@@ -52,10 +50,8 @@ public class Ball {
      * 
      * @return Vect form of velocity
      */
-    public Vect getVelocity() {
-        double newX = velocity.x();
-        double newY = velocity.y();
-        return new Vect(newX, newY);
+    public synchronized Vect getVelocity() {
+        return velocity;
     }
 
     /**
@@ -71,8 +67,7 @@ public class Ball {
      * @return Circle of the ball
      */
     public Circle getCircle() {
-        Vect pos = this.getPos();
-        return new Circle(pos, RADIUS);
+        return new Circle(this.getPos(), RADIUS);
     }
 
     /**
@@ -80,8 +75,8 @@ public class Ball {
      * 
      * @param newPos new position of the ball
      */
-    public void changePos(Vect newPos) {
-        this.position = newPos;
+    public synchronized void changePos(Vect newPos) {
+        position = newPos;
     }
 
     /**
@@ -89,8 +84,8 @@ public class Ball {
      * 
      * @param newVel new velocity of the ball
      */
-    public void changeVelocity(Vect newVel) {
-        this.velocity = newVel;
+    public synchronized void changeVelocity(Vect newVel) {
+        velocity = newVel;
     }
     
     /**
@@ -100,7 +95,7 @@ public class Ball {
      */
     public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
-        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '*');
+        sb.setCharAt(Board.getBoardStringIndexFromVect(this.getPos()), '*');
         return sb.toString();
     }
 

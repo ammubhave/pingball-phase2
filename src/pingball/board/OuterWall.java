@@ -179,11 +179,6 @@ public class OuterWall implements Gadget {
     @Override
     public void action() {
     }
-
-    @Override
-    public double getReflCoeff() {
-        return 1;
-    }
     
     public OuterWallsOrientation getOrientation() {
         return this.orientation;
