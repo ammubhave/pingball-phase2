@@ -50,8 +50,8 @@ public class Board {
         this.width = DEFAULT_SIZE;
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
-        keyUpForGadgets.putAll(keyUForGadgets);
-        keyDownForGadgets.putAll(keyDForGadgets);
+        // keyUpForGadgets.putAll(keyUForGadgets);
+        // keyDownForGadgets.putAll(keyDForGadgets);
         for (Gadget gadget : gadgets) {
             // Vect pos = new Vect(gadget.getX(),gadget.getY());
             boardGadgets.put(gadget.getName(), gadget);
