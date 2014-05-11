@@ -81,7 +81,7 @@ NAME : [A-Za-z_][A-Za-z_0-9]* ;
  * *** ANTLR requires grammar nonterminals to be lowercase, like html, normal, and italic.
  */
 board : objectLine+ EOF ;
-objectLine: boardObjectLine | ballObjectLine | squareBumperObjectLine | triangleBumperObjectLine | circleBumperObjectLine | leftFlipperObjectLine | rightFlipperObjectLine | absorberObjectLine | fireObjectLine ;
+objectLine: boardObjectLine | ballObjectLine | squareBumperObjectLine | triangleBumperObjectLine | circleBumperObjectLine | leftFlipperObjectLine | rightFlipperObjectLine | absorberObjectLine | fireObjectLine | keyupObjectLine | keydownObjectLine | portalObjectLine ;
 
 // object lines
 boardObjectLine : STRING_BOARD boardAttributes+ ;

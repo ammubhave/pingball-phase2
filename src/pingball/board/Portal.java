@@ -78,7 +78,7 @@ public class Portal implements Gadget {
     @Override
     public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
-        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'o');
+        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '@');
         return sb.toString();
     }
     

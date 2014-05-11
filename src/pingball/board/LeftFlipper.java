@@ -10,10 +10,11 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Flipper.FlipperOrientation;
 
 /** Represents the LeftFlipper gadget class */
 
-public class LeftFlipper extends Flipper {
+public class LeftFlipper implements Gadget {
 
     /**
      * Definition of orientation: 1: top 2: bottom 3: left 4: right
@@ -44,7 +45,6 @@ public class LeftFlipper extends Flipper {
     private double yLoc;
 
     public LeftFlipper(Vect loc, FlipperOrientation orient, String n) {
-        super(loc);
         xLoc = loc.x();
         yLoc = loc.y();
 
@@ -374,7 +374,6 @@ public class LeftFlipper extends Flipper {
      * 
      * @return orientation of flipper
      */
-    @Override
     public FlipperOrientation getOrientation() {
         return this.orientation;
     }
@@ -398,5 +397,15 @@ public class LeftFlipper extends Flipper {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1, 1))), '-');
         }
         return sb.toString();
+    }
+
+    @Override
+    public double getX() {
+        return this.xLoc;
+    }
+
+    @Override
+    public double getY() {
+        return this.yLoc;
     }
 }

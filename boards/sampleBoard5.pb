@@ -7,5 +7,7 @@ squareBumper name=Square x=3 y=12
 circleBumper name=Circle x=5 y=12
 triangleBumper name=Triangle x=7 y=12 orientation=90
 rightFlipper name=FlipperR x=5 y=5 orientation=180
+portal name=Portal1 x=0 y=1 otherPortal=Portal2
+portal name=Portal2 x=4 y=1 otherPortal=Portal1
 fire trigger=Square action=Absorber
 fire trigger=Circle action=Absorber

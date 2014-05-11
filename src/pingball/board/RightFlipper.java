@@ -7,10 +7,11 @@ import physics.Angle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.board.Flipper.FlipperOrientation;
 
 /** Represents the RightFlipper gadget class */
 
-public class RightFlipper extends Flipper {
+public class RightFlipper implements Gadget {
 
     /**
      * Definition of orientation: 1: top 2: bottom 3: left 4: right
@@ -20,9 +21,6 @@ public class RightFlipper extends Flipper {
      * Definition of pivot: 1: topLeft 2: topRight 3: bottomLeft 4: bottomRight
      */
     private final int pivot;
-
-    private final static double TIME_TO_TRIGGER = 0.001;
-    private final static double NULL = 5;
 
     private boolean initial = true;
     private double flipperAngle;
@@ -42,8 +40,6 @@ public class RightFlipper extends Flipper {
     private final String name;
 
     public RightFlipper(Vect loc, FlipperOrientation orient, String n) {
-
-        super(loc);
         xLoc = loc.x();
         yLoc = loc.y();
 
@@ -165,63 +161,7 @@ public class RightFlipper extends Flipper {
         }
     }
 
-    /**
-     * Moves the right flipper for a certain time period
-     * 
-     * @time time for flipper to be moving
-     */
-    @Override
-    public void move(double time) {
-        boolean change = false;
-        double FLIPPER_ANGULAR_VELOCITY = 1080;
-        double angleToBeRotated = time * FLIPPER_ANGULAR_VELOCITY;
-        // * Math.PI / 180.0
-        while (angleToBeRotated > 360) {
-            angleToBeRotated = angleToBeRotated - 360;
-        }
-        if (initial == true) {
-            if (flipperAngle + angleToBeRotated < 90) {
-                flipperAngle = flipperAngle + angleToBeRotated;
-            } else {
-                angleToBeRotated = 90 - flipperAngle;
-                flipperAngle = 90;
-                change = true;
-                // initial = false;
-            }
-        } else {
-            if (flipperAngle - angleToBeRotated > 0) {
-                flipperAngle = flipperAngle - angleToBeRotated;
-            } else {
-                angleToBeRotated = flipperAngle;
-                flipperAngle = 0;
-                change = true;
-                // initial = true;
-            }
-        }
-        Vect pivotPoint;
-        if (pivot == 1) {
-            pivotPoint = new Vect(xLoc, yLoc);
-        } else if (pivot == 2) {
-            pivotPoint = new Vect(xLoc + 2, yLoc);
-        } else if (pivot == 3) {
-            pivotPoint = new Vect(xLoc, yLoc + 2);
-        } else {
-            pivotPoint = new Vect(xLoc + 2, yLoc + 2);
-        }
-        System.out.println(getState());
-        if (initial == false) {
-            oneLineFlipper = Geometry.rotateAround(oneLineFlipper, pivotPoint, new Angle(0 - angleToBeRotated * Math.PI
-                    / 180.0));
-        } else {
-            oneLineFlipper = Geometry.rotateAround(oneLineFlipper, pivotPoint, new Angle(angleToBeRotated * Math.PI
-                    / 180.0));
-        }
-        if (change) {
-            initial = !initial;
-        }
-        System.out.println(getState());
-    }
-
+    
     @Override
     public void action() {
         if (initial == true) {
@@ -316,5 +256,15 @@ public class RightFlipper extends Flipper {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position.plus(new Vect(1, 1))), '-');
         }
         return sb.toString();
+    }
+
+    @Override
+    public double getX() {
+        return this.xLoc;
+    }
+
+    @Override
+    public double getY() {
+        return this.yLoc;
     }
 }

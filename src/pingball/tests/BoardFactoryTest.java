@@ -92,7 +92,7 @@ public class BoardFactoryTest {
         board += ".           O        .\n";
         board += ".            O       .\n";
         board += ".             O      .\n";
-        board += ".              O     .\n";
+        board += ".              O    \\.\n";
         board += ".               O    .\n";
         board += ".                |   .\n";
         board += ".                |   .\n";
@@ -203,7 +203,7 @@ public class BoardFactoryTest {
         String board = "......................\n";
         String emptyRow = ".                    .\n";
         board += emptyRow;
-        board += emptyRow;
+        board += ".@   @               .\n";
         board += emptyRow;
         board += emptyRow;
         board += emptyRow;
