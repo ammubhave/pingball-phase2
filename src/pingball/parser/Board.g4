@@ -46,7 +46,10 @@ STRING_CIRCLEBUMPER : 'circleBumper';
 STRING_LEFTFLIPPER : 'leftFlipper' ;
 STRING_RIGHTFLIPPER : 'rightFlipper' ;
 STRING_ABSORBER : 'absorber' ;
+STRING_PORTAL : 'portal' ;
 STRING_FIRE : 'fire' ;
+STRING_KEYDOWN : 'keydown' ;
+STRING_KEYUP : 'keyup' ;
 
 // Attributes
 STRING_NAME : 'name' ;
@@ -62,6 +65,9 @@ STRING_XVELOCITY : 'xVelocity' ;
 STRING_YVELOCITY : 'yVelocity' ;
 STRING_X : 'x' ;
 STRING_Y : 'y' ;
+STRING_KEY : 'key';
+STRING_OTHERBOARD : 'otherBoard' ;
+STRING_OTHERPORTAL : 'otherPortal' ;
 
 EQUALS : '=' ;
 NUMBER : '-'?([0-9]+'.'[0-9]*|'.'?[0-9]+) ;
@@ -87,6 +93,9 @@ leftFlipperObjectLine : STRING_LEFTFLIPPER leftFlipperAttributes+ ;
 rightFlipperObjectLine: STRING_RIGHTFLIPPER rightFlipperAttributes+ ;
 absorberObjectLine: STRING_ABSORBER absorberAttributes+ ;
 fireObjectLine: STRING_FIRE fireAttributes+ ;
+keydownObjectLine : STRING_KEYDOWN keydownAttributes+ ;
+keyupObjectLine : STRING_KEYUP keyupAttributes+ ;
+portalObjectLine : STRING_PORTAL portalAttributes+ ;
 
 // attribute lines
 boardAttributes : attributeName | attributeGravity | attributeFriction1 | attributeFriction2 ;
@@ -98,6 +107,9 @@ leftFlipperAttributes : attributeName | attributeX | attributeY | attributeOrien
 rightFlipperAttributes : attributeName | attributeX | attributeY | attributeOrientation ;
 absorberAttributes : attributeName | attributeX |attributeY | attributeWidth | attributeHeight ;
 fireAttributes : attributeName | attributeTrigger | attributeAction ;
+keydownAttributes : attributeKey | attributeAction ;
+keyupAttributes : attributeKey | attributeAction ;
+portalAttributes : attributeName | attributeX | attributeY | attributeOtherboard | attributeOtherportal ;
 
 // attribute
 attributeName : STRING_NAME EQUALS NAME ;
@@ -113,3 +125,6 @@ attributeTrigger : STRING_TRIGGER EQUALS NAME ;
 attributeAction : STRING_ACTION EQUALS NAME ;
 attributeWidth : STRING_WIDTH EQUALS NUMBER ;
 attributeHeight : STRING_HEIGHT EQUALS NUMBER ;
+attributeKey : STRING_KEY EQUALS NAME ;
+attributeOtherboard : STRING_OTHERBOARD EQUALS NAME ;
+attributeOtherportal : STRING_OTHERPORTAL EQUALS NAME ;

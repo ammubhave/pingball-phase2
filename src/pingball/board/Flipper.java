@@ -43,43 +43,43 @@ public class Flipper implements Gadget {
 
     /** Returns the top line segment of the bounding box */
     public LineSegment getTop() {
-        return new LineSegment(xCoord, yCoord, xCoord + boundingBoxLength, yCoord);
+        throw new RuntimeException();
     }
 
     /** Returns the bottom line segment of the bounding box */
     public LineSegment getBottom() {
-        return new LineSegment(xCoord, yCoord + boundingBoxLength, xCoord + boundingBoxLength, yCoord
-                + boundingBoxLength);
+        throw new RuntimeException();
     }
 
     /** Returns the left line segment of the bounding box */
     public LineSegment getLeft() {
-        return new LineSegment(xCoord, yCoord, xCoord, yCoord + boundingBoxLength);
+        throw new RuntimeException();
     }
 
     /** Returns the right line segment of the bounding box */
     public LineSegment getRight() {
-        return new LineSegment(xCoord + boundingBoxLength, yCoord, xCoord + boundingBoxLength, yCoord
-                + boundingBoxLength);
+        throw new RuntimeException();
     }
 
     /** Returns the time before collision */
     public double leastCollisionTime(Ball ball) {
-        return NULL;
+        throw new RuntimeException();
     }
 
     @Override
     public void trigger() {
+        throw new RuntimeException();
 
     }
 
     /** Acts on a collision */
     public void action(Ball ball) {
+        throw new RuntimeException();
     }
 
     /** Returns the reflection coefficient */
     public double getReflCoeff() {
-        return coefficientOfReflection;
+        throw new RuntimeException();
     }
 
     /**
@@ -87,28 +87,22 @@ public class Flipper implements Gadget {
      */
     @Override
     public String toString() {
-        // TODO: Figure out how to represent vertical vs horizontal
-        return "";
+        throw new RuntimeException();
     }
 
     /** Returns the x coordinate of the gadget */
     public double getX() {
-        return xCoord;
+        throw new RuntimeException();
     }
 
     /** Returns the y coordinate of the gadget */
     public double getY() {
-        return yCoord;
+        throw new RuntimeException();
     }
 
     /** Returns the name of the flipper gadget */
     public String getName() {
-        return "";
-    }
-
-    /** Returns the state of the gadget */
-    public double getState(double angle) {
-        return 0;
+        throw new RuntimeException();
     }
 
     /**
@@ -117,7 +111,7 @@ public class Flipper implements Gadget {
      * @return orientation of flipper
      */
     public FlipperOrientation getOrientation() {
-        return FlipperOrientation.TOP;
+        throw new RuntimeException();
     }
 
     /**
@@ -129,21 +123,21 @@ public class Flipper implements Gadget {
 
     @Override
     public void reactBall(Ball ball) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException();
     }
 
     @Override
     public void action() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException();
     }
 
     public void hookActionToTrigger(Gadget gadget) {
-        gadgetsToBeHooked.add(gadget);
+        throw new RuntimeException();
     }
 
     @Override
     public String render(String input) {
-        return "SHOULDN'T BE AT FLIPPER'S RENDER";
+        throw new RuntimeException();
     }
     
 }

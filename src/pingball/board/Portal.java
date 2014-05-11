@@ -1,69 +1,101 @@
 package pingball.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import physics.Circle;
+import physics.Geometry;
+import physics.Vect;
+
 public class Portal implements Gadget {
+ 
+    //specified in spec
+    private final static double RADIUS = 0.5;
     
-    public Portal() {
-        
+    private final String name;
+    private Vect position;
+    private Circle portal;
+    private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
+    private String targetPortalName;
+    private String targetBoardName;
+
+    public Portal(Vect loc, String n) {
+        name = n;
+        position = loc;
+        double centerX = loc.x() + RADIUS;
+        double centerY = loc.y() + RADIUS;
+        portal = new Circle(centerX, centerY, RADIUS);
+        targetPortalName=null;
+        targetBoardName=null;
     }
 
     @Override
     public void trigger() {
-        // TODO Auto-generated method stub
-
+        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
+            gadgetsToBeHooked.get(i).action();
+        }
     }
 
     @Override
     public double leastCollisionTime(Ball ball) {
-        // TODO Auto-generated method stub
-        return 0;
+        Vect velocity = ball.getVelocity();
+        return Geometry.timeUntilCircleCollision(portal, ball.getCircle(), velocity);
     }
 
     @Override
     public void reactBall(Ball ball) {
-        // TODO Auto-generated method stub
-
+        if (targetPortalName==null){
+            return;
+        }
+        else{
+            
+        }
     }
 
     @Override
     public void action() {
-        // TODO Auto-generated method stub
-
     }
 
-    @Override
-    public double getReflCoeff() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public double getX() {
-        // TODO Auto-generated method stub
-        return 0;
+        return portal.getCenter().x();
     }
 
     @Override
     public double getY() {
-        // TODO Auto-generated method stub
-        return 0;
+        return portal.getCenter().x();
     }
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
     @Override
     public void hookActionToTrigger(Gadget gadget) {
-        // TODO Auto-generated method stub
-
+        gadgetsToBeHooked.add(gadget);
     }
 
     @Override
     public String render(String input) {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder(input);
+        sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'o');
+        return sb.toString();
+    }
+    
+    /**
+     * Set the name of the target portal.
+     * @param otherPortal the name of the target portal name
+     */
+    public void setTargetPortal(String otherPortal) {
+        targetPortalName = otherPortal;
+    }
+    
+    /**
+     * Set the name of the target board.
+     * @param otherBoard the name of the target board name
+     */
+    public void setTargetBoard(String otherBoard) {
+        targetBoardName=otherBoard;
     }
 
 }
