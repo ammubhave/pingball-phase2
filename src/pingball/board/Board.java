@@ -531,12 +531,15 @@ public class Board {
 
     public void handleKeyUp(String keyName) {
         Gadget gadget = keyUpForGadgets.get(keyName);
-        gadget.action();
+        if (gadget != null)
+            gadget.action();
     }
 
     public void handleKeyDown(String keyName) {
+        System.err.println(keyName);
         Gadget gadget = keyDownForGadgets.get(keyName);
-        gadget.action();
+        if (gadget != null)
+            gadget.action();
     }
 
     /**

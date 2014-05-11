@@ -14,6 +14,7 @@ public class MainWindow extends JFrame implements KeyListener {
 
     public MainWindow(Board board) {
         super("Pingball");
+        addKeyListener(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         display = new GameDisplay(board);
