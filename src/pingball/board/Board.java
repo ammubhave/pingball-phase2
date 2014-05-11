@@ -29,8 +29,8 @@ public class Board {
     private Vect g; // In L / s^2
     private double mu; // In per s.
     private double mu2; // In per L.
-    private HashMap<String, Gadget> keyUpForGadgets;
-    private HashMap<String, Gadget> keyDownForGadgets;
+    private HashMap<String, Gadget> keyUpForGadgets = new HashMap<String, Gadget>();
+    private HashMap<String, Gadget> keyDownForGadgets = new HashMap<String, Gadget>();
 
     /**
      * Creates a new instance of Board.
