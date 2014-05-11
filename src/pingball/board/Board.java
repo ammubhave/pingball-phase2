@@ -12,9 +12,9 @@ import pingball.proto.BallMessage;
 import pingball.proto.ConnectWallMessage;
 import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
+import pingball.proto.PortalMessage;
 import pingball.ui.board.BallPainter;
 import pingball.ui.board.GadgetPainter;
-import pingball.proto.PortalMessage;
 
 /**
  * 
@@ -51,8 +51,8 @@ public class Board {
         this.width = DEFAULT_SIZE;
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
-        // keyUpForGadgets.putAll(keyUForGadgets);
-        // keyDownForGadgets.putAll(keyDForGadgets);
+        keyUpForGadgets.putAll(keyUForGadgets);
+        keyDownForGadgets.putAll(keyDForGadgets);
         for (Gadget gadget : gadgets) {
             // Vect pos = new Vect(gadget.getX(),gadget.getY());
             boardGadgets.put(gadget.getName(), gadget);
@@ -423,7 +423,8 @@ public class Board {
             this.boardGadgetPainters.add(new BallPainter(ball));
         } else if (message instanceof PortalMessage) {
             PortalMessage portalMessage = (PortalMessage) message;
-            Ball ball = new Ball(portalMessage.getName(), portalMessage.getBallShape().getCenter(), portalMessage.getVelocity());
+            Ball ball = new Ball(portalMessage.getName(), portalMessage.getBallShape().getCenter(),
+                    portalMessage.getVelocity());
             addBall(ball);
         }
     }
