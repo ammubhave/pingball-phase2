@@ -68,8 +68,8 @@ public class OuterWallsGadgetTest {
         OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.VERTICAL, "wall");
         gadget.setNeighborName("");
         String renderedString = gadget.render(emptyBoardString);
-        //System.out.println(renderedString);
-        for (int y = 0; y < 23; y++) {
+        System.out.println(renderedString);
+        for (int y = 0; y < 22; y++) {
             assertEquals("Y: " + String.valueOf(y), '.', renderedString.charAt(y * 23 + 0));
         }
         
@@ -94,7 +94,7 @@ public class OuterWallsGadgetTest {
         for (int y = 4; y < 17; y++) {
             assertEquals("Y: " + String.valueOf(y), "Jimmy Neutron".charAt(y - 4), renderedString.charAt(y * 23 + 0));
         }
-        for (int y = 17; y < 23; y++) {
+        for (int y = 17; y < 22; y++) {
             assertEquals("Y: " + String.valueOf(y), '.', renderedString.charAt(y * 23 + 0));
         }
         // System.out.println(renderedString);
@@ -149,7 +149,7 @@ public class OuterWallsGadgetTest {
         String renderedString = gadget.render(emptyBoardString);
         System.out.println(renderedString);
 
-        for (int y = 0; y < 23; y++) {
+        for (int y = 0; y < 22; y++) {
             for (int x = 0; x < 21; x++) {
                 assertTrue(renderedString.charAt(y * 23 + x) == ' ');
             }
@@ -170,7 +170,7 @@ public class OuterWallsGadgetTest {
         for (int y = 4; y < 17; y++) {
             assertEquals("Y: " + String.valueOf(y), "Jimmy Neutron".charAt(y - 4), renderedString.charAt(y * 23 + 21));
         }
-        for (int y = 17; y < 23; y++) {
+        for (int y = 17; y < 22; y++) {
             assertEquals("Y: " + String.valueOf(y), '.', renderedString.charAt(y * 23 + 21));
         }
         for (int y = 0; y < 23; y++) {
@@ -189,6 +189,15 @@ public class OuterWallsGadgetTest {
         assertEquals(4.75, gadget.leastCollisionTime(ball), 0.001);
         gadget.reactBall(ball);
         assertEquals(new Vect(0, 1), ball.getVelocity());
+    }
+    
+    @Test
+    public void testPerpendicularTransparentReflection() {
+        OuterWall gadget = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "wall");
+        gadget.setNeighborName("ne");
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEquals(new Vect(0, -1), ball.getVelocity());
     }
 
     @Test
