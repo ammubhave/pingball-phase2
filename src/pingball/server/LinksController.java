@@ -13,6 +13,7 @@ import pingball.proto.Message;
 import pingball.proto.WelcomeMessage;
 import pingball.proto.ControlMessage.Type;
 import pingball.server.BoardLinks.TargetedMessage;
+import pingball.proto.PortalMessage;
 
 /** The code that runs on the board links thread. */ 
 public class LinksController implements Runnable {
@@ -122,6 +123,13 @@ public class LinksController implements Runnable {
     				request.getBoardName(), ballMessage);
     		dispatch(response);
     		return;
+    	}
+    	if (message instanceof PortalMessage) {
+    	    PortalMessage portalMessage = (PortalMessage)message;
+    	    BoardLinks.TargetedMessage response = boardLinks.teleport(
+    	            request.getBoardName(), portalMessage);
+    	    dispatch(response);
+    	    return;
     	}
     	if (message instanceof ConsoleMessage) {
     		ConsoleMessage consoleMessage = (ConsoleMessage)message;

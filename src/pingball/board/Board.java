@@ -14,6 +14,7 @@ import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
 import pingball.ui.board.BallPainter;
 import pingball.ui.board.GadgetPainter;
+import pingball.proto.PortalMessage;
 
 /**
  * 
@@ -420,6 +421,10 @@ public class Board {
             Ball ball = new Ball(ballMessage.getName(), center, velocity);
             addBall(ball);
             this.boardGadgetPainters.add(new BallPainter(ball));
+        } else if (message instanceof PortalMessage) {
+            PortalMessage portalMessage = (PortalMessage) message;
+            Ball ball = new Ball(portalMessage.getName(), portalMessage.getBallShape().getCenter(), portalMessage.getVelocity());
+            addBall(ball);
         }
     }
 
