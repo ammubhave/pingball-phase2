@@ -1,12 +1,15 @@
 package pingball.tests;
 
 import static org.junit.Assert.*;
+import static pingball.tests.TestHelpers.assertEqualsVect;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import physics.Vect;
 import pingball.board.Flipper.FlipperOrientation;
+import pingball.board.Ball;
+import pingball.board.LeftFlipper;
 import pingball.board.RightFlipper;
 /**
  * testing strategy:
@@ -156,5 +159,135 @@ public class RightFlipperGadgetTest {
                 }
             }
         }
+    }
+    
+    // REFLECTION
+    
+    @Test
+    public void testPerpendicularTopReflectionBottomSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.TOP, "test");
+        Ball ball = new Ball("ball", new Vect(1, 2), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, 0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularTopReflectionLeftSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.TOP, "test");
+        Ball ball = new Ball("ball", new Vect(-1, 0.25), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(-0.95, 0), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularTopReflectionTopSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.TOP, "test");
+        Ball ball = new Ball("ball", new Vect(1, -1), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, -0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularTopReflectionRightSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.TOP, "test");
+        Ball ball = new Ball("ball", new Vect(3, 0.25), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0.95, 0), ball.getVelocity());
+    }
+    
+    @Test
+    public void testPerpendicularLeftReflectionBottomSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(0.25, 3), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, 0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularLeftReflectionLeftSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(-1, 1), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(-0.95, 0), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularLeftReflectionTopSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(0.25, -1), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, -0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularLeftReflectionRightSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0.95, 0), ball.getVelocity());
+    }
+    
+    @Test
+    public void testPerpendicularRightReflectionBottomSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(1.75, 3), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, 0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularRightReflectionLeftSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(-0.95, 0), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularRightReflectionTopSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(1.75, -1), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, -0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularRightReflectionRightSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(3, 1), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0.95, 0), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularBottomReflectionBottomSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
+        Ball ball = new Ball("ball", new Vect(1, 3), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, 0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularBottomReflectionLeftSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
+        Ball ball = new Ball("ball", new Vect(-1, 1.75), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(-0.95, 0), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularBottomReflectionTopSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
+        Ball ball = new Ball("ball", new Vect(1, 1), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0, -0.95), ball.getVelocity());
+    }
+
+    @Test
+    public void testPerpendicularBottomReflectionRightSide() {
+        RightFlipper gadget = new RightFlipper(new Vect(0, 0), FlipperOrientation.BOTTOM, "test");
+        Ball ball = new Ball("ball", new Vect(3, 1.75), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assertEqualsVect(new Vect(0.95, 0), ball.getVelocity());
     }
 }
