@@ -29,8 +29,8 @@ public class Board {
     private Vect g; // In L / s^2
     private double mu; // In per s.
     private double mu2; // In per L.
-    private HashMap<Gadget, String> keyUpForGadgets;
-    private HashMap<Gadget, String> keyDownForGadgets;
+    private HashMap<String, Gadget> keyUpForGadgets;
+    private HashMap<String, Gadget> keyDownForGadgets;
 
     /**
      * Creates a new instance of Board.
@@ -40,7 +40,7 @@ public class Board {
      * @param gadgets
      */
     public Board(String name, List<Ball> balls, List<Gadget> gadgets, double gravity, double friction1,
-            double friction2, HashMap<Gadget, String> keyUForGadgets, HashMap<Gadget, String> keyDForGadgets) {
+            double friction2, HashMap<String, Gadget> keyUForGadgets, HashMap<String, Gadget> keyDForGadgets) {
         this.name = name;
         this.g = new Vect(0, gravity); // L / s^2
 
@@ -516,19 +516,21 @@ public class Board {
     }
 
     public void addKeyUpBinding(String keyName, Gadget gadget) {
-        keyUpForGadgets.put(gadget, keyName);
+        keyUpForGadgets.put(keyName, gadget);
     }
 
     public void addKeyDownBinding(String keyName, Gadget gadget) {
-        keyDownForGadgets.put(gadget, keyName);
+        keyDownForGadgets.put(keyName, gadget);
     }
 
     public void handleKeyUp(String keyName) {
-
+        Gadget gadget = keyUpForGadgets.get(keyName);
+        gadget.action();
     }
 
     public void handleKeyDown(String keyName) {
-
+        Gadget gadget = keyDownForGadgets.get(keyName);
+        gadget.action();
     }
 
     /**
