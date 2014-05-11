@@ -1,21 +1,28 @@
 package pingball.ui.board;
 
-import java.awt.Graphics;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import pingball.board.Portal;
 
 public class PortalPainter implements GadgetPainter {
-    Portal gadget;
-    
+
+    private Portal gadget;
+    private final Color circularBumperColor = Color.ORANGE;
+
     public PortalPainter(Portal gadget) {
         this.gadget = gadget;
     }
 
     @Override
     public void paint(Graphics2D g) {
-        // TODO Auto-generated method stub
-        
+        g.setColor(circularBumperColor);
+        g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
+
+        g.fillOval(GraphicsConstants.convertX(this.gadget.getX()), GraphicsConstants.convertY(this.gadget.getY()),
+                GraphicsConstants.CELL_SIZE, GraphicsConstants.CELL_SIZE);
+
     }
 
 }
