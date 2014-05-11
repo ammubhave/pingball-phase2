@@ -25,8 +25,6 @@ public class LeftFlipper implements Gadget {
      */
     private final int pivot;
 
-    private boolean initial = true;
-
     private Double flipperAngle = 0.0;
     
     private final static double REFL_COEFF = 0.95;
@@ -100,24 +98,21 @@ public class LeftFlipper implements Gadget {
         } else if (pivot == 2) {
             Vect pv = new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS);
             l1 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_DIAMETER, xLoc + CORNER_RADIUS, yLoc + CORNER_DIAMETER), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc, xLoc + CORNER_RADIUS, yLoc + CORNER_DIAMETER), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc, xLoc + CORNER_RADIUS, yLoc), pv, a);
             c1 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
             c2 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            throw new RuntimeException();
-        } else if (pivot == 3) {
-            Vect pv = new Vect(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
+        } else if (pivot == 4) {
+            Vect pv = new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
             l1 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + EDGE_LENGTH - CORNER_RADIUS, xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + CORNER_RADIUS), pv, a);
             l2 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH,  yLoc + EDGE_LENGTH - CORNER_RADIUS, xLoc + EDGE_LENGTH, yLoc + CORNER_RADIUS), pv, a);
-            c1 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + EDGE_LENGTH - CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            throw new RuntimeException();
+            c1 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
+            c2 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS, CORNER_RADIUS), pv, a);
         } else {
-            Vect pv = new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
+            Vect pv = new Vect(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);            
             l1 = Geometry.rotateAround(new LineSegment(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS, xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS), pv, a);
             l2 = Geometry.rotateAround(new LineSegment(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH, xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH), pv, a);
             c1 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS, CORNER_RADIUS), pv, a);
             c2 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            throw new RuntimeException();
         }
         
         sides.add(l1);
@@ -286,29 +281,18 @@ public class LeftFlipper implements Gadget {
     
     @Override
     public void action() {
-
-        if (initial == true) {
-            initial = false;
-        } else {
-            initial = true;
-        }
-        
-        
         moveFlipper();
         if (rotatorThread != null && rotatorThread.isAlive()) {
             rotatorThread.interrupt();
             try {
                 rotatorThread.join();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         
         rotatorThread = new Thread(new FlipperRotator());
         rotatorThread.start();
-        
-        // changeFlipperOrientation(findFlipperOrientation());
     }
 
     public void moveFlipper() {
