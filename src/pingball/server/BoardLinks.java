@@ -13,6 +13,7 @@ import pingball.proto.BallMessage;
 import pingball.proto.ConnectWallMessage;
 import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
+import pingball.proto.PortalMessage;
 
 /**
  * Tracks joins amongst boards.
@@ -196,6 +197,16 @@ public class BoardLinks {
 		assert checkRep();		
 		return message;
 	}
+	
+	public TargetedMessage teleport(String from, PortalMessage message) {
+	    String to;
+	    if (liveClients.contains(message.getTargetBoard())) {
+	        to = message.getTargetBoard();
+	    } else {
+	        to = from;
+	    }
+	    return new TargetedMessage(message, to);
+    } 
 	
 	
 	/** Pairs a board name with a Message for the client owning the board. */
