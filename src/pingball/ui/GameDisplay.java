@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import pingball.board.Board;
 import pingball.ui.board.GadgetPainter;
@@ -25,25 +24,26 @@ public class GameDisplay extends JPanel {
     Color backgroundColor = Color.white;
     final int width = 440;
     final int height = 440;
-    
+
     /**
      * Default constructor that displays only the menu options
      * 
      */
     public GameDisplay() {
-        
+
     }
-    
+
     /**
      * Constructor for a GUI of the game when a board is provided
      * 
-     * @param board game board 
+     * @param board
+     *            game board
      */
-    public GameDisplay(Board board){        
+    public GameDisplay(Board board) {
         this.board = board;
         this.setPreferredSize(new Dimension(width, height));
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -51,29 +51,28 @@ public class GameDisplay extends JPanel {
         drawMenu(g2);
         drawGadgets(g2);
         drawBalls(g2);
-        //other drawings methods needs to be added here
+        // other drawings methods needs to be added here
     }
-    
-    
-    private void drawMenu(final Graphics2D g){
-        
+
+    private void drawMenu(final Graphics2D g) {
+        this.add(new DisplayMenu());
     }
-    
-    private void drawGadgets(final Graphics2D g){
+
+    private void drawGadgets(final Graphics2D g) {
         for (GadgetPainter painter : board.getGadgetPainters()) {
             painter.paint(g);
         }
     }
-    
-    private void drawBalls(final Graphics2D g){
-        
+
+    private void drawBalls(final Graphics2D g) {
+
     }
-    
+
     /*
      * Make the drawing buffer entirely white.
      */
     private void fillWindow(final Graphics2D g) {
         g.setColor(backgroundColor);
-        g.fillRect(0,  0,  getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
 }

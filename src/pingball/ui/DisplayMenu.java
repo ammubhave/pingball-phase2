@@ -1,11 +1,13 @@
 package pingball.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 /**
  * The DisplayMenu class represents menu bar for the Pingball game. It contains
@@ -20,19 +22,20 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
     private JMenu game;
     private JMenu server;
-    private JMenu help;
 
-    private JLabel loadBoard;
-    private JLabel pause;
-    private JLabel resume;
-    private JLabel restart;
-    private JLabel exit;
+    private JMenuItem loadBoard;
+    private JMenuItem pause;
+    private JMenuItem resume;
+    private JMenuItem restart;
+    private JMenuItem exit;
 
-    private JLabel connectToServer;
-    private JLabel disconnectFromServer;
+    private JMenuItem connectToServer;
+    private JMenuItem disconnectFromServer;
 
     public DisplayMenu() {
-
+        addMenusToMenuBar();
+        addComponentsToGameMenu();
+        addComponentsToServerMenu();
     }
 
     /**
@@ -42,7 +45,47 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
      * these options.
      */
     public void addComponentsToGameMenu() {
+        loadBoard = new JMenuItem("Load Board");
+        pause = new JMenuItem("Pause");
+        resume = new JMenuItem("Resume");
+        restart = new JMenuItem("Restart");
+        exit = new JMenuItem("Exit");
 
+        game.add(loadBoard);
+        game.add(pause);
+        game.add(resume);
+        game.add(restart);
+        game.add(exit);
+
+        loadBoard.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        pause.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        resume.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        restart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        exit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     /**
@@ -52,20 +95,31 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
      * defined for all these options.
      */
     public void addComponentsToServerMenu() {
+        connectToServer = new JMenuItem("Connect to Server");
+        disconnectFromServer = new JMenuItem("Disconnect from Server");
 
-    }
+        server.add(connectToServer);
+        server.add(disconnectFromServer);
 
-    /**
-     * Adds the directions option to the help menu. The appropriate listeners
-     * are added and their methods are defined for all these options.
-     */
-    public void addComponentsToHelpMenu() {
+        connectToServer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+
+        disconnectFromServer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     /** Adds the game menu, server menu, and help menu to the menu bar. */
     public void addMenusToMenuBar() {
-
+        game = new JMenu("Game");
+        server = new JMenu("Server");
+        this.add(game);
+        this.add(server);
     }
 
     @Override
@@ -97,5 +151,13 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         // TODO Auto-generated method stub
 
     }
+
+    /*
+     * public static void main(String[] args) { SwingUtilities.invokeLater(new
+     * Runnable() { public void run() { DisplayMenu main = new DisplayMenu();
+     * main.setSize(400, 400); main.setVisible(true);
+     * 
+     * } }); }
+     */
 
 }
