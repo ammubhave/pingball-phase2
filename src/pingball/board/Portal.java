@@ -44,7 +44,10 @@ public class Portal implements Gadget {
 
     @Override
     public void reactBall(Ball ball) {
-
+        if (this.targetPortalName==null){
+            return;
+        }
+        
     }
 
     @Override

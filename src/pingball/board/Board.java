@@ -426,6 +426,7 @@ public class Board {
             Ball ball = new Ball(portalMessage.getName(), portalMessage.getBallShape().getCenter(),
                     portalMessage.getVelocity());
             addBall(ball);
+            this.boardGadgetPainters.add(new BallPainter(ball));
         }
     }
 
@@ -536,7 +537,6 @@ public class Board {
     }
 
     public void handleKeyDown(String keyName) {
-        System.err.println(keyName);
         Gadget gadget = keyDownForGadgets.get(keyName);
         if (gadget != null)
             gadget.action();
