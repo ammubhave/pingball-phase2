@@ -4,6 +4,7 @@ package pingball.ui;
 //
 //
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -42,6 +43,7 @@ public class GameDisplay extends JPanel {
     public GameDisplay(Board board) {
         this.board = board;
         this.setPreferredSize(new Dimension(width, height));
+        this.setLayout(new BorderLayout());
     }
 
     @Override
@@ -55,7 +57,7 @@ public class GameDisplay extends JPanel {
     }
 
     private void drawMenu(final Graphics2D g) {
-        this.add(new DisplayMenu());
+        this.add(new DisplayMenu(), BorderLayout.NORTH);
     }
 
     private void drawGadgets(final Graphics2D g) {

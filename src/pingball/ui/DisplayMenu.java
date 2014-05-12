@@ -4,10 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import pingball.board.Board;
+import pingball.client.ClientController;
+import pingball.parser.BoardBuilder;
 
 /**
  * The DisplayMenu class represents menu bar for the Pingball game. It contains
@@ -59,7 +66,23 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         loadBoard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                JFileChooser boardLoad = new JFileChooser();
+                int returnVal = boardLoad.showOpenDialog(loadBoard);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = boardLoad.getSelectedFile();
+                    try {
 
+                        final Board board = BoardBuilder.buildBoard(file);
+                        ClientController controller = new ClientController(board, null, 0);
+                        controller.start();
+                    } catch (IOException i) {
+                        i.printStackTrace();
+                    }
+                }
+                // add(boardUpload);
+                // FileFinderDisplay aa = new FileFinderDisplay();
+                // PingballClient.runClient(new File("boards/sampleBoard3.pb"),
+                // "string", 4467);
             }
         });
 
