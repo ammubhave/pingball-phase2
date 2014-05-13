@@ -52,7 +52,6 @@ public class GameDisplay extends JPanel {
         fillWindow(g2);
         drawGadgets(g2);
         drawBalls(g2);
-        drawMenu(g2);
         // other drawings methods needs to be added here
     }
 
