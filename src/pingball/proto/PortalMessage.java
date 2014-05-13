@@ -16,18 +16,24 @@ public class PortalMessage extends Message {
 
     private final Circle ballShape;
     private final String name;
+    private final String source;
 
     public PortalMessage(String name, String targetPortal, String targetBoard,
-            Circle ballShape, Vect velocity) {
+            Circle ballShape, Vect velocity, String source) {
         this.name = name;
         this.targetPortal = targetPortal;
         this.targetBoard = targetBoard;
         this.ballShape = ballShape;
         this.velocity = velocity;
+        this.source = source;
     }
 
     public String getName() {
         return name;
+    }
+    
+    public String getSource() {
+        return this.source;
     }
 
     public String getTargetPortal() {
@@ -55,7 +61,7 @@ public class PortalMessage extends Message {
     public String toLine() {
         return NAME + " " + targetPortal + " " + targetBoard + " "+ ballShape.getCenter().x() + " " + ballShape.getCenter().y() + " " +
                 ballShape.getRadius() + " " + velocity.x() + " " + velocity.y()
-                + " " + name;
+                + " " + name + " " + source;
     }
 
     static final String NAME = "portal";
@@ -70,6 +76,7 @@ public class PortalMessage extends Message {
             this.targetBoard=tokens[2];
             this.name=tokens[6];
             this.velocity= new Vect(Double.parseDouble(tokens[4]),Double.parseDouble(tokens[5]));
+            this.source = tokens[7];
             double cx = Double.parseDouble(tokens[3]);
             double cy = Double.parseDouble(tokens[4]);
             double radius = Double.parseDouble(tokens[5]);

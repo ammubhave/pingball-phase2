@@ -92,7 +92,7 @@ public class Board {
      * @param gadget
      *            to be added to board
      */
-    public void addGadget(Gadget gadget) {
+    public synchronized void addGadget(Gadget gadget) {
         boardGadgets.put(gadget.getName(), gadget);
     }
 
@@ -102,11 +102,11 @@ public class Board {
      * @param gadget
      *            painter to be added to board
      */
-    public void addGadgetPainter(GadgetPainter gadgetPainter) {
+    public synchronized void addGadgetPainter(GadgetPainter gadgetPainter) {
         boardGadgetPainters.add(gadgetPainter);
     }
 
-    public List<GadgetPainter> getGadgetPainters() {
+    public synchronized List<GadgetPainter> getGadgetPainters() {
         return this.boardGadgetPainters;
     }
 
@@ -266,7 +266,7 @@ public class Board {
         balls.add(ball);
     }
 
-    public void removeBall(Ball ball) {
+    public synchronized void removeBall(Ball ball) {
         balls.remove(ball);
     }
 
@@ -412,7 +412,7 @@ public class Board {
                                toadd = false;
                         }
                     }
-                    if (toadd) {
+                    if (toadd && portalEnabled) {
                         sendMessages.add(msg);
                     }
                 } else {
@@ -420,6 +420,14 @@ public class Board {
                 }
             }
         }
+    }
+    
+    private boolean portalEnabled = false;
+    public void enablePortal() {
+        portalEnabled = true;
+    }
+    public void disablePortal() {
+        portalEnabled = false;
     }
 
 
@@ -529,9 +537,10 @@ public class Board {
             }
         }
         for (Message msg : sendMessages) {
-            if (msg instanceof PortalMessage && ((PortalMessage) msg).getTargetBoard().equals(getName())) {
+            if (msg instanceof PortalMessage) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
-            } else {
+                messages.add(new PortalMessage(((PortalMessage) msg).getName(), ((PortalMessage) msg).getTargetPortal(), ((PortalMessage) msg).getTargetBoard(), ((PortalMessage) msg).getBallShape(), ((PortalMessage) msg).getVelocity(), getName()));
+            } else {                
                 messages.add(msg);
             }
         }
@@ -565,11 +574,11 @@ public class Board {
      *            the name of the gadget to find.
      * @return
      */
-    public Gadget getGadgetFromName(String name) {
+    public synchronized Gadget getGadgetFromName(String name) {
         return boardGadgets.get(name);
     }
     
-    public Ball getBallFromName(String name) {
+    public synchronized Ball getBallFromName(String name) {
         for (Ball ball : balls) {
             if (ball.getName().equals(name))
                 return ball;
@@ -591,7 +600,7 @@ public class Board {
         keyDownForGadgets.get(keyName).add(gadget);
     }
 
-    public void handleKeyUp(String keyName) {
+    public synchronized void handleKeyUp(String keyName) {
         if (!keyUpForGadgets.containsKey(keyName)) 
             return;
         for (Gadget gadget : keyUpForGadgets.get(keyName)) {
@@ -599,7 +608,7 @@ public class Board {
         }
     }
 
-    public void handleKeyDown(String keyName) {
+    public synchronized void handleKeyDown(String keyName) {
         if (!keyDownForGadgets.containsKey(keyName)) 
             return;
         for (Gadget gadget : keyDownForGadgets.get(keyName)) {

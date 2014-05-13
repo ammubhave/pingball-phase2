@@ -51,7 +51,7 @@ public class Portal implements Gadget {
             return new ArrayList<Message>();
         }
       //  System.err.println(targetBoardName);
-        PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName, ball.getCircle(), ball.getVelocity());
+        PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName, ball.getCircle(), ball.getVelocity(), null);
         ArrayList<Message> msgs = new ArrayList<Message>();
         msgs.add(message);
         return msgs;

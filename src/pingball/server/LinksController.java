@@ -126,6 +126,11 @@ public class LinksController implements Runnable {
     	}
     	if (message instanceof PortalMessage) {
     	    PortalMessage portalMessage = (PortalMessage)message;
+    	    String target;
+    	    if (this.boardLinks.isConnected(request.getBoardName()))
+    	        target = request.getBoardName();
+    	    else
+    	        target = portalMessage.getSource();
     	    BoardLinks.TargetedMessage response = boardLinks.teleport(
     	            request.getBoardName(), portalMessage);
     	    dispatch(response);

@@ -55,9 +55,11 @@ public class ClientController {
         this.sendQueue = new LinkedBlockingQueue<Message>();
 
         if (host != null) {
+            board.enablePortal();
             this.serverConnection = new Connection(host, port, sendQueue, recvQueue);
             handshake();
         } else {
+            board.disablePortal();
             this.serverConnection = null;
         } // set up the UI (on the event-handling thread)
         final ClientController thisClientController = this;
@@ -108,14 +110,6 @@ public class ClientController {
                 }
                 board.simulateTime(DT);
                 messages = board.getOutOfBoundBallMessages();
-                if (serverConnection == null) {
-                    for (Message msg : messages) {
-                        if (msg instanceof PortalMessage) {
-                            System.err.println("FF");
-                            recvQueue.add(msg);
-                        }
-                    }
-                }
                 if (!messages.isEmpty())
                     System.err.println(messages);
             }

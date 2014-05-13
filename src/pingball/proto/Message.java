@@ -52,6 +52,9 @@ public abstract class Message {
 		if (name.equals(WelcomeMessage.NAME)) {
 			return new WelcomeMessage(tokens);
 		}
+        if (name.equals(PortalMessage.NAME)) {
+            return new PortalMessage(tokens);
+        }
 		
 		throw new IllegalArgumentException("Invalid message name " + name);
 	}

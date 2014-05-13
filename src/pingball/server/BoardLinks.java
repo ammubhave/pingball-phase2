@@ -46,6 +46,10 @@ public class BoardLinks {
 		assert checkRep();
 	}
 	
+	public boolean isConnected(String name) {
+	    return liveClients.contains(name);
+	}
+	
 	/**
 	 * Joins two boards horizontally.
 	 * 
