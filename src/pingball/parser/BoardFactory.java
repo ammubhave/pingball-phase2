@@ -248,17 +248,17 @@ public class BoardFactory {
         }
         @Override
         public void exitRightFlipperObjectLine(BoardParser.RightFlipperObjectLineContext ctx) {
-            FlipperOrientation orientation = FlipperOrientation.LEFT;
+            FlipperOrientation orientation = FlipperOrientation.RIGHT;
             switch (Integer.parseInt(attributes.get("orientation"))) {
             // CHECK ORIENTATIONS FOR EACH ANGLE
             case 0:
-                orientation = FlipperOrientation.TOP; break;
-            case 90:
                 orientation = FlipperOrientation.RIGHT; break;
-            case 180:
+            case 90:
                 orientation = FlipperOrientation.BOTTOM; break;
-            case 270:
+            case 180:
                 orientation = FlipperOrientation.LEFT; break;
+            case 270:
+                orientation = FlipperOrientation.TOP; break;
             }
             RightFlipper gadget = new RightFlipper(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),

@@ -53,4 +53,5 @@ board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
   fire trigger=Abs action=Abs 
   
   # adds key control to gadgets
-  keydown key=space action=FlipL1
+  keydown key=z action=FlipL2
+  keydown key=c action=FlipR2

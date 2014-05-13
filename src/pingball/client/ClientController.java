@@ -74,6 +74,8 @@ public class ClientController {
     public void start() {
         // scheudle both tasks to run at specific intervals -
         // heartbeat and board printer
+        if (exec != null)
+            return;
         exec = new ScheduledThreadPoolExecutor(1);
 
         exec.scheduleAtFixedRate(new BoardPrinterTask(), 0, (long) (BOARD_REFRESH_INTERVAL * 1000 * 1000),
@@ -85,6 +87,7 @@ public class ClientController {
 
     public void stop() {
         exec.shutdown();
+        exec = null;
     }
 
     /**

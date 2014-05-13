@@ -327,15 +327,6 @@ public class LeftFlipper implements Gadget {
         }
     }
 
-    /** Returns the current state of the left flipper while is is being rotated */
-    public String getState() {
-        String state = "";
-        state = "Flipper Angle: " + flipperAngle + "\n";
-        //state = state + "X1: " + oneLineFlipper.p1().x() + "Y1: " + oneLineFlipper.p1().y() + "X2: "
-        //        + oneLineFlipper.p2().x() + " Y2: " + oneLineFlipper.p2().y();
-        return state;
-    }
-
     /**
      * Returns String representation of the board depending on whether it's
      * vertical or not. Does not support diagonal flippers
