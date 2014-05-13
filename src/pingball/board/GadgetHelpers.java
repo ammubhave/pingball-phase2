@@ -15,13 +15,13 @@ public class GadgetHelpers {
         double smallestTime = Double.POSITIVE_INFINITY;
         for (LineSegment ls : lines) {
             double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), ball.getVelocity());
-            if (time < smallestTime) {
+            if (time <= smallestTime) {
                 smallestTime = time;
             }
         }
         for (Circle circ : circles) {
             double time = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), ball.getVelocity());
-            if (time < smallestTime) {
+            if (time <= smallestTime) {
                 smallestTime = time;
             }
         }
@@ -37,7 +37,7 @@ public class GadgetHelpers {
         double timeToWall = 0;
         for (LineSegment ls : lines) {
             timeToWall = Geometry.timeUntilWallCollision(ls, ball.getCircle(), ball.getVelocity());
-            if (timeToWall < smallestTimeWall) {
+            if (timeToWall <= smallestTimeWall) {
                 smallestTimeWall = timeToWall;
                 smallestWall = ls;
             }
@@ -47,7 +47,7 @@ public class GadgetHelpers {
         double timeToCircle = 0;
         for (Circle circ : circles) {
             timeToCircle = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), ball.getVelocity());
-            if (timeToCircle < smallestTimeCircle) {
+            if (timeToCircle <= smallestTimeCircle) {
                 smallestTimeCircle = timeToCircle;
                 smallestCircle = circ;
             }
