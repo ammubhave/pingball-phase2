@@ -6,6 +6,9 @@ import java.util.List;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import pingball.proto.BallMessage;
+import pingball.proto.Message;
+import pingball.proto.PortalMessage;
 
 public class Portal implements Gadget {
  
@@ -43,11 +46,14 @@ public class Portal implements Gadget {
     }
 
     @Override
-    public void reactBall(Ball ball) {
-        if (this.targetPortalName==null){
-            return;
+    public List<Message> reactBall(Ball ball) {
+        if (this.targetPortalName == null){
+            return new ArrayList<Message>();
         }
-        
+        PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName, ball.getCircle(), ball.getVelocity());
+        ArrayList<Message> msgs = new ArrayList<Message>();
+        msgs.add(message);
+        return msgs;
     }
 
     @Override

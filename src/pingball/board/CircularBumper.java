@@ -6,6 +6,7 @@ import java.util.List;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import pingball.proto.Message;
 
 public class CircularBumper implements Gadget {
 
@@ -110,10 +111,12 @@ public class CircularBumper implements Gadget {
         return name;
     }
 
-    public void reactBall(Ball ball) {
+    public List<Message> reactBall(Ball ball) {
         ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(), REFL_COEFF));
 
         this.trigger();
+
+        return new ArrayList<Message>();
     }
 
     public void hookActionToTrigger(Gadget gadget) {

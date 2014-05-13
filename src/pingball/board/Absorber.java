@@ -8,6 +8,7 @@ import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.Tuple;
+import pingball.proto.Message;
 import static pingball.MapFilterReduce.*;
 
 /** This class represents an Absorber Gadget */
@@ -146,7 +147,7 @@ public class Absorber implements Gadget {
         }
     }
  
-    public void reactBall(Ball ball) {
+    public List<Message> reactBall(Ball ball) {
         if (heldBall != null && !isInside(ball)) {           
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
         } else if (heldBall == null) {
@@ -159,6 +160,7 @@ public class Absorber implements Gadget {
         }
 
         this.trigger();
+        return new ArrayList<Message>();
     }
 
     /** @return: upper left x coordinate of absorber */

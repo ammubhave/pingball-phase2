@@ -32,6 +32,7 @@ public class Board {
     private double mu2; // In per L.
     private HashMap<String, ArrayList<Gadget>> keyUpForGadgets = new HashMap<String, ArrayList<Gadget>>();
     private HashMap<String, ArrayList<Gadget>> keyDownForGadgets = new HashMap<String, ArrayList<Gadget>>();
+    private List<Message> sendMessages = new ArrayList<Message>();
 
     /**
      * Creates a new instance of Board.
@@ -400,9 +401,12 @@ public class Board {
                 ball1.changeVelocity(vels.v1);
                 ball2.changeVelocity(vels.v2);
             }
-        else
-            gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
+        else {
+            List<Message> msgs = gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
+            sendMessages.addAll(msgs);
+        }
     }
+
 
     /**
      * Handles a message received from the server.
@@ -504,6 +508,11 @@ public class Board {
                 removedBalls.add(ball);
             }
         }
+        for (Message msg : sendMessages) {
+            if (msg instanceof PortalMessage) {
+                removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
+            }
+        }
         for (Ball ball : removedBalls) {
             balls.remove(ball);
             int i = 0;
@@ -513,6 +522,8 @@ public class Board {
                         break;
             this.boardGadgetPainters.remove(i);
         }
+        messages.addAll(sendMessages);
+        sendMessages.clear();
         return messages;
     }
 
@@ -526,6 +537,14 @@ public class Board {
      */
     public Gadget getGadgetFromName(String name) {
         return boardGadgets.get(name);
+    }
+    
+    public Ball getBallFromName(String name) {
+        for (Ball ball : balls) {
+            if (ball.getName().equals(name))
+                return ball;
+        }
+        throw new RuntimeException("ball not found");
     }
 
     public void addKeyUpBinding(String keyName, Gadget gadget) {

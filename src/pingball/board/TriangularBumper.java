@@ -7,6 +7,7 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.proto.Message;
 
 public class TriangularBumper implements Gadget {
     /**
@@ -123,9 +124,11 @@ public class TriangularBumper implements Gadget {
 
     }
 
-    public void reactBall(Ball ball) {
+    public List<Message> reactBall(Ball ball) {
         GadgetHelpers.reflectBall(sides, corners, ball, REFL_COEFF);
         this.trigger();
+
+        return new ArrayList<Message>();
     }
 
     /**

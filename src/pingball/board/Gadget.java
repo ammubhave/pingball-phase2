@@ -1,5 +1,9 @@
 package pingball.board;
 
+import java.util.List;
+
+import pingball.proto.Message;
+
 /*
  * Gadget superclass OR interface, have lots of implementing/extending gadget classes.
  * For now, has been implemented as an interface
@@ -52,7 +56,7 @@ public interface Gadget {
      *            the Ball object inside this.containingSquare that is
      *            interacting with the gadget
      */
-    public void reactBall(Ball ball);
+    public List<Message> reactBall(Ball ball);
 
     /**
      * Performs action of the gadget

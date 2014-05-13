@@ -15,6 +15,7 @@ import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.board.Flipper.FlipperOrientation;
+import pingball.proto.Message;
 
 /** Represents the LeftFlipper gadget class */
 
@@ -153,7 +154,7 @@ public class LeftFlipper implements Gadget {
         return 0;
     }
 
-    public synchronized void reactBall(Ball ball) {
+    public synchronized List<Message> reactBall(Ball ball) {
         List<LineSegment> lines = sides;
         List<Circle> circles = cornerCircles;
         if (lines == null) lines = new ArrayList<LineSegment>();
@@ -185,6 +186,8 @@ public class LeftFlipper implements Gadget {
             ball.changeVelocity(Geometry.reflectRotatingCircle(smallestCircle, getPivotVect(), getVelocity() , ball.getCircle(), ball.getVelocity(), REFL_COEFF));
         }
         this.trigger();
+
+        return new ArrayList<Message>();
     }
 
     @Override
