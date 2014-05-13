@@ -56,10 +56,6 @@ public class GameDisplay extends JPanel {
         // other drawings methods needs to be added here
     }
 
-    private void drawMenu(final Graphics2D g) {
-        this.add(new DisplayMenu(), BorderLayout.NORTH);
-    }
-
     private void drawGadgets(final Graphics2D g) {
         for (GadgetPainter painter : board.getGadgetPainters()) {
             painter.paint(g);
