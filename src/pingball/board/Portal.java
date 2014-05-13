@@ -42,7 +42,7 @@ public class Portal implements Gadget {
     @Override
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getVelocity();
-        return Geometry.timeUntilCircleCollision(portal, ball.getCircle(), velocity);
+        return Geometry.timeUntilCircleCollision(new Circle(portal.getCenter().x(), portal.getCenter().y(), RADIUS), ball.getCircle(), velocity);
     }
 
     @Override
@@ -50,6 +50,7 @@ public class Portal implements Gadget {
         if (this.targetPortalName == null){
             return new ArrayList<Message>();
         }
+      //  System.err.println(targetBoardName);
         PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName, ball.getCircle(), ball.getVelocity());
         ArrayList<Message> msgs = new ArrayList<Message>();
         msgs.add(message);
@@ -66,7 +67,7 @@ public class Portal implements Gadget {
 
     @Override
     public double getY() {
-        return portal.getCenter().x();
+        return portal.getCenter().y();
     }
 
     @Override

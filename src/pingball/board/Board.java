@@ -312,8 +312,8 @@ public class Board {
         for (Ball ball : balls) {
             Vect oldV = ball.getVelocity();
             Vect newV = oldV.times(1 - this.mu * time - this.mu2 * oldV.length() * time).plus(this.g.times(time));
-            if (newV.length() < 0.05) // If velocity is too small, kill it
-                newV = new Vect(0, 0);
+           // if (newV.length() < 0.05) // If velocity is too small, kill it
+           //     newV = new Vect(0, 0);
             ball.changeVelocity(newV);
             ball.changePos(ball.getPos().plus(oldV.times(time)));
         }
@@ -403,7 +403,22 @@ public class Board {
             }
         else {
             List<Message> msgs = gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
-            sendMessages.addAll(msgs);
+            for (Message msg : msgs) {
+                if (msg instanceof PortalMessage) {
+                    boolean toadd = true;
+                    for (Message sm : sendMessages) {
+                        if (sm instanceof PortalMessage) {
+                            if (((PortalMessage) sm).getName().equals(((PortalMessage) msg).getName()))
+                               toadd = false;
+                        }
+                    }
+                    if (toadd) {
+                        sendMessages.add(msg);
+                    }
+                } else {
+                    sendMessages.add(msg);
+                }
+            }
         }
     }
 
@@ -433,7 +448,7 @@ public class Board {
             this.boardGadgetPainters.add(new BallPainter(ball));
         } else if (message instanceof PortalMessage) {
             PortalMessage portalMessage = (PortalMessage) message;
-            Ball ball = new Ball(portalMessage.getName(), portalMessage.getBallShape().getCenter(),
+            Ball ball = new Ball(portalMessage.getName(), new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY()),
                     portalMessage.getVelocity());
             addBall(ball);
             this.boardGadgetPainters.add(new BallPainter(ball));
@@ -508,9 +523,20 @@ public class Board {
                 removedBalls.add(ball);
             }
         }
+        for (Ball ball : removedBalls) {
+            balls.remove(ball);
+            int i = 0;
+            for (i = 0; i < this.boardGadgetPainters.size(); i++)
+                if (this.boardGadgetPainters.get(i) instanceof BallPainter)
+                    if (((BallPainter) this.boardGadgetPainters.get(i)).getBall().getName() == ball.getName())
+                        break;
+            this.boardGadgetPainters.remove(i);
+        }
         for (Message msg : sendMessages) {
             if (msg instanceof PortalMessage) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
+            } else {
+                messages.add(msg);
             }
         }
         for (Ball ball : removedBalls) {
@@ -522,7 +548,15 @@ public class Board {
                         break;
             this.boardGadgetPainters.remove(i);
         }
-        messages.addAll(sendMessages);
+        for (Message msg : sendMessages) {
+            if (msg instanceof PortalMessage) {
+                if (((PortalMessage) msg).getTargetBoard().equals(getName())) {
+                    System.err.println("$$$");
+                    onMessage(msg);
+                    System.err.println(((PortalMessage) msg).getTargetPortal());
+                }
+            }
+        }
         sendMessages.clear();
         return messages;
     }

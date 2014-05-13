@@ -9,7 +9,7 @@ import pingball.board.Ball;
 
 public class BallPainter implements GadgetPainter {
     private final Color ballColor = Color.RED;
-    private final int ballDiameter = 10; // in Pixels
+    private final int ballDiameter = GraphicsConstants.CELL_SIZE/2; // in Pixels
     
     private Ball ball;
     
@@ -23,7 +23,7 @@ public class BallPainter implements GadgetPainter {
 
     @Override
     public void paint(final Graphics2D g) {
-        final Point ballpt = new Point((int)((ball.getCircle().getCenter().x()-0.25+1)*20), (int)((ball.getCircle().getCenter().y()-0.25+1)*20));
+        final Point ballpt = new Point((int)((ball.getCircle().getCenter().x()-0.25+1)*GraphicsConstants.CELL_SIZE), (int)((ball.getCircle().getCenter().y()-0.25+1)*GraphicsConstants.CELL_SIZE));
         
         g.setColor(ballColor);
         g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
