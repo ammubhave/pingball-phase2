@@ -20,6 +20,7 @@ public class MainWindow extends JFrame implements KeyListener {
         display = new GameDisplay(board);
         boardForKeys = board;
         this.add(display, BorderLayout.CENTER);
+        this.add(new DisplayMenu(), BorderLayout.NORTH);
         this.pack();
         this.setVisible(true);
     }

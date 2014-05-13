@@ -50,14 +50,10 @@ public class GameDisplay extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         fillWindow(g2);
-        drawMenu(g2);
+
         drawGadgets(g2);
         drawBalls(g2);
         // other drawings methods needs to be added here
-    }
-
-    private void drawMenu(final Graphics2D g) {
-        this.add(new DisplayMenu(), BorderLayout.NORTH);
     }
 
     private void drawGadgets(final Graphics2D g) {
