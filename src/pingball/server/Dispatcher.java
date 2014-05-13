@@ -221,6 +221,7 @@ public class Dispatcher {
 		    			// The console stream was closed.
 		    			return;
 		    		}
+		    		
 		    		ConsoleMessage message = new ConsoleMessage(line);
 		    		Request request = new Request(null, message);
 		    		requestQueue.put(request);

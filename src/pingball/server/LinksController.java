@@ -147,7 +147,7 @@ public class LinksController implements Runnable {
 			for(BoardLinks.TargetedMessage reaction : reactions)
 				dispatch(reaction);
 			return;
-    	}
+    	}System.err.println(message);
     	
         // Should never get here--make sure to return in each of the valid cases above.
         throw new UnsupportedOperationException();

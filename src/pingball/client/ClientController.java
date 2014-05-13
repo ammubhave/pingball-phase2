@@ -107,6 +107,8 @@ public class ClientController {
                 }
                 board.simulateTime(DT);
                 messages = board.getOutOfBoundBallMessages();
+                if (!messages.isEmpty())
+                    System.err.println(messages);
             }
             for (Message message : messages)
                 sendQueue.add(message);
@@ -120,7 +122,7 @@ public class ClientController {
         @Override
         public void run() {
             synchronized (board) {
-                System.out.println(board.toString());
+               // System.out.println(board.toString());
                 if (window != null)
                     window.repaint();
             }

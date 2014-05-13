@@ -127,7 +127,7 @@ public class OuterWall implements Gadget {
     public void trigger() {
     }
 
-    public String render(String input) {
+    public synchronized String render(String input) {
     	String label = this.neighborName;
     	if (label == null)
     		label = "";

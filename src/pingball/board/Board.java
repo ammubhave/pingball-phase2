@@ -523,15 +523,6 @@ public class Board {
                 removedBalls.add(ball);
             }
         }
-        for (Ball ball : removedBalls) {
-            balls.remove(ball);
-            int i = 0;
-            for (i = 0; i < this.boardGadgetPainters.size(); i++)
-                if (this.boardGadgetPainters.get(i) instanceof BallPainter)
-                    if (((BallPainter) this.boardGadgetPainters.get(i)).getBall().getName() == ball.getName())
-                        break;
-            this.boardGadgetPainters.remove(i);
-        }
         for (Message msg : sendMessages) {
             if (msg instanceof PortalMessage) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));

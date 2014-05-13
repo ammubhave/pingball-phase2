@@ -93,7 +93,7 @@ public class Ball {
      * @param input the board string on which to render
      * @return the final rendered board string
      */
-    public String render(String input) {
+    public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.getPos()), '*');
         return sb.toString();

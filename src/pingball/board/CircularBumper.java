@@ -124,7 +124,7 @@ public class CircularBumper implements Gadget {
     }
     
     @Override
-    public String render(String input) {
+    public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'O');
         return sb.toString();

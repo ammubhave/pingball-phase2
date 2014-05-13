@@ -61,17 +61,17 @@ public class Portal implements Gadget {
     public void action() {
     }
 
-    public double getX() {
+    public synchronized double getX() {
         return portal.getCenter().x();
     }
 
     @Override
-    public double getY() {
+    public synchronized double getY() {
         return portal.getCenter().y();
     }
 
     @Override
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 
@@ -81,7 +81,7 @@ public class Portal implements Gadget {
     }
 
     @Override
-    public String render(String input) {
+    public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '@');
         return sb.toString();
@@ -91,7 +91,7 @@ public class Portal implements Gadget {
      * Set the name of the target portal.
      * @param otherPortal the name of the target portal name
      */
-    public void setTargetPortal(String otherPortal) {
+    public synchronized void setTargetPortal(String otherPortal) {
         targetPortalName = otherPortal;
     }
     
@@ -99,7 +99,7 @@ public class Portal implements Gadget {
      * Set the name of the target board.
      * @param otherBoard the name of the target board name
      */
-    public void setTargetBoard(String otherBoard) {
+    public synchronized void setTargetBoard(String otherBoard) {
         targetBoardName=otherBoard;
     }
 
