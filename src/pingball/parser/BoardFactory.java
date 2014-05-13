@@ -330,8 +330,8 @@ public class BoardFactory {
             Portal gadget = new Portal(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
                     attributes.get("name"));
-            gadget.setTargetBoard(attributes.get("targetBoard"));
-            gadget.setTargetPortal(attributes.get("targetPortal"));
+            gadget.setTargetBoard(attributes.get("otherBoard"));
+            gadget.setTargetPortal(attributes.get("otherPortal"));
             board.addGadget(gadget);
             board.addGadgetPainter(new PortalPainter(gadget));
             attributes.clear();

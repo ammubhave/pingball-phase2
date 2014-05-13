@@ -1,8 +1,8 @@
 package pingball.ui.board;
 
 public class GraphicsConstants {
-    public static final int CELL_SIZE = 20;
-    public static final int SIZE = 440;
+    public static final int CELL_SIZE = (int)(GraphicsConstants.SIZE / 21.5);
+    public static final int SIZE = 700;
     public static final int STROKE_WIDTH = 3;
     
     public static int convertX(double x) {

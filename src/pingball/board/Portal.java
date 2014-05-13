@@ -6,6 +6,9 @@ import java.util.List;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import pingball.proto.BallMessage;
+import pingball.proto.Message;
+import pingball.proto.PortalMessage;
 
 public class Portal implements Gadget {
  
@@ -39,15 +42,19 @@ public class Portal implements Gadget {
     @Override
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getVelocity();
-        return Geometry.timeUntilCircleCollision(portal, ball.getCircle(), velocity);
+        return Geometry.timeUntilCircleCollision(new Circle(portal.getCenter().x(), portal.getCenter().y(), RADIUS), ball.getCircle(), velocity);
     }
 
     @Override
-    public void reactBall(Ball ball) {
-        if (this.targetPortalName==null){
-            return;
+    public List<Message> reactBall(Ball ball) {
+        if (this.targetPortalName == null){
+            return new ArrayList<Message>();
         }
-        
+      //  System.err.println(targetBoardName);
+        PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName, ball.getCircle(), ball.getVelocity());
+        ArrayList<Message> msgs = new ArrayList<Message>();
+        msgs.add(message);
+        return msgs;
     }
 
     @Override
@@ -60,7 +67,7 @@ public class Portal implements Gadget {
 
     @Override
     public double getY() {
-        return portal.getCenter().x();
+        return portal.getCenter().y();
     }
 
     @Override

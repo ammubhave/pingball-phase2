@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import pingball.board.Board;
 import pingball.ui.board.GadgetPainter;
+import pingball.ui.board.GraphicsConstants;
 
 /**
  * 
@@ -23,8 +24,6 @@ import pingball.ui.board.GadgetPainter;
 public class GameDisplay extends JPanel {
     Board board;
     Color backgroundColor = Color.white;
-    final int width = 440;
-    final int height = 440;
 
     /**
      * Default constructor that displays only the menu options
@@ -42,7 +41,7 @@ public class GameDisplay extends JPanel {
      */
     public GameDisplay(Board board) {
         this.board = board;
-        this.setPreferredSize(new Dimension(width, height));
+        this.setPreferredSize(new Dimension(GraphicsConstants.SIZE, GraphicsConstants.SIZE));
         this.setLayout(new BorderLayout());
     }
 

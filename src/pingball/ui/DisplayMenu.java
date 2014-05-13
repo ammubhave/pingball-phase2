@@ -1,5 +1,6 @@
 package pingball.ui;
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -8,9 +9,15 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import pingball.board.Board;
 import pingball.client.ClientController;
@@ -77,6 +84,9 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         loadBoard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser boardLoad = new JFileChooser();
+                FileFilter filter = new FileNameExtensionFilter("Pingball Board File", new String[] { "pb" });
+                boardLoad.setFileFilter(filter);
+                boardLoad.addChoosableFileFilter(filter);
                 int returnVal = boardLoad.showOpenDialog(loadBoard);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = boardLoad.getSelectedFile();
@@ -123,7 +133,7 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                System.exit(1);
             }
         });
     }
@@ -143,13 +153,53 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         connectToServer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                try {
+                    JPanel serverPanel = new JPanel();
 
+                    JLabel hostRequest = new JLabel("Enter the host name: ");
+                    JLabel portRequest = new JLabel("Enter the port number: ");
+
+                    JTextField hostInput = new JTextField();
+                    JTextField portInput = new JTextField();
+
+                    serverPanel.setLayout(new GridLayout(0, 2));
+                    serverPanel.add(hostRequest);
+                    serverPanel.add(hostInput);
+                    serverPanel.add(portRequest);
+                    serverPanel.add(portInput);
+
+                    int result = JOptionPane.showConfirmDialog(connectToServer, serverPanel,
+                            "Input to Connect to Server: ", JOptionPane.OK_CANCEL_OPTION);
+
+                    if (result == JOptionPane.OK_OPTION) {
+                        try {
+                            gamePort = Integer.parseInt(portInput.getText());
+                            gameHost = hostInput.getText();
+                            ClientController controller = new ClientController(gameBoard, gameHost, gamePort, gameFile);
+                            controller.start();
+                            mainWindow.stopController();
+                            mainWindow.dispose();
+                        } catch (Exception u) {
+
+                        }
+                    }
+
+                } catch (Exception i) {
+                    // i.printStackTrace();
+                }
             }
         });
 
         disconnectFromServer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    ClientController controller = new ClientController(gameBoard, null, 0, gameFile);
+                    controller.start();
+                    mainWindow.stopController();
+                    mainWindow.dispose();
+                } catch (IOException i) {
+                    i.printStackTrace();
+                }
             }
         });
     }

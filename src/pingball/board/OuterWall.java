@@ -1,9 +1,13 @@
 package pingball.board;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.proto.Message;
 
 /**
  * Represents the outer walls in pingball
@@ -158,9 +162,9 @@ public class OuterWall implements Gadget {
     }
 
     @Override
-    public void reactBall(Ball ball) {
+    public List<Message> reactBall(Ball ball) {
         if (this.neighborName != null)
-            return;
+            return new ArrayList<Message>();
         
         Vect delta;
         switch (this.orientation) {
@@ -174,6 +178,8 @@ public class OuterWall implements Gadget {
             ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta), this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
             break;
         }
+
+        return new ArrayList<Message>();
     }
 
     @Override
