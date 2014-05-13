@@ -39,7 +39,17 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
     private JMenuItem connectToServer;
     private JMenuItem disconnectFromServer;
 
-    public DisplayMenu() {
+    private MainWindow mainWindow;
+    private Board gameBoard;
+    private String gameHost;
+    private int gamePort;
+    private File gameFile;
+
+    public DisplayMenu(MainWindow window, Board board, String host, int port, File file) {
+        mainWindow = window;
+        gameBoard = board;
+        gameFile = file;
+
         addMenusToMenuBar();
         addComponentsToGameMenu();
         addComponentsToServerMenu();
@@ -71,18 +81,15 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = boardLoad.getSelectedFile();
                     try {
-
                         final Board board = BoardBuilder.buildBoard(file);
-                        ClientController controller = new ClientController(board, null, 0);
+                        ClientController controller = new ClientController(board, gameHost, gamePort, file);
                         controller.start();
+                        mainWindow.dispose();
+                        mainWindow.stopWindowPrinting();
                     } catch (IOException i) {
                         i.printStackTrace();
                     }
                 }
-                // add(boardUpload);
-                // FileFinderDisplay aa = new FileFinderDisplay();
-                // PingballClient.runClient(new File("boards/sampleBoard3.pb"),
-                // "string", 4467);
             }
         });
 
@@ -100,7 +107,15 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         restart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    gameBoard = BoardBuilder.buildBoard(gameFile);
+                    ClientController controller = new ClientController(gameBoard, gameHost, gamePort, gameFile);
+                    controller.start();
+                    mainWindow.dispose();
+                    mainWindow.stopWindowPrinting();
+                } catch (IOException i) {
+                    i.printStackTrace();
+                }
             }
         });
 
@@ -174,13 +189,5 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         // TODO Auto-generated method stub
 
     }
-
-    /*
-     * public static void main(String[] args) { SwingUtilities.invokeLater(new
-     * Runnable() { public void run() { DisplayMenu main = new DisplayMenu();
-     * main.setSize(400, 400); main.setVisible(true);
-     * 
-     * } }); }
-     */
 
 }
