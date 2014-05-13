@@ -84,56 +84,56 @@ public class PortalTests {
     public void testPerpendicularReflectionTop() {
         Ball ball = new Ball("ball", new Vect(5, 4), new Vect(0, 1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(0, -1));
+        assertEquals(ball.getVelocity(),new Vect(0, 1));
     }
     
     @Test
     public void testPerpendicularReflectionLeft() {
         Ball ball = new Ball("ball", new Vect(4, 5), new Vect(1, 0));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(-1, 0));
+        assertEquals(ball.getVelocity(),new Vect(1, 0));
     }
     
     @Test
     public void testPerpendicularReflectionRight() {
         Ball ball = new Ball("ball", new Vect(6, 5), new Vect(-1, 0));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(1, 0));
+        assertEquals(ball.getVelocity(),new Vect(-1, 0));
     }
     
     @Test
     public void testPerpendicularReflectionBottom() {
         Ball ball = new Ball("ball", new Vect(5, 6), new Vect(0, -1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(0, 1));
+        assertEquals(ball.getVelocity(),new Vect(0, -1));
     }
     
     @Test
     public void testPerpendicularReflectionTopRight() {
         Ball ball = new Ball("ball", new Vect(6, 4), new Vect(-1, 1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(1, -1));
+        assertEquals(ball.getVelocity(),new Vect(-1, 1));
     }
     
     @Test
     public void testPerpendicularReflectionTopLeft() {
         Ball ball = new Ball("ball", new Vect(4, 4), new Vect(1, 1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(-1, -1));
+        assertEquals(ball.getVelocity(),new Vect(1, 1));
     }
     
     @Test
     public void testPerpendicularReflectionBottomRight() {
         Ball ball = new Ball("ball", new Vect(6, 6), new Vect(-1, -1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(1, 1));
+        assertEquals(ball.getVelocity(),new Vect(-1, -1));
     }
     
     @Test
     public void testPerpendicularReflectionBottomLeft() {
         Ball ball = new Ball("ball", new Vect(4, 6), new Vect(1, -1));
         portal3.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(-1, 1));
+        assertEquals(ball.getVelocity(),new Vect(1, -1));
     }
     
     
