@@ -29,7 +29,11 @@ public class MainWindow extends JFrame implements KeyListener {
         this.setVisible(true);
     }
 
-    public void stopWindowPrinting() {
+    public void startController() {
+        clientControl.start();
+    }
+    
+    public void stopController() {
         clientControl.stop();
     }
 

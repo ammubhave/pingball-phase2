@@ -84,8 +84,8 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
                         final Board board = BoardBuilder.buildBoard(file);
                         ClientController controller = new ClientController(board, gameHost, gamePort, file);
                         controller.start();
+                        mainWindow.stopController();
                         mainWindow.dispose();
-                        mainWindow.stopWindowPrinting();
                     } catch (IOException i) {
                         i.printStackTrace();
                     }
@@ -96,12 +96,14 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         pause.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                mainWindow.stopController();
             }
         });
 
         resume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                mainWindow.startController();
             }
         });
 
@@ -111,8 +113,8 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
                     gameBoard = BoardBuilder.buildBoard(gameFile);
                     ClientController controller = new ClientController(gameBoard, gameHost, gamePort, gameFile);
                     controller.start();
+                    mainWindow.stopController();
                     mainWindow.dispose();
-                    mainWindow.stopWindowPrinting();
                 } catch (IOException i) {
                     i.printStackTrace();
                 }
