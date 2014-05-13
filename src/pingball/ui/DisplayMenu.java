@@ -94,8 +94,8 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
                         final Board board = BoardBuilder.buildBoard(file);
                         ClientController controller = new ClientController(board, gameHost, gamePort, file);
                         controller.start();
-                        mainWindow.stopController();
-                        mainWindow.dispose();
+                        //mainWindow.stopController();
+                        //mainWindow.dispose();
                     } catch (IOException i) {
                         i.printStackTrace();
                     }

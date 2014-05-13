@@ -448,7 +448,12 @@ public class Board {
             this.boardGadgetPainters.add(new BallPainter(ball));
         } else if (message instanceof PortalMessage) {
             PortalMessage portalMessage = (PortalMessage) message;
-            Ball ball = new Ball(portalMessage.getName(), new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY()),
+            Vect position;
+            if (portalMessage.getTargetBoard().equals(getName()))
+                position = new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY());
+            else
+                position = portalMessage.getBallShape().getCenter();
+            Ball ball = new Ball(portalMessage.getName(), position,
                     portalMessage.getVelocity());
             addBall(ball);
             this.boardGadgetPainters.add(new BallPainter(ball));
@@ -524,7 +529,7 @@ public class Board {
             }
         }
         for (Message msg : sendMessages) {
-            if (msg instanceof PortalMessage) {
+            if (msg instanceof PortalMessage && ((PortalMessage) msg).getTargetBoard().equals(getName())) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
             } else {
                 messages.add(msg);

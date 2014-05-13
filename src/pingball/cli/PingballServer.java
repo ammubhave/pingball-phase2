@@ -65,7 +65,7 @@ public class PingballServer {
 		BoardLinks boardLinks = new BoardLinks();
 
 		// HACK: remove when done testing
-		boardLinks.horizontalJoin("sampleBoard2_1", "sampleBoard2_2");
+		boardLinks.horizontalJoin("sampleBoard5", "sampleBoard5clone");
 		//boardLinks.verticalJoin("warmup", "warmup");
 		
 		LinksController linkController = new LinksController(boardLinks);

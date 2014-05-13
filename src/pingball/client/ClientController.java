@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import pingball.board.Board;
 import pingball.proto.HelloMessage;
 import pingball.proto.Message;
+import pingball.proto.PortalMessage;
 import pingball.proto.WelcomeMessage;
 import pingball.ui.MainWindow;
 
@@ -107,11 +108,20 @@ public class ClientController {
                 }
                 board.simulateTime(DT);
                 messages = board.getOutOfBoundBallMessages();
+                if (serverConnection == null) {
+                    for (Message msg : messages) {
+                        if (msg instanceof PortalMessage) {
+                            System.err.println("FF");
+                            recvQueue.add(msg);
+                        }
+                    }
+                }
                 if (!messages.isEmpty())
                     System.err.println(messages);
             }
             for (Message message : messages)
-                sendQueue.add(message);
+                if (serverConnection != null)
+                    sendQueue.add(message);
         }
     }
 
