@@ -79,7 +79,7 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         loadBoard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser boardLoad = new JFileChooser();
-                FileFilter filter = new FileNameExtensionFilter("Pingball Board File", new String[] {"pb"});
+                FileFilter filter = new FileNameExtensionFilter("Pingball Board File", new String[] { "pb" });
                 boardLoad.setFileFilter(filter);
                 boardLoad.addChoosableFileFilter(filter);
                 int returnVal = boardLoad.showOpenDialog(loadBoard);
@@ -148,13 +148,28 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         connectToServer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    gameBoard = BoardBuilder.buildBoard(gameFile);
+                    ClientController controller = new ClientController(gameBoard, gameHost, gamePort, gameFile);
+                    controller.start();
+                    mainWindow.stopController();
+                    mainWindow.dispose();
+                } catch (IOException i) {
+                    i.printStackTrace();
+                }
             }
         });
 
         disconnectFromServer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    ClientController controller = new ClientController(gameBoard, null, 0, gameFile);
+                    controller.start();
+                    mainWindow.stopController();
+                    mainWindow.dispose();
+                } catch (IOException i) {
+                    i.printStackTrace();
+                }
             }
         });
     }
