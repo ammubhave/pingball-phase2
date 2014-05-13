@@ -32,7 +32,7 @@ import pingball.parser.BoardBuilder;
  * it.
  */
 
-public class DisplayMenu extends JMenuBar implements MouseListener {
+public class DisplayMenu extends JMenuBar {
 
     private JMenu game;
     private JMenu server;
@@ -133,7 +133,7 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
 
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                mainWindow.dispose();
             }
         });
     }
@@ -212,34 +212,5 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         this.add(server);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-
-    }
 
 }
