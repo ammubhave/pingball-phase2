@@ -76,8 +76,8 @@ public class BoardFactory {
        // private Stack<Expression> stack = new Stack<>();
         Board board;
         HashMap<String, String> attributes = new HashMap<String, String>();
-        HashMap<String, Gadget> keyUMap = new HashMap<String, Gadget>();
-        HashMap<String, Gadget> keyDMap = new HashMap<String, Gadget>();
+        HashMap<String, ArrayList<Gadget>> keyUMap = new HashMap<String, ArrayList<Gadget>>();
+        HashMap<String, ArrayList<Gadget>> keyDMap = new HashMap<String, ArrayList<Gadget>>();
 
         // board
         

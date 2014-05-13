@@ -30,8 +30,8 @@ public class Board {
     private Vect g; // In L / s^2
     private double mu; // In per s.
     private double mu2; // In per L.
-    private HashMap<String, Gadget> keyUpForGadgets = new HashMap<String, Gadget>();
-    private HashMap<String, Gadget> keyDownForGadgets = new HashMap<String, Gadget>();
+    private HashMap<String, ArrayList<Gadget>> keyUpForGadgets = new HashMap<String, ArrayList<Gadget>>();
+    private HashMap<String, ArrayList<Gadget>> keyDownForGadgets = new HashMap<String, ArrayList<Gadget>>();
 
     /**
      * Creates a new instance of Board.
@@ -41,7 +41,7 @@ public class Board {
      * @param gadgets
      */
     public Board(String name, List<Ball> balls, List<Gadget> gadgets, double gravity, double friction1,
-            double friction2, HashMap<String, Gadget> keyUForGadgets, HashMap<String, Gadget> keyDForGadgets) {
+            double friction2, HashMap<String, ArrayList<Gadget>> keyUForGadgets, HashMap<String, ArrayList<Gadget>> keyDForGadgets) {
         this.name = name;
         this.g = new Vect(0, gravity); // L / s^2
 
@@ -51,8 +51,14 @@ public class Board {
         this.width = DEFAULT_SIZE;
         this.height = DEFAULT_SIZE;
         boardGadgets = new HashMap<String, Gadget>();
-        keyUpForGadgets.putAll(keyUForGadgets);
-        keyDownForGadgets.putAll(keyDForGadgets);
+        
+        for (String key : keyUForGadgets.keySet()) {
+            keyUpForGadgets.put(key, new ArrayList<Gadget>(keyUForGadgets.get(key)));
+        }
+        for (String key : keyDForGadgets.keySet()) {
+            keyDownForGadgets.put(key, new ArrayList<Gadget>(keyDForGadgets.get(key)));
+        }
+        
         for (Gadget gadget : gadgets) {
             // Vect pos = new Vect(gadget.getX(),gadget.getY());
             boardGadgets.put(gadget.getName(), gadget);
@@ -523,23 +529,33 @@ public class Board {
     }
 
     public void addKeyUpBinding(String keyName, Gadget gadget) {
-        keyUpForGadgets.put(keyName, gadget);
+        if (!keyUpForGadgets.containsKey(keyName))
+            keyUpForGadgets.put(keyName, new ArrayList<Gadget>());
+        
+        keyUpForGadgets.get(keyName).add(gadget);
     }
 
     public void addKeyDownBinding(String keyName, Gadget gadget) {
-        keyDownForGadgets.put(keyName, gadget);
+        if (!keyDownForGadgets.containsKey(keyName))
+            keyDownForGadgets.put(keyName, new ArrayList<Gadget>());
+        
+        keyDownForGadgets.get(keyName).add(gadget);
     }
 
     public void handleKeyUp(String keyName) {
-        Gadget gadget = keyUpForGadgets.get(keyName);
-        if (gadget != null)
+        if (!keyUpForGadgets.containsKey(keyName)) 
+            return;
+        for (Gadget gadget : keyUpForGadgets.get(keyName)) {
             gadget.action();
+        }
     }
 
     public void handleKeyDown(String keyName) {
-        Gadget gadget = keyDownForGadgets.get(keyName);
-        if (gadget != null)
+        if (!keyDownForGadgets.containsKey(keyName)) 
+            return;
+        for (Gadget gadget : keyDownForGadgets.get(keyName)) {
             gadget.action();
+        }
     }
 
     /**
