@@ -11,6 +11,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import pingball.board.Board;
 import pingball.client.ClientController;
@@ -77,6 +79,9 @@ public class DisplayMenu extends JMenuBar implements MouseListener {
         loadBoard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser boardLoad = new JFileChooser();
+                FileFilter filter = new FileNameExtensionFilter("Pingball Board File", new String[] {"pb"});
+                boardLoad.setFileFilter(filter);
+                boardLoad.addChoosableFileFilter(filter);
                 int returnVal = boardLoad.showOpenDialog(loadBoard);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = boardLoad.getSelectedFile();
