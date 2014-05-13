@@ -84,7 +84,7 @@ public class PingballClient {
     public static void runClient(File boardFile, String host, int port) {
         try {
             final Board board = BoardBuilder.buildBoard(boardFile);
-            ClientController controller = new ClientController(board, host, port);
+            ClientController controller = new ClientController(board, host, port, boardFile);
 
             controller.start();
         } catch (IOException e) {
