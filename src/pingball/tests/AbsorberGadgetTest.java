@@ -117,29 +117,20 @@ public class AbsorberGadgetTest {
     @Test
     public void testLeastCollisionTimeRight(){
         Ball ball = new Ball ("ball", new Vect(3, 2), new Vect(-1, 0));
-        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+        assertEquals(0.75, gadget.leastCollisionTime(ball), 0.0001);
     }
     
     @Test
     public void testLeastCollisionTimeBottom(){
         Ball ball = new Ball ("ball", new Vect(2, 3), new Vect(0, -1));
-        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+        assertEquals(0.75, gadget.leastCollisionTime(ball), 0.0001);
     }
     
     @Test
     public void testLeastCollisionTimeBottomRight(){
         Ball ball = new Ball ("ball", new Vect(3, 3), new Vect(-1, -1));
-        assertEquals(gadget.leastCollisionTime(ball), 1, 0.0001);
+        assertEquals(0.8232, gadget.leastCollisionTime(ball), 0.0001);
     }
     
 
-    @Test
-    public void testEquals() {
-        Absorber g1 = new Absorber(new Vect(0, 0), 1, 1, "Bilbo");
-        Absorber g2 = new Absorber(new Vect(0, 0), 1, 1, "Bilbo");
-        Absorber g3 = new Absorber(new Vect(5, 0), 1, 1, "Baggins");
-
-        assertEquals(g1, g2);
-        assertNotEquals(g1, g3);
-    }
 }
