@@ -42,6 +42,7 @@ public class DisplayMenu extends JMenuBar {
     private JMenuItem resume;
     private JMenuItem restart;
     private JMenuItem exit;
+    private JMenuItem exitAll;
 
     private JMenuItem connectToServer;
     private JMenuItem disconnectFromServer;
@@ -74,12 +75,14 @@ public class DisplayMenu extends JMenuBar {
         resume = new JMenuItem("Resume");
         restart = new JMenuItem("Restart");
         exit = new JMenuItem("Exit");
+        exitAll = new JMenuItem("Exit All");
 
         game.add(loadBoard);
         game.add(pause);
         game.add(resume);
         game.add(restart);
         game.add(exit);
+        game.add(exitAll);
 
         loadBoard.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -134,6 +137,12 @@ public class DisplayMenu extends JMenuBar {
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainWindow.dispose();
+            }
+        });
+        
+        exitAll.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
             }
         });
     }
