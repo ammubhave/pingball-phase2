@@ -2,6 +2,10 @@ package pingball.board;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.TimerTask;
 
 import org.antlr.v4.parse.ANTLRParser.throwsSpec_return;
 
@@ -63,7 +67,7 @@ public class LeftFlipper implements Gadget {
         remakeComponents();
     }
     
-    public double orientationToAngle(FlipperOrientation orientation) {
+    public synchronized double orientationToAngle(FlipperOrientation orientation) {
         if ((orientation == FlipperOrientation.TOP && pivot == 2) ||
             (orientation == FlipperOrientation.RIGHT && pivot == 4) ||
             (orientation == FlipperOrientation.BOTTOM && pivot == 3) ||
@@ -79,10 +83,7 @@ public class LeftFlipper implements Gadget {
         
         LineSegment l1, l2;
         Circle c1, c2;
-        Angle a;
-        synchronized (flipperAngle) {
-            a = new Angle(flipperAngle);
-        }
+        Angle a = new Angle(-flipperAngle);
         
         if (pivot == 1) {
             Vect pv = new Vect(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS);
@@ -144,11 +145,11 @@ public class LeftFlipper implements Gadget {
             return new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
     }
     
-    private double getVelocity() {
+    private synchronized double getVelocity() {
         double targetAngle = orientationToAngle(orientation);
 
-        if (flipperAngle > targetAngle && targetAngle - flipperAngle < 0) return -18.8495559;
-        if(flipperAngle < targetAngle && targetAngle - flipperAngle > 0) return 18.8495559;
+        if (flipperAngle > targetAngle && flipperAngle - targetAngle > 0.006) return -18.8495559;
+        if(flipperAngle < targetAngle && targetAngle - flipperAngle > 0.006) return 18.8495559;
         return 0;
     }
 
@@ -163,7 +164,7 @@ public class LeftFlipper implements Gadget {
         double timeToWall = 0;
         for (LineSegment ls : lines) {
             timeToWall = Geometry.timeUntilWallCollision(ls, ball.getCircle(), ball.getVelocity());
-            if (timeToWall < smallestTimeWall) {
+            if (timeToWall <= smallestTimeWall) {
                 smallestTimeWall = timeToWall;
                 smallestWall = ls;
             }
@@ -173,7 +174,7 @@ public class LeftFlipper implements Gadget {
         double timeToCircle = 0;
         for (Circle circ : circles) {
             timeToCircle = Geometry.timeUntilCircleCollision(circ, ball.getCircle(), ball.getVelocity());
-            if (timeToCircle < smallestTimeCircle) {
+            if (timeToCircle <= smallestTimeCircle) {
                 smallestTimeCircle = timeToCircle;
                 smallestCircle = circ;
             }
@@ -226,46 +227,40 @@ public class LeftFlipper implements Gadget {
         }
     }*/
 
-    private Thread rotatorThread;
-    class FlipperRotator implements Runnable {
-        @Override
-        public void run() {
-            
+    private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+    class FlipperRotator extends TimerTask {
+        LeftFlipper flipper;
+        int direction; // 1 -> positive, -1 -> negative
+        
+        public FlipperRotator(LeftFlipper flipper) {
+            this.flipper = flipper;
             double targetAngle = orientationToAngle(orientation);
-            double a;
-            synchronized (flipperAngle) {
-                a = flipperAngle; 
-            }
-            double dt = 0.05/200.0;
-            if (a > targetAngle) {
-                while (targetAngle - a < 0) {
-                    synchronized (flipperAngle) {
-                        flipperAngle -= 18.8495559 * dt;
-                    }
-                    remakeComponents();
-                    try {
-                        Thread.sleep((long)(dt*1000), (int)(dt/1000/1000));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    synchronized (flipperAngle) {
-                        a = flipperAngle; 
-                    }
-                }
+            if (flipperAngle > targetAngle) {
+                direction = -1;
             } else {
-                while (targetAngle - a > 0) {
-                    synchronized (flipperAngle) {
-                        flipperAngle += 18.8495559 * dt;
+                direction = 1;
+            }
+        }
+        
+        @Override
+        public void run() { 
+            synchronized (flipper) {        
+                double targetAngle = orientationToAngle(orientation);
+                double dt = 0.05/200.0;
+                if (direction == -1) {
+                    if (flipperAngle <= targetAngle) {
+                        exec.shutdownNow();
+                        return;
                     }
+                    flipperAngle -= 18.8495559 * dt;
                     remakeComponents();
-                    try {
-                        Thread.sleep((long)(dt*1000), (int)(dt/1000/1000));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                } else {
+                    if (flipperAngle >= targetAngle) {
+                        exec.shutdownNow();
+                        return;
                     }
-                    synchronized (flipperAngle) {
-                        a = flipperAngle; 
-                    }
+                    flipperAngle += 18.8495559 * dt;
+                    remakeComponents();                    
                 }
             }
         }
@@ -282,20 +277,29 @@ public class LeftFlipper implements Gadget {
     @Override
     public void action() {
         moveFlipper();
-        if (rotatorThread != null && rotatorThread.isAlive()) {
+        /*if (rotatorThread != null && rotatorThread.isAlive()) {
             rotatorThread.interrupt();
             try {
                 rotatorThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }*/
+        if (exec.getActiveCount() >= 0) {
+            exec.shutdownNow();
         }
+        exec = new ScheduledThreadPoolExecutor(1);
+        double BOARD_REFRESH_INTERVAL = 0.05/200.0;
+        exec.scheduleAtFixedRate(new FlipperRotator(this), 0, (long)(BOARD_REFRESH_INTERVAL*1000*1000), TimeUnit.MICROSECONDS);
         
-        rotatorThread = new Thread(new FlipperRotator());
-        rotatorThread.start();
+     //   exec.scheduleAtFixedRate(new BoardPrinterTask(), 0, (long)(BOARD_REFRESH_INTERVAL*1000*1000), TimeUnit.MICROSECONDS);
+        
+      //  rotatorThread = new Thread(new FlipperRotator());
+      //  rotatorThread.start();
+        
     }
 
-    public void moveFlipper() {
+    public synchronized void moveFlipper() {
         if (orientation == FlipperOrientation.TOP) {
             if (pivot == 1) {
                 orientation = FlipperOrientation.LEFT;
