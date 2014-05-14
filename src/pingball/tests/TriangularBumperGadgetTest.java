@@ -12,8 +12,7 @@ import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 /**
- * Testing Strategy: 
- * -Test render for each of the four corners (NW, NE, SW, SE)
+ * Testing Strategy: -Test render for each of the four corners (NW, NE, SW, SE)
  * -Test
  */
 public class TriangularBumperGadgetTest {
@@ -142,30 +141,78 @@ public class TriangularBumperGadgetTest {
     // TOP_RIGHT
 
     @Test
-    public void testPerpendicularTRReflectionBottomLeft() {
+    public void testPerpendicularTRReflectionHypotenuse() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_RIGHT, "test");
         Ball ball = new Ball("ball", new Vect(0, 1), new Vect(1, -1));
         gadget.reactBall(ball);
         assert ball.getVelocity() == new Vect(-1, 1);
     }
 
+    @Test
+    public void testPerpendicularTRReflectionTopLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(0.5, 0), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(0, -1);
+    }
+
+    @Test
+    public void testPerpendicularTRReflectionLeftLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 0.5), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(1, 0);
+    }
+
     // BOTTOM_RIGHT
 
     @Test
-    public void testPerpendicularBRReflectionTopLeft() {
+    public void testPerpendicularBRReflectionHypotenuse() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_RIGHT, "test");
         Ball ball = new Ball("ball", new Vect(0, 0), new Vect(1, 1));
         gadget.reactBall(ball);
         assert ball.getVelocity() == new Vect(-1, -1);
     }
 
+    @Test
+    public void testPerpendicularBRReflectionBottomLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(0.5, 1), new Vect(0, 1));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(0, -1);
+    }
+
+    @Test
+    public void testPerpendicularBRReflectionRightLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_RIGHT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 0.5), new Vect(-1, 0));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(1, 0);
+    }
+
     // BOTTOM_LEFT
 
     @Test
-    public void testPerpendicularBLReflectionTopRight() {
+    public void testPerpendicularBLReflectionHypotenuse() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_LEFT, "test");
         Ball ball = new Ball("ball", new Vect(1, 0), new Vect(-1, 1));
         gadget.reactBall(ball);
         assert ball.getVelocity() == new Vect(1, -1);
+    }
+
+    @Test
+    public void testPerpendicularBLReflectionLeftLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(0, 0.5), new Vect(1, 0));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(-1, 0);
+    }
+
+    @Test
+    public void testPerpendicularBLReflectionBottomLeg() {
+        TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.BOTTOM_LEFT, "test");
+        Ball ball = new Ball("ball", new Vect(1, 0.5), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assert ball.getVelocity() == new Vect(0, 1);
     }
 }
