@@ -12,11 +12,19 @@ import pingball.board.Ball;
 
 /**
  * Testing Strategy: 
+ * -Test render for each of the four corners (NW, NE, SW, SE)
+ * -Test getPos method
+ * -Test getVelocity method
+ * -Test getName method
+ * -Test getCircle method
+ * -Test changePos method
+ * -Test changeVelocity method
  * 
  */
 public class BallTest {
 
     String emptyBoardString;
+    Ball ball;
 
     @Before
     public void setUp() throws Exception {
@@ -27,13 +35,15 @@ public class BallTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
+        ball = new Ball("Bob", new Vect(10,10), new Vect(-1,1));
     }
+    
+    //RENDER TESTS
     
     @Test
     public void testRenderNWCorner() {
         Ball ball = new Ball("test",new Vect(0, 0),new Vect(1, 1));
         String renderedString = ball.render(emptyBoardString);
-       //System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
@@ -47,7 +57,6 @@ public class BallTest {
     public void testRenderNECorner() {
         Ball ball = new Ball("test",new Vect(19, 0), new Vect(1,1));
         String renderedString = ball.render(emptyBoardString);
-       // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 20 && y == 1)
@@ -62,7 +71,6 @@ public class BallTest {
     public void testRenderSWCorner() {
         Ball ball = new Ball("test",new Vect(0, 19), new Vect(1,1));
         String renderedString = ball.render(emptyBoardString);
-        //System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 20)
@@ -77,7 +85,6 @@ public class BallTest {
     public void testRenderSECorner() {
         Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
         String renderedString = ball.render(emptyBoardString);
-        //System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 20 && y == 20)
@@ -89,25 +96,35 @@ public class BallTest {
     }
     
     @Test
-    public void testGetCircle() {
-        Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
-        Circle newCircle = ball.getCircle();
-        assertEquals(newCircle, new Circle(new Vect(19,19), 0.25));
+    public void testGetPos(){
+        assertEquals(new Vect(10,10), ball.getPos());
     }
     
     @Test
-    public void testChangePos() {
-        Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
-        ball.changePos(new Vect(20, 21));
-        assertEquals(new Vect(20, 21), ball.getPos());
-        assertEquals(new Vect(1, 1), ball.getVelocity());
+    public void testGetVelocity(){
+        assertEquals(new Vect(-1,1), ball.getVelocity());
     }
-
+    
     @Test
-    public void testChangeVelocity() {
-        Ball ball = new Ball("test",new Vect(19, 19), new Vect(1,1));
-        ball.changeVelocity(new Vect(2, 1));
-        assertEquals(new Vect(2, 1), ball.getVelocity());
-        assertEquals(new Vect(19, 19), ball.getPos());
+    public void testGetName(){
+        assertEquals("Bob", ball.getName());
     }
+    
+    @Test
+    public void testGetCircle(){
+        assertEquals(new Circle(new Vect(10,10), 0.25), ball.getCircle());
+    }
+    
+    @Test
+    public void testChangePos(){
+        ball.changePos(new Vect(15,15));
+        assertEquals(new Vect(15,15), ball.getPos());
+    }
+    
+    @Test
+    public void testChangeVelocity(){
+        ball.changeVelocity(new Vect(1,1));
+        assertEquals(new Vect(1,1), ball.getVelocity());
+    }
+    
 }

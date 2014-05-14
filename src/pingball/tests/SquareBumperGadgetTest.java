@@ -20,7 +20,8 @@ import pingball.board.SquareBumper;
  *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
  * -Test leastCollisionTime method.
  *      -Create balls that will hit the square bumper from left, right, 
- *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner. Also, 
+ *      includes a ball currently touching the square bumper.
  */
 
 public class SquareBumperGadgetTest {
@@ -46,7 +47,6 @@ public class SquareBumperGadgetTest {
     public void testRenderNWCorner() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
         String renderedString = gadget.render(emptyBoardString);
-        // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
@@ -61,7 +61,6 @@ public class SquareBumperGadgetTest {
     public void testRenderNECorner() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
         String renderedString = gadget.render(emptyBoardString);
-        // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
@@ -76,7 +75,6 @@ public class SquareBumperGadgetTest {
     public void testRenderSWCorner() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
         String renderedString = gadget.render(emptyBoardString);
-        // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
@@ -91,7 +89,6 @@ public class SquareBumperGadgetTest {
     public void testRenderSECorner() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
         String renderedString = gadget.render(emptyBoardString);
-        // System.out.println(renderedString);
         for (int y = 1; y < 21; y++) {
             for (int x = 1; x < 21; x++) {
                 if (x == 1 && y == 1)
@@ -148,7 +145,6 @@ public class SquareBumperGadgetTest {
     public void testPerpendicularReflectionLeftSide() {
         SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
         Ball ball = new Ball("ball", new Vect(1, 1.5), new Vect(1, 0));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(-1, 0), ball.getVelocity());
     }
@@ -157,7 +153,6 @@ public class SquareBumperGadgetTest {
     public void testPerpendicularReflectionTopSide() {
         SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
         Ball ball = new Ball("ball", new Vect(1.5, 1), new Vect(-1, 0));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(1, 0), ball.getVelocity());
     }
@@ -166,7 +161,6 @@ public class SquareBumperGadgetTest {
     public void testPerpendicularReflectionRightSide() {
         SquareBumper gadget = new SquareBumper(new Vect(1, 1), "test");
         Ball ball = new Ball("ball", new Vect(2, 1.5), new Vect(-1, 0));
-        // assertEquals(gadget.leastCollisionTime(ball), 0, 0.0001);
         gadget.reactBall(ball);
         assertEqualsVect(new Vect(1, 0), ball.getVelocity());
     }

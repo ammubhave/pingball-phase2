@@ -15,7 +15,7 @@ import pingball.board.RightFlipper;
  * testing strategy:
  * check for each of the 4 corners, both horizontal and vertical
  * also check for perpendicular reflection
- * - test equals
+ * 
  */
 public class RightFlipperGadgetTest {
     String emptyBoardString;
