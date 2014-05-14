@@ -72,24 +72,4 @@ public class MainWindow extends JFrame {
     public void stopController() {
         clientControl.stop();
     }
-/*
-    @Override
-    public void keyPressed(KeyEvent e) {
-        String keyName = KeyEvent.getKeyText(e.getKeyCode());
-        keyName = keyName.replaceAll(" ", "");
-        keyName = keyName.toLowerCase();
-        boardForKeys.handleKeyDown(keyName);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        String keyName = KeyEvent.getKeyText(e.getKeyCode());
-        keyName = keyName.replaceAll(" ", "");
-        keyName = keyName.toLowerCase();
-        boardForKeys.handleKeyDown(keyName);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }*/
 }

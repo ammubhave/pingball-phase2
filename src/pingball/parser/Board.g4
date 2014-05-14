@@ -36,22 +36,8 @@ package pingball.parser;
 COMMENT : '#' ( ~'\n' )* -> skip;
 WHITESPACE : [ \t\r\n]+ -> skip ;
 
-// Objects/Gadgets
-STRING_BOARD : 'board' ;
-STRING_BALL : 'ball' ;
-
-STRING_SQUAREBUMPER : 'squareBumper' ;
-STRING_TRIANGLEBUMPER : 'triangleBumper' ; 
-STRING_CIRCLEBUMPER : 'circleBumper';
-STRING_LEFTFLIPPER : 'leftFlipper' ;
-STRING_RIGHTFLIPPER : 'rightFlipper' ;
-STRING_ABSORBER : 'absorber' ;
-STRING_PORTAL : 'portal' ;
-STRING_FIRE : 'fire' ;
-STRING_KEYDOWN : 'keydown' ;
-STRING_KEYUP : 'keyup' ;
-
 // Attributes
+/*
 STRING_NAME : 'name' ;
 STRING_GRAVITY : 'gravity' ;
 STRING_FRICTION1 : 'friction1' ;
@@ -67,13 +53,10 @@ STRING_YVELOCITY : 'yVelocity' ;
 //STRING_Y : 'y' ;
 STRING_KEY : 'key';
 STRING_OTHERBOARD : 'otherBoard' ;
-STRING_OTHERPORTAL : 'otherPortal' ;
+STRING_OTHERPORTAL : 'otherPortal' ;*/
 
 EQUALS : '=' ;
 NUMBER : '-'?([0-9]+'.'[0-9]*|'.'?[0-9]+) ;
-//INTEGER : [0-9]+ ;
-//NUMBER : [0-9]+ ;
-//NUMBER : ([0-9]+) | ('-'?([0-9]+.[0-9]*|.?[0-9]+)) ;
 NAME : [A-Za-z_][A-Za-z_0-9]* ;
 
 /*
@@ -84,47 +67,17 @@ board : objectLine+ EOF ;
 objectLine: boardObjectLine | ballObjectLine | squareBumperObjectLine | triangleBumperObjectLine | circleBumperObjectLine | leftFlipperObjectLine | rightFlipperObjectLine | absorberObjectLine | fireObjectLine | keyupObjectLine | keydownObjectLine | portalObjectLine ;
 
 // object lines
-boardObjectLine : STRING_BOARD boardAttributes+ ;
-ballObjectLine : STRING_BALL ballAttributes+ ;
-squareBumperObjectLine : STRING_SQUAREBUMPER squareBumperAttributes+ ;
-triangleBumperObjectLine : STRING_TRIANGLEBUMPER triangleBumperAttributes+ ;
-circleBumperObjectLine : STRING_CIRCLEBUMPER circleBumperAttributes+ ;
-leftFlipperObjectLine : STRING_LEFTFLIPPER leftFlipperAttributes+ ;
-rightFlipperObjectLine: STRING_RIGHTFLIPPER rightFlipperAttributes+ ;
-absorberObjectLine: STRING_ABSORBER absorberAttributes+ ;
-fireObjectLine: STRING_FIRE fireAttributes+ ;
-keydownObjectLine : STRING_KEYDOWN keydownAttributes+ ;
-keyupObjectLine : STRING_KEYUP keyupAttributes+ ;
-portalObjectLine : STRING_PORTAL portalAttributes+ ;
+boardObjectLine : 'board' attribute+ ;
+ballObjectLine : 'ball' attribute+ ;
+squareBumperObjectLine : 'squareBumper' attribute+ ;
+triangleBumperObjectLine : 'triangleBumper' attribute+ ;
+circleBumperObjectLine : 'circleBumper' attribute+ ;
+leftFlipperObjectLine : 'leftFlipper' attribute+ ;
+rightFlipperObjectLine: 'rightFlipper' attribute+ ;
+absorberObjectLine: 'absorber' attribute+ ;
+fireObjectLine: 'fire' attribute+ ;
+keydownObjectLine : 'keydown' attribute+ ;
+keyupObjectLine : 'keyup' attribute+ ;
+portalObjectLine : 'portal' attribute+ ;
 
-// attribute lines
-boardAttributes : attributeName | attributeGravity | attributeFriction1 | attributeFriction2 ;
-ballAttributes : attributeName | attributeX | attributeY | attributeXVelocity | attributeYVelocity ;
-squareBumperAttributes : attributeName | attributeX | attributeY ;
-triangleBumperAttributes : attributeName | attributeX | attributeY | attributeOrientation ;
-circleBumperAttributes : attributeName | attributeX | attributeY ;
-leftFlipperAttributes : attributeName | attributeX | attributeY | attributeOrientation ;
-rightFlipperAttributes : attributeName | attributeX | attributeY | attributeOrientation ;
-absorberAttributes : attributeName | attributeX |attributeY | attributeWidth | attributeHeight ;
-fireAttributes : attributeName | attributeTrigger | attributeAction ;
-keydownAttributes : attributeKey | attributeAction ;
-keyupAttributes : attributeKey | attributeAction ;
-portalAttributes : attributeName | attributeX | attributeY | attributeOtherboard | attributeOtherportal ;
-
-// attribute
-attributeName : STRING_NAME EQUALS NAME ;
-attributeGravity : STRING_GRAVITY EQUALS NUMBER ;
-attributeFriction1 : STRING_FRICTION1 EQUALS NUMBER ;
-attributeFriction2 : STRING_FRICTION2 EQUALS NUMBER ;
-attributeX : 'x' EQUALS NUMBER ;
-attributeY : 'y' EQUALS NUMBER ;
-attributeXVelocity : STRING_XVELOCITY EQUALS NUMBER ;
-attributeYVelocity : STRING_YVELOCITY EQUALS NUMBER ;
-attributeOrientation : STRING_ORIENTATION EQUALS NUMBER ;
-attributeTrigger : STRING_TRIGGER EQUALS NAME ;
-attributeAction : STRING_ACTION EQUALS NAME ;
-attributeWidth : STRING_WIDTH EQUALS NUMBER ;
-attributeHeight : STRING_HEIGHT EQUALS NUMBER ;
-attributeKey : STRING_KEY EQUALS NAME ;
-attributeOtherboard : STRING_OTHERBOARD EQUALS NAME ;
-attributeOtherportal : STRING_OTHERPORTAL EQUALS NAME ;
+attribute : NAME EQUALS (NAME | NUMBER) ;
