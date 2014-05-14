@@ -148,7 +148,7 @@ public class RightFlipper implements Gadget {
         gadgetsToBeHooked.add(gadget);
     }
 
-    private Vect getPivotVect() {
+    private synchronized Vect getPivotVect() {
         if (pivot == 1)
             return new Vect(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS);
         else if (pivot == 2)
@@ -258,7 +258,7 @@ public class RightFlipper implements Gadget {
     }
 
     @Override
-    public void action() {
+    public synchronized void action() {
         moveFlipper();
         /*
          * if (rotatorThread != null && rotatorThread.isAlive()) {
@@ -283,10 +283,32 @@ public class RightFlipper implements Gadget {
 
     @Override
     public synchronized double leastCollisionTime(Ball ball) {
-        return GadgetHelpers.leastCollisionTime(sides, cornerCircles, ball);
+        List<LineSegment> lines = sides;
+        List<Circle> circles = cornerCircles;
+        if (lines == null) lines = new ArrayList<LineSegment>();
+        if (circles == null) circles = new ArrayList<Circle>();
+        
+        double smallestTime = Double.POSITIVE_INFINITY;
+        for (LineSegment ls : lines) {
+            double time = Geometry.timeUntilRotatingWallCollision(ls, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
+                    //(ls, ball.getCircle(), ball.getVelocity());
+            if (time <= smallestTime) {
+                smallestTime = time;
+            }
+        }
+        for (Circle circ : circles) {
+            double time = Geometry.timeUntilRotatingCircleCollision(circ, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
+                    //lCircleCollision(circ, ball.getCircle(), ball.getVelocity());
+            if (time <= smallestTime) {
+                smallestTime = time;
+            }
+        }
+        //czreturn smallestTime;
+        return Math.max(smallestTime - 2*0.05/200., 0);
+       // return Math.max(GadgetHelpers.leastCollisionTime(sides, cornerCircles, ball) - 4*0.05/200., 0);
     }
 
-    public void moveFlipper() {
+    public synchronized void moveFlipper() {
         if (orientation == FlipperOrientation.TOP) {
             if (pivot == 1) {
                 orientation = FlipperOrientation.LEFT;
@@ -315,7 +337,7 @@ public class RightFlipper implements Gadget {
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         if (orientation == FlipperOrientation.TOP || orientation == FlipperOrientation.BOTTOM) {
             return "_";
         } else {
@@ -328,7 +350,7 @@ public class RightFlipper implements Gadget {
      * 
      * @return orientation of flipper
      */
-    public FlipperOrientation getOrientation() {
+    public synchronized FlipperOrientation getOrientation() {
         return this.orientation;
     }
 
@@ -345,7 +367,7 @@ public class RightFlipper implements Gadget {
     }
 
     @Override
-    public String render(String input) {
+    public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         Vect position = new Vect(this.xLoc, this.yLoc);
         // I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM

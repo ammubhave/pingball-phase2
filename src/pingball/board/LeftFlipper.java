@@ -149,7 +149,7 @@ public class LeftFlipper implements Gadget {
         gadgetsToBeHooked.add(gadget);
     }
 
-    private Vect getPivotVect() {
+    private synchronized Vect getPivotVect() {
         if (pivot == 1)
             return new Vect(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS);
         else if (pivot == 2)
@@ -213,7 +213,28 @@ public class LeftFlipper implements Gadget {
 
     @Override
     public synchronized double leastCollisionTime(Ball ball) {
-        return GadgetHelpers.leastCollisionTime(sides, cornerCircles, ball);
+        List<LineSegment> lines = sides;
+        List<Circle> circles = cornerCircles;
+        if (lines == null) lines = new ArrayList<LineSegment>();
+        if (circles == null) circles = new ArrayList<Circle>();
+        
+        double smallestTime = Double.POSITIVE_INFINITY;
+        for (LineSegment ls : lines) {
+            double time = Geometry.timeUntilRotatingWallCollision(ls, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
+                    //(ls, ball.getCircle(), ball.getVelocity());
+            if (time <= smallestTime) {
+                smallestTime = time;
+            }
+        }
+        for (Circle circ : circles) {
+            double time = Geometry.timeUntilRotatingCircleCollision(circ, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
+                    //lCircleCollision(circ, ball.getCircle(), ball.getVelocity());
+            if (time <= smallestTime) {
+                smallestTime = time;
+            }
+        }
+        //czreturn smallestTime;
+        return Math.max(smallestTime - 2*0.05/200., 0);
     }
 
     /*
@@ -295,7 +316,7 @@ public class LeftFlipper implements Gadget {
     }
 
     @Override
-    public void action() {
+    public synchronized void action() {
         moveFlipper();
         /*
          * if (rotatorThread != null && rotatorThread.isAlive()) {
@@ -353,7 +374,7 @@ public class LeftFlipper implements Gadget {
      * @return string representation of a flipper
      */
     @Override
-    public String toString() {
+    public synchronized String toString() {
         if (orientation == FlipperOrientation.TOP || orientation == FlipperOrientation.BOTTOM) {
             return "_";
         } else {
@@ -372,7 +393,7 @@ public class LeftFlipper implements Gadget {
      * 
      * @return orientation of flipper
      */
-    public FlipperOrientation getOrientation() {
+    public synchronized FlipperOrientation getOrientation() {
         return this.orientation;
     }
 
