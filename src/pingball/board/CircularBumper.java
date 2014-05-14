@@ -1,5 +1,6 @@
 package pingball.board;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +113,9 @@ public class CircularBumper implements Gadget {
     }
 
     public List<Message> reactBall(Ball ball) {
-        ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(), REFL_COEFF));
+        Toolkit.getDefaultToolkit().beep();
+        ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(),
+                REFL_COEFF));
 
         this.trigger();
 
@@ -122,7 +125,7 @@ public class CircularBumper implements Gadget {
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
     }
-    
+
     @Override
     public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);

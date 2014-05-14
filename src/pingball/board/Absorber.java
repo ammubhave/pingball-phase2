@@ -1,15 +1,13 @@
 package pingball.board;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
-import pingball.Tuple;
 import pingball.proto.Message;
-import static pingball.MapFilterReduce.*;
 
 /** This class represents an Absorber Gadget */
 
@@ -36,6 +34,7 @@ public class Absorber implements Gadget {
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> cornerCircles = new ArrayList<Circle>();
+
     /**
      * Creates an absorber gadget with the following user-inputted parameters.
      * 
@@ -77,54 +76,45 @@ public class Absorber implements Gadget {
             gadgetsToBeHooked.get(i).action();
         }
     }
-    
+
     /*
      * Returns the smallest collision time and the colliding wall for that ball
+     * 
      * @param ball the ball for which info is to be taken
+     * 
      * @return tuple of collision info
-     
-    private Tuple<Double, LineSegment> getCollisionInfo(Ball ball) {
-        /*
-        class TupleDLs extends Tuple<Double, LineSegment> {
-            public TupleDLs(Double x, LineSegment y) {
-                super(x, y);
-            }
-        }
-        
-        Function<LineSegment, TupleDLs> mapper = new Function<LineSegment, TupleDLs>() {
-            @Override
-            public TupleDLs apply(LineSegment t) {
-                return new TupleDLs(
-                        Geometry.timeUntilWallCollision(t, ball.getCircle(), ball.getVelocity()),
-                        t
-                );
-            }
-        };
-        List<TupleDLs> mapped = map(mapper, sides);
-        
-        BinOp<TupleDLs, TupleDLs, TupleDLs> reducer = new BinOp<TupleDLs, TupleDLs, TupleDLs>() {
-            @Override
-            public TupleDLs apply(TupleDLs t, TupleDLs u) {
-                return t.x < u.x ? t : u;
-            }
-        };
-        return reduce(mapped, reducer, new TupleDLs(Double.POSITIVE_INFINITY, null));
-        double smallestTime = Double.POSITIVE_INFINITY;
-        LineSegment smallestTimeWall = null;
-        for (LineSegment ls : sides) {
-            double time = Geometry.timeUntilWallCollision(ls, ball.getCircle(), ball.getVelocity());
-            if (time <= smallestTime) {
-                smallestTime = time;
-                smallestTimeWall = ls;
-            }
-        }    
-        return new Tuple<Double, LineSegment>(smallestTime, smallestTimeWall);
-    }*/
+     * 
+     * private Tuple<Double, LineSegment> getCollisionInfo(Ball ball) { /* class
+     * TupleDLs extends Tuple<Double, LineSegment> { public TupleDLs(Double x,
+     * LineSegment y) { super(x, y); } }
+     * 
+     * Function<LineSegment, TupleDLs> mapper = new Function<LineSegment,
+     * TupleDLs>() {
+     * 
+     * @Override public TupleDLs apply(LineSegment t) { return new TupleDLs(
+     * Geometry.timeUntilWallCollision(t, ball.getCircle(), ball.getVelocity()),
+     * t ); } }; List<TupleDLs> mapped = map(mapper, sides);
+     * 
+     * BinOp<TupleDLs, TupleDLs, TupleDLs> reducer = new BinOp<TupleDLs,
+     * TupleDLs, TupleDLs>() {
+     * 
+     * @Override public TupleDLs apply(TupleDLs t, TupleDLs u) { return t.x <
+     * u.x ? t : u; } }; return reduce(mapped, reducer, new
+     * TupleDLs(Double.POSITIVE_INFINITY, null)); double smallestTime =
+     * Double.POSITIVE_INFINITY; LineSegment smallestTimeWall = null; for
+     * (LineSegment ls : sides) { double time =
+     * Geometry.timeUntilWallCollision(ls, ball.getCircle(),
+     * ball.getVelocity()); if (time <= smallestTime) { smallestTime = time;
+     * smallestTimeWall = ls; } } return new Tuple<Double,
+     * LineSegment>(smallestTime, smallestTimeWall); }
+     */
 
     /**
-     * Calculates time on ball will take to hit this bumper if it travelled in straight line.
+     * Calculates time on ball will take to hit this bumper if it travelled in
+     * straight line.
      * 
-     * @param ball the ball to check
+     * @param ball
+     *            the ball to check
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
@@ -139,16 +129,17 @@ public class Absorber implements Gadget {
      */
     @Override
     public void action() {
-        if (heldBall != null) {            
+        if (heldBall != null) {
             heldBall.changeVelocity(SHOOT_VELOCITY);
             heldBall.changePos(new Vect(xLocation + width - 0.25, yLocation - 0.25));
             System.out.println(heldBall.getVelocity());
             heldBall = null;
         }
     }
- 
+
     public List<Message> reactBall(Ball ball) {
-        if (heldBall != null && !isInside(ball)) {           
+        Toolkit.getDefaultToolkit().beep();
+        if (heldBall != null && !isInside(ball)) {
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
         } else if (heldBall == null) {
             ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
@@ -183,7 +174,7 @@ public class Absorber implements Gadget {
     public int getHeight() {
         return height;
     }
-    
+
     public List<LineSegment> getLineSegments() {
         return this.sides;
     }
@@ -207,15 +198,15 @@ public class Absorber implements Gadget {
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
     }
-    
+
     @Override
     public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
 
-        for (int y = (int)position.y(); y < (int)position.y() + height; y++)
-            for (int x = (int)position.x(); x < (int)position.x() + width; x++)
+        for (int y = (int) position.y(); y < (int) position.y() + height; y++)
+            for (int x = (int) position.x(); x < (int) position.x() + width; x++)
                 sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)), '=');
-        
+
         return sb.toString();
     }
 

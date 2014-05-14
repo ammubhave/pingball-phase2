@@ -1,10 +1,10 @@
 package pingball.board;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
@@ -87,6 +87,7 @@ public class SquareBumper implements Gadget {
     }
 
     public List<Message> reactBall(Ball ball) {
+        Toolkit.getDefaultToolkit().beep();
         GadgetHelpers.reflectBall(sides, cornerCircles, ball, REFL_COEFF);
         this.trigger();
         return new ArrayList<Message>();

@@ -1,10 +1,10 @@
 package pingball.board;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
@@ -24,9 +24,9 @@ public class TriangularBumper implements Gadget {
     private final double yCoord;
     private final double legLength = 1.0;
 
-    private final TriangularBumperOrientation orientation; // in terms of degrees
+    private final TriangularBumperOrientation orientation; // in terms of
+                                                           // degrees
     private final String name;
-
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
@@ -51,25 +51,39 @@ public class TriangularBumper implements Gadget {
         Circle angle1; // horizontal leg
         Circle angle2; // vertical leg
         Circle rightAngle;
-        
+
         this.xCoord = loc.x();
         this.yCoord = loc.y();
         this.name = name;
-        if (orientation == TriangularBumperOrientation.TOP_LEFT) { // Right angle is in top-left corner
+        if (orientation == TriangularBumperOrientation.TOP_LEFT) { // Right
+                                                                   // angle is
+                                                                   // in
+                                                                   // top-left
+                                                                   // corner
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord, yCoord, xCoord, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord + legLength, yCoord, xCoord, yCoord + legLength);
             angle1 = new Circle(xCoord + legLength, yCoord, 0);
             angle2 = new Circle(xCoord, yCoord + legLength, 0);
             rightAngle = new Circle(xCoord, yCoord, 0);
-        } else if (orientation == TriangularBumperOrientation.TOP_RIGHT) { // Right angle is in top-right corner
+        } else if (orientation == TriangularBumperOrientation.TOP_RIGHT) { // Right
+                                                                           // angle
+                                                                           // is
+                                                                           // in
+                                                                           // top-right
+                                                                           // corner
             leg1 = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord, xCoord + legLength, yCoord + legLength);
             angle1 = new Circle(xCoord + legLength, yCoord + legLength, 0);
             angle2 = new Circle(xCoord, yCoord, 0);
             rightAngle = new Circle(xCoord + legLength, yCoord, 0);
-        } else if (orientation == TriangularBumperOrientation.BOTTOM_RIGHT) { // Right angle is in bottom-right corner
+        } else if (orientation == TriangularBumperOrientation.BOTTOM_RIGHT) { // Right
+                                                                              // angle
+                                                                              // is
+                                                                              // in
+                                                                              // bottom-right
+                                                                              // corner
             leg1 = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord + legLength);
             leg2 = new LineSegment(xCoord + legLength, yCoord, xCoord + legLength, yCoord + legLength);
             hypotenuse = new LineSegment(xCoord, yCoord + legLength, xCoord + legLength, yCoord);
@@ -125,6 +139,7 @@ public class TriangularBumper implements Gadget {
     }
 
     public List<Message> reactBall(Ball ball) {
+        Toolkit.getDefaultToolkit().beep();
         GadgetHelpers.reflectBall(sides, corners, ball, REFL_COEFF);
         this.trigger();
 
@@ -147,7 +162,8 @@ public class TriangularBumper implements Gadget {
      */
     @Override
     public String toString() {
-        if (orientation == TriangularBumperOrientation.TOP_LEFT || orientation == TriangularBumperOrientation.BOTTOM_RIGHT) {
+        if (orientation == TriangularBumperOrientation.TOP_LEFT
+                || orientation == TriangularBumperOrientation.BOTTOM_RIGHT) {
             return "/";
         } else {
             return "\\";
@@ -190,11 +206,11 @@ public class TriangularBumper implements Gadget {
     public String render(String input) {
         Vect position = new Vect(this.xCoord, this.yCoord);
         StringBuilder sb = new StringBuilder(input);
-        
-        if (this.orientation == orientation.TOP_LEFT || this.orientation == orientation.BOTTOM_RIGHT){
+
+        if (this.orientation == orientation.TOP_LEFT || this.orientation == orientation.BOTTOM_RIGHT) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '/');
         }
-        if (this.orientation == orientation.TOP_RIGHT || this.orientation == orientation.BOTTOM_LEFT){
+        if (this.orientation == orientation.TOP_RIGHT || this.orientation == orientation.BOTTOM_LEFT) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '\\');
         }
         return sb.toString();
