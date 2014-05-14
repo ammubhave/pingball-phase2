@@ -14,6 +14,7 @@ public class SquareBumper implements Gadget {
     /**
      * Thread Safety Information: SquareBumper is threadsafe because it is never
      * altered after creation.
+     * gadget hooking is done only in factory
      */
 
     private final static double EDGE_LENGTH = 1.0;

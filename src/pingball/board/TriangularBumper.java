@@ -13,6 +13,7 @@ public class TriangularBumper implements Gadget {
     /**
      * Thread Safety Information: TriangularBumper is threadsafe because it is
      * never altered after creation.
+     * gadget hooking is done only in factory 
      */
     public enum TriangularBumperOrientation {
         TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT
@@ -23,14 +24,26 @@ public class TriangularBumper implements Gadget {
     private final Vect position;
     private final double legLength = 1.0;
 
-    private final TriangularBumperOrientation orientation; // in terms of
-                                                           // degrees
+    private final TriangularBumperOrientation orientation;
     private final String name;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> corners = new ArrayList<Circle>();
+    
+    /*
+     * Rep Invariant:
+     * - all attributes should be non-null
+     */
+    private void checkRep() {
+        assert position != null;
+        assert orientation != null;
+        assert name != null;
+        assert gadgetsToBeHooked != null;
+        assert sides != null;
+        assert corners != null;
+    }
 
     /**
      * Creates a 45-45-90 triangle bumper with the user-inputted parameters
