@@ -14,10 +14,20 @@ import pingball.board.TriangularBumper.TriangularBumperOrientation;
 /**
  * Testing Strategy: 
  * -Test render for each of the four corners (NW, NE, SW, SE)
- * -Test
+ * -For each orientation (TOP_RIGHT, BOTTOM_RIGHT, TOP_LEFT, BOTTOM_LEFT)
+ *     -Test reactBall method
+ *          -ball approaching each side and each corner (6 total)
+ *     -Test leastCollisionTime
+ *          -ball approaching each side and each corner (6 total)
+ * -Total of 4 (render) test, 24 (reactBall) tests, and 24 (leastCollisionTime) tests
+ * 
  */
 public class TriangularBumperGadgetTest {
     String emptyBoardString;
+    TriangularBumper topRight;
+    TriangularBumper topLeft;
+    TriangularBumper bottomRight;
+    TriangularBumper bottomLeft;
 
     @Before
     public void setUp() throws Exception {
@@ -28,6 +38,10 @@ public class TriangularBumperGadgetTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
+        topRight = new TriangularBumper(new Vect(5,5), TriangularBumperOrientation.TOP_RIGHT, "John");
+        topLeft = new TriangularBumper(new Vect(5,5), TriangularBumperOrientation.TOP_LEFT, "Matthew");
+        bottomRight = new TriangularBumper(new Vect(5,5), TriangularBumperOrientation.BOTTOM_RIGHT, "Jacob");
+        bottomLeft = new TriangularBumper(new Vect(5,5), TriangularBumperOrientation.BOTTOM_LEFT, "Samuel");
     }
 
     @Test
@@ -90,7 +104,23 @@ public class TriangularBumperGadgetTest {
         }
     }
 
-    // TOP_LEFT
+    // TOP_RIGHT REACT BALL TESTS
+    
+    
+    
+    // TOP_RIGHT LEAST COLLISION TIME TESTS
+    
+    // TOP_LEFT REACT BALL TESTS
+    
+    // TOP_LEFT LEAST COLLISION TIME TESTS
+    
+    // BOTTOM_RIGHT REACT BALL TESTS
+    
+    // BOTTOM_RIGHT LEAST COLLISION TIME TESTS
+    
+    // TOP_LEFT REACT BALL TESTS
+    
+    // TOP_LEFT LEAST COLLISION TIME TESTS
     @Test
     public void testPerpendicularTLReflectionBottomRight() {
         TriangularBumper gadget = new TriangularBumper(new Vect(0, 0), TriangularBumperOrientation.TOP_LEFT, "test");
