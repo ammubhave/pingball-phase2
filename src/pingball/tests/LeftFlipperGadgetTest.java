@@ -10,9 +10,9 @@ import physics.Vect;
 import pingball.board.Flipper.FlipperOrientation;
 import pingball.board.Ball;
 import pingball.board.LeftFlipper;
-import pingball.board.SquareBumper;
+
 /**
- * testing strategy:
+ * Testing strategy:
  * check for each of the 4 corners, both horizontal and vertical
  * also check for perpendicular reflection
  * - test equals
@@ -30,6 +30,8 @@ public class LeftFlipperGadgetTest {
         }
         emptyBoardString = sb.toString();
     }
+    
+    //RENDER TESTS
     
     @Test
     public void testRenderNWCorner() {
@@ -159,7 +161,7 @@ public class LeftFlipperGadgetTest {
         }
     }
     
-    // REFLECTION
+    // REACT BALL TESTS
     
     @Test
     public void testPerpendicularTopReflectionBottomSide() {

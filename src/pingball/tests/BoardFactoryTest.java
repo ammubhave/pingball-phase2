@@ -13,7 +13,7 @@ import pingball.board.Board;
 import pingball.parser.BoardBuilder;
 
 /**
- * testing strategy:
+ * Testing Strategy:
  * - test buildBoard on:
  *   - the staff boards
  *   - test out all the gadgets with various orientations

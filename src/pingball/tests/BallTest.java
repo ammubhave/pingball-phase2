@@ -9,6 +9,11 @@ import physics.Circle;
 import physics.Vect;
 import pingball.board.Ball;
 
+
+/**
+ * Testing Strategy: 
+ * 
+ */
 public class BallTest {
 
     String emptyBoardString;

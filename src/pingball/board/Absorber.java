@@ -13,10 +13,10 @@ import pingball.proto.Message;
 
 public class Absorber implements Gadget {
     /*
-     * Thread Safety Information: Absorber is threadsafe because
-     * - The only mutable attribute is 'heldBall' and it is accessed in synchronized manner.
-     * - gadgetsToBeHooked is only modified in factory.
-     * - All other attributes are immutable
+     * Thread Safety Information: Absorber is threadsafe because - The only
+     * mutable attribute is 'heldBall' and it is accessed in synchronized
+     * manner. - gadgetsToBeHooked is only modified in factory. - All other
+     * attributes are immutable
      */
     private final int width; // measured horizontally
     private final int height; // measured vertically
@@ -31,12 +31,11 @@ public class Absorber implements Gadget {
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> cornerCircles = new ArrayList<Circle>();
-    
+
     /*
-     * Rep Invariant:
-     * - heldBall, if non-null, should be within the bounds of the absorber
-     * - width, height must be positive
-     * - all others must be non-null
+     * Rep Invariant: - heldBall, if non-null, should be within the bounds of
+     * the absorber - width, height must be positive - all others must be
+     * non-null
      */
     private void checkRep() {
         assert position != null;
@@ -44,50 +43,55 @@ public class Absorber implements Gadget {
         assert cornerCircles != null;
         assert gadgetsToBeHooked != null;
         assert name != null;
-        
+
         if (heldBall != null) {
             assert heldBall.getCircle().getCenter().x() > position.x();
             assert heldBall.getCircle().getCenter().x() < position.x() + width;
             assert heldBall.getCircle().getCenter().y() > position.y();
             assert heldBall.getCircle().getCenter().y() < position.y() + height;
         }
-        
+
         assert width > 0;
-        assert height > 0;        
+        assert height > 0;
     }
 
     /**
-     * Creates an absorber gadget with the following user-inputted parameters.
+     * Constructor: creates an absorber gadget with the following user-inputted
+     * parameters.
      * 
-     * @param position vector representing the starting location
-     * @param width horizontal distance of absorber
-     * @param height vertical distance of absorber
-     * @param name name of absorber
+     * @param position
+     *            vector representing the starting location
+     * @param width
+     *            horizontal distance of absorber
+     * @param height
+     *            vertical distance of absorber
+     * @param name
+     *            name of absorber
      */
     public Absorber(Vect position, int width, int height, String name) {
         this.position = position;
         this.name = name;
         this.width = width;
         this.height = height;
-        
+
         double x = this.position.x();
         double y = this.position.y();
 
-        sides.add(new LineSegment(x, y, x + width, y));                     // Top Line
-        sides.add(new LineSegment(x, y + height, x + width, y + height));   // Bottom Line
-        sides.add(new LineSegment(x, y, x, y + height));                    // Left Line
-        sides.add(new LineSegment(x + width, y, x + width, y + height));    // Right Line
+        sides.add(new LineSegment(x, y, x + width, y)); // Top Line
+        sides.add(new LineSegment(x, y + height, x + width, y + height)); // Bottom Line
+        sides.add(new LineSegment(x, y, x, y + height)); // Left Line
+        sides.add(new LineSegment(x + width, y, x + width, y + height)); // Right Line
 
-        cornerCircles.add(new Circle(x, y, 0));                             // Top Left Circle
-        cornerCircles.add(new Circle(x + width, y, 0));                     // Top Right Circle
-        cornerCircles.add(new Circle(x, y + height, 0));                    // Bottom Left Circle
-        cornerCircles.add(new Circle(x + width, y + height, 0));            // Bottom Right Circle
-        
+        cornerCircles.add(new Circle(x, y, 0)); // Top Left Circle
+        cornerCircles.add(new Circle(x + width, y, 0)); // Top Right Circle
+        cornerCircles.add(new Circle(x, y + height, 0)); // Bottom Left Circle
+        cornerCircles.add(new Circle(x + width, y + height, 0)); // Bottom Right Circle
+
         checkRep();
     }
 
     @Override
-    public void trigger() { 
+    public void trigger() {
         GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
@@ -101,10 +105,11 @@ public class Absorber implements Gadget {
         // Only shoot is there a ball to shoot
         if (heldBall != null) {
             heldBall.changeVelocity(SHOOT_VELOCITY);
-            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() - 0.25));
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25,
+                    this.position.y() - 0.25));
             heldBall = null;
         }
-        
+
         checkRep();
     }
 
@@ -114,16 +119,18 @@ public class Absorber implements Gadget {
         if (heldBall != null && !isInside(ball)) {
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
         } else if (heldBall == null) {
-            ball.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
+            ball.changePos(new Vect(this.position.x() + width - 0.25,
+                    this.position.y() + height - 0.25));
             ball.changeVelocity(new Vect(0, 0));
             heldBall = ball;
         } else {
-            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25,
+                    this.position.y() + height - 0.25));
             heldBall.changeVelocity(new Vect(0, 0));
         }
 
         this.trigger();
-        
+
         return new ArrayList<Message>();
     }
 
@@ -139,6 +146,7 @@ public class Absorber implements Gadget {
 
     /**
      * Returns LineSegments representing the absorber.
+     * 
      * @return List of line segments representing the absorber
      */
     public List<LineSegment> getLineSegments() {
@@ -146,7 +154,10 @@ public class Absorber implements Gadget {
     }
 
     /**
-     * @param ball ball to check if it's in absorber
+     * Checks if a ball is inside the absorber
+     * 
+     * @param ball
+     *            ball to check if it's in absorber
      * @return true if ball is inside absorber
      */
     public boolean isInside(Ball ball) {
@@ -162,7 +173,7 @@ public class Absorber implements Gadget {
 
     @Override
     public void hookActionToTrigger(Gadget gadget) {
-        gadgetsToBeHooked.add(gadget);       
+        gadgetsToBeHooked.add(gadget);
     }
 
     @Override
@@ -171,14 +182,16 @@ public class Absorber implements Gadget {
 
         for (int y = (int) position.y(); y < (int) position.y() + height; y++)
             for (int x = (int) position.x(); x < (int) position.x() + width; x++)
-                sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)), '=');
+                sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)),
+                        '=');
 
-        return sb.toString();        
+        return sb.toString();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Absorber)) return false;
-        return ((Absorber)obj).getName().equals(this.getName());
+        if (!(obj instanceof Absorber))
+            return false;
+        return ((Absorber) obj).getName().equals(this.getName());
     }
 }

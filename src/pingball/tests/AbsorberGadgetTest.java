@@ -1,7 +1,6 @@
 package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -12,9 +11,17 @@ import pingball.board.Absorber;
 import pingball.board.Ball;
 
 /**
- * testing strategy: - test render for all four corners - test perpendicular
- * reflection - test equals
+ * Testing Strategy: 
+ * -Test render for each of the four corners (NW, NE, SW, SE)
+ * -Test reactBall method, which should reflect a ball the absorber. 
+ *     -Create balls approaching the absorber from the left, right,
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ * -Test leastCollisionTime method.
+ *      -test time until collision for balls that will hit the absorber
+ *      from left, right, top, bottom, NW corner, NE corner, SW corner,
+ *      and SE corner.
  */
+
 public class AbsorberGadgetTest {
     String emptyBoardString;
     Absorber gadget;
@@ -28,12 +35,14 @@ public class AbsorberGadgetTest {
             sb.append('\n');
         }
         emptyBoardString = sb.toString();
+        
         gadget = new Absorber(new Vect(0, 0), 2, 2, "test");
     }
 
+    // RENDER TESTS
+
     @Test
     public void testRenderNWCorner() {
-        Absorber gadget = new Absorber(new Vect(0, 0), 2, 2, "test");
         String renderedString = gadget.render(emptyBoardString);
 
         for (int y = 1; y < 21; y++) {
@@ -90,47 +99,45 @@ public class AbsorberGadgetTest {
             }
         }
     }
-    
-    //REFLECTION TESTS
-    
-    public void testPerpendicularReflectionRight(){
-        Ball ball = new Ball ("ball", new Vect(3, 2), new Vect(-1, 0));
+
+    // REFLECTION TESTS
+
+    public void testPerpendicularReflectionRight() {
+        Ball ball = new Ball("ball", new Vect(3, 2), new Vect(-1, 0));
         gadget.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(1,0));
-    }
-    
-    public void testPerpendicularReflectionBottom(){
-        Ball ball = new Ball ("ball", new Vect(2, 3), new Vect(0, -1));
-        gadget.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(0,1));
-    }
-    
-    public void testPerpendicularReflectionBottomRight(){
-        Ball ball = new Ball ("ball", new Vect(3, 3), new Vect(-1, -1));
-        gadget.reactBall(ball);
-        assertEquals(ball.getVelocity(),new Vect(1,1));
+        assertEquals(ball.getVelocity(), new Vect(1, 0));
     }
 
-    
-    //LEAST COLLISION TIME TESTS
-    
+    public void testPerpendicularReflectionBottom() {
+        Ball ball = new Ball("ball", new Vect(2, 3), new Vect(0, -1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(), new Vect(0, 1));
+    }
+
+    public void testPerpendicularReflectionBottomRight() {
+        Ball ball = new Ball("ball", new Vect(3, 3), new Vect(-1, -1));
+        gadget.reactBall(ball);
+        assertEquals(ball.getVelocity(), new Vect(1, 1));
+    }
+
+    // LEAST COLLISION TIME TESTS
+
     @Test
-    public void testLeastCollisionTimeRight(){
-        Ball ball = new Ball ("ball", new Vect(3, 2), new Vect(-1, 0));
+    public void testLeastCollisionTimeRight() {
+        Ball ball = new Ball("ball", new Vect(3, 2), new Vect(-1, 0));
         assertEquals(0.75, gadget.leastCollisionTime(ball), 0.0001);
     }
-    
+
     @Test
-    public void testLeastCollisionTimeBottom(){
-        Ball ball = new Ball ("ball", new Vect(2, 3), new Vect(0, -1));
+    public void testLeastCollisionTimeBottom() {
+        Ball ball = new Ball("ball", new Vect(2, 3), new Vect(0, -1));
         assertEquals(0.75, gadget.leastCollisionTime(ball), 0.0001);
     }
-    
+
     @Test
-    public void testLeastCollisionTimeBottomRight(){
-        Ball ball = new Ball ("ball", new Vect(3, 3), new Vect(-1, -1));
+    public void testLeastCollisionTimeBottomRight() {
+        Ball ball = new Ball("ball", new Vect(3, 3), new Vect(-1, -1));
         assertEquals(0.8232, gadget.leastCollisionTime(ball), 0.0001);
     }
-    
 
 }

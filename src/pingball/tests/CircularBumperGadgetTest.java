@@ -11,9 +11,17 @@ import pingball.board.Ball;
 import pingball.board.CircularBumper;
 
 /**
- * testing strategy: - test render for all four corners - test perpendicular
- * reflection - test equals
+ * Testing Strategy: 
+ * -Test render for each of the four corners (NW, NE, SW, SE)
+ * -Test reactBall method, which should reflect a ball the circular
+ *  bumper. 
+ *     -Create balls approaching the circular bumper from the left, right,
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ * -Test leastCollisionTime method.
+ *      -Create balls that will hit the circular bumper from left, right, 
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
  */
+
 public class CircularBumperGadgetTest {
     String emptyBoardString;
     CircularBumper gadget;
@@ -30,6 +38,9 @@ public class CircularBumperGadgetTest {
         gadget = new CircularBumper(new Vect(4.5, 4.5), "test");
     }
 
+    
+    //RENDER TESTS
+    
     @Test
     public void testRenderNWCorner() {
         CircularBumper gadget = new CircularBumper(new Vect(0, 0), "test");
@@ -89,6 +100,8 @@ public class CircularBumperGadgetTest {
         }
     }
 
+    //REACT BALL TESTS
+    
     @Test
     public void testPerpendicularReflectionTop() {
         Ball ball = new Ball("ball", new Vect(5, 4), new Vect(0, 1));
@@ -145,7 +158,7 @@ public class CircularBumperGadgetTest {
         assertEquals(ball.getVelocity(),new Vect(-1, 1));
     }
     
-    //LEAST COLLISION TIME
+    //LEAST COLLISION TIME TESTS
     
     @Test
     public void testLeastCollisionTimeZero(){

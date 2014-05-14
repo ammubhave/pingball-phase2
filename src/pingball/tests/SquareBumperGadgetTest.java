@@ -12,9 +12,17 @@ import pingball.board.Ball;
 import pingball.board.SquareBumper;
 
 /**
- * testing strategy: - test render for all four corners - test perpendicular
- * reflection - test equals
+ * Testing Strategy: 
+ * -Test render for each of the four corners (NW, NE, SW, SE)
+ * -Test reactBall method, which should reflect a ball the square
+ *  bumper. 
+ *     -Create balls approaching the square bumper from the left, right,
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ * -Test leastCollisionTime method.
+ *      -Create balls that will hit the square bumper from left, right, 
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
  */
+
 public class SquareBumperGadgetTest {
 
     String emptyBoardString;
@@ -32,6 +40,8 @@ public class SquareBumperGadgetTest {
         gadget = new SquareBumper(new Vect(5, 5), "test");
     }
 
+    //RENDER TESTS
+    
     @Test
     public void testRenderNWCorner() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
@@ -92,6 +102,8 @@ public class SquareBumperGadgetTest {
         }
     }
 
+    //REACT BALL TESTS
+    
     @Test
     public void testPerpendicularReflectionBottomRight() {
         SquareBumper gadget = new SquareBumper(new Vect(0, 0), "test");
@@ -159,7 +171,7 @@ public class SquareBumperGadgetTest {
         assertEqualsVect(new Vect(1, 0), ball.getVelocity());
     }
 
-    // LEAST COLLISION TIME TESTING
+    // LEAST COLLISION TIME TESTS
 
     @Test
     public void testLeastCollisionTimeZero() {

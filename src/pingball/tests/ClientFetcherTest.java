@@ -22,6 +22,11 @@ import pingball.proto.WelcomeMessage;
  * @category no_didit
  */
 
+/**
+ * Testing Strategy: 
+ * 
+ */
+
 public class ClientFetcherTest extends SocketFetcherTestBase<Message> {
 	protected SocketFetcher<Message> createFetcher(
 			BlockingQueue<Message> recvQueue, Socket fetcherSocket)
