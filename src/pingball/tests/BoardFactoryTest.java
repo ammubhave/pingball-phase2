@@ -1,7 +1,6 @@
 package pingball.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,13 +62,13 @@ public class BoardFactoryTest {
         String emptyRow = ".                    .\n";
         board += ".*                   .\n";
         board += emptyRow;
-        board += ".########| --########.\n";
-        board += ".    O   |      O    .\n";
+        board += ".########|  |########.\n";
+        board += ".    O   |  |   O    .\n";
         board += ".     O        O     .\n";
         board += ".      O      O      .\n";
         board += ".       O    O       .\n";
-        board += ".        | --        .\n";
-        board += ".        |           .\n";
+        board += ".        |  |        .\n";
+        board += ".        |  |        .\n";
         board += ".        \\  /        .\n";
         for (int i = 0; i < 9; i++){
             board += emptyRow;
@@ -114,15 +113,15 @@ public class BoardFactoryTest {
         String emptyRow = ".                    .\n";
         board += emptyRow;
         board += emptyRow;
-        board += ".  --################.\n";
-        board += ".         O          .\n";
+        board += ".   |################.\n";
+        board += ".   |     O          .\n";
         board += ".        O           .\n";
         board += ".       O            .\n";
         board += ".      O             .\n";
         board += ".     O              .\n";
         board += ".    O               .\n";
-        board += ".  --                .\n";
-        board += emptyRow;
+        board += ".   |                .\n";
+        board += ".   |                .\n";
         board += ".  /                 .\n";
         board += ". /                  .\n";
         
@@ -148,8 +147,8 @@ public class BoardFactoryTest {
         board += ". *                  .\n";
         board += emptyRow;
         board += emptyRow;
-        board += ".          | --      .\n";
-        board += ".          |         .\n";
+        board += ".          |  |      .\n";
+        board += ".          |  |      .\n";
         board += emptyRow;
         board += ".########            .\n";
         board += emptyRow;
@@ -178,8 +177,8 @@ public class BoardFactoryTest {
         board += ". *                  .\n";
         board += emptyRow;
         board += emptyRow;
-        board += ".          | --      .\n";
-        board += ".          |         .\n";
+        board += ".          |  |      .\n";
+        board += ".          |  |      .\n";
         board += emptyRow;
         board += ".####                .\n";
         board += emptyRow;

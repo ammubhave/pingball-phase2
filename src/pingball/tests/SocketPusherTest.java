@@ -24,6 +24,11 @@ import pingball.proto.Message;
 import pingball.proto.WelcomeMessage;
 import pingball.proto.ControlMessage.Type;
 
+/**
+ * Testing Strategy:  
+ * 
+*/
+
 public class SocketPusherTest {
 	private ServerSocket serverSocket;
 	private Socket clientSocket;

@@ -19,7 +19,7 @@ import pingball.board.Portal;
  *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
  */
 
-public class PortalTests {
+public class PortalTest {
     Portal portal1;
     Portal portal2;
     Portal portal3;

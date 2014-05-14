@@ -88,7 +88,7 @@ public class BoardFactory {
             attributes.put("friction2", "0.025");
         }
         @Override
-        public void exitBoardAttributes(BoardParser.BoardAttributesContext ctx) {
+        public void exitAttribute(BoardParser.AttributeContext ctx) {
             attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
         }
         @Override
@@ -125,10 +125,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("name", "invalid");
         }
-        @Override
-        public void exitBallAttributes(BoardParser.BallAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+     
         @Override
         public void exitBallObjectLine(BoardParser.BallObjectLineContext ctx) {
             Ball ball = new Ball(
@@ -147,10 +144,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("name", "invalid");
         }
-        @Override
-        public void exitSquareBumperAttributes(BoardParser.SquareBumperAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+        
         @Override
         public void exitSquareBumperObjectLine(BoardParser.SquareBumperObjectLineContext ctx) {
             SquareBumper gadget = new SquareBumper(
@@ -169,10 +163,7 @@ public class BoardFactory {
             attributes.put("name", "invalid");
             attributes.put("orientation", "0");
         }
-        @Override
-        public void exitTriangleBumperAttributes(BoardParser.TriangleBumperAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+        
         @Override
         public void exitTriangleBumperObjectLine(BoardParser.TriangleBumperObjectLineContext ctx) {
             TriangularBumperOrientation orientation = TriangularBumperOrientation.TOP_LEFT;
@@ -202,10 +193,7 @@ public class BoardFactory {
             attributes.put("name", "invalid");
             attributes.put("orientation", "0");
         }
-        @Override
-        public void exitLeftFlipperAttributes(BoardParser.LeftFlipperAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitLeftFlipperObjectLine(BoardParser.LeftFlipperObjectLineContext ctx) {
             FlipperOrientation orientation = FlipperOrientation.LEFT;
@@ -236,10 +224,7 @@ public class BoardFactory {
             attributes.put("name", "invalid");
             attributes.put("orientation", "0");
         }
-        @Override
-        public void exitRightFlipperAttributes(BoardParser.RightFlipperAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitRightFlipperObjectLine(BoardParser.RightFlipperObjectLineContext ctx) {
             FlipperOrientation orientation = FlipperOrientation.RIGHT;
@@ -270,10 +255,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("name", "invalid");
         }
-        @Override
-        public void exitCircleBumperAttributes(BoardParser.CircleBumperAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitCircleBumperObjectLine(BoardParser.CircleBumperObjectLineContext ctx) {
             CircularBumper gadget = new CircularBumper(
@@ -292,10 +274,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("name", "invalid");
         }
-        @Override
-        public void exitAbsorberAttributes(BoardParser.AbsorberAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitAbsorberObjectLine(BoardParser.AbsorberObjectLineContext ctx) {
             Absorber gadget = new Absorber(
@@ -315,10 +294,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("otherBoard", board.getName());
         }
-        @Override
-        public void exitPortalAttributes(BoardParser.PortalAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitPortalObjectLine(BoardParser.PortalObjectLineContext ctx) {
             Portal gadget = new Portal(
@@ -341,10 +317,7 @@ public class BoardFactory {
             attributes.clear();
             attributes.put("name", "invalid");
         }
-        @Override
-        public void exitFireAttributes(BoardParser.FireAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitFireObjectLine(BoardParser.FireObjectLineContext ctx) {
             Gadget gadget = board.getGadgetFromName(attributes.get("trigger"));
@@ -356,10 +329,7 @@ public class BoardFactory {
         public void enterKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) {
             attributes.clear();
         }
-        @Override
-        public void exitKeydownAttributes(BoardParser.KeydownAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitKeydownObjectLine(BoardParser.KeydownObjectLineContext ctx) {
             board.addKeyDownBinding(attributes.get("key"), board.getGadgetFromName(attributes.get("action")));
@@ -370,10 +340,7 @@ public class BoardFactory {
         public void enterKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) {
             attributes.clear();
         }
-        @Override
-        public void exitKeyupAttributes(BoardParser.KeyupAttributesContext ctx) {
-            attributes.put(ctx.getStart().getText(), ctx.getStop().getText());
-        }
+
         @Override
         public void exitKeyupObjectLine(BoardParser.KeyupObjectLineContext ctx) {
             board.addKeyUpBinding(attributes.get("key"), board.getGadgetFromName(attributes.get("action")));
