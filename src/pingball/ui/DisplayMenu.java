@@ -168,8 +168,8 @@ public class DisplayMenu extends JMenuBar {
                     JLabel hostRequest = new JLabel("Enter the host name: ");
                     JLabel portRequest = new JLabel("Enter the port number: ");
 
-                    JTextField hostInput = new JTextField();
-                    JTextField portInput = new JTextField();
+                    JTextField hostInput = new JTextField("localhost");
+                    JTextField portInput = new JTextField("10987");
 
                     serverPanel.setLayout(new GridLayout(0, 2));
                     serverPanel.add(hostRequest);

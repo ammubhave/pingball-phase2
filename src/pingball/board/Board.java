@@ -20,98 +20,87 @@ import pingball.ui.board.GadgetPainter;
  * 
  */
 public class Board {
+    /*
+     * Thread Safety:
+     * All public methods are either on immutable objects or synchronized, does not create new threads
+     */
+    
     public static final int DEFAULT_SIZE = 20;
-    private final int height;
-    private final int width;
-    private final List<Ball> balls;
-    private final HashMap<String, Gadget> boardGadgets;
-    private final List<GadgetPainter> boardGadgetPainters;
+
+    private final List<Ball> balls = new ArrayList<Ball>();
+    private final HashMap<String, Gadget> boardGadgets = new HashMap<String, Gadget>();
+    private final List<GadgetPainter> boardGadgetPainters  = new ArrayList<GadgetPainter>();
+    
     private final String name;
-    private Vect g; // In L / s^2
-    private double mu; // In per s.
-    private double mu2; // In per L.
+    private final Vect g; // In L / s^2
+    private final double mu; // In per s.
+    private final double mu2; // In per L.
+    
     private HashMap<String, ArrayList<Gadget>> keyUpForGadgets = new HashMap<String, ArrayList<Gadget>>();
     private HashMap<String, ArrayList<Gadget>> keyDownForGadgets = new HashMap<String, ArrayList<Gadget>>();
+    
     private List<Message> sendMessages = new ArrayList<Message>();
+    
+    /*
+     * Rep Invariant:
+     * - everything should be non-null
+     */
+    public void checkRep() {
+        assert balls != null;
+        assert boardGadgets != null;
+        assert boardGadgetPainters != null;
+        assert name != null;
+        assert keyUpForGadgets != null;
+        assert keyDownForGadgets != null;
+        assert sendMessages != null;
+    }
 
     /**
      * Creates a new instance of Board.
      * 
-     * @param name
-     * @param balls
-     * @param gadgets
+     * @param name the name of the board
+     * @param gravity the gravity in the board
+     * @param friction1 the friction coeff 1 in the board
+     * @param friction2 the friction coeff 2 in the board
      */
-    public Board(String name, List<Ball> balls, List<Gadget> gadgets, double gravity, double friction1,
-            double friction2, HashMap<String, ArrayList<Gadget>> keyUForGadgets, HashMap<String, ArrayList<Gadget>> keyDForGadgets) {
+    public Board(String name, double gravity, double friction1, double friction2) {
         this.name = name;
         this.g = new Vect(0, gravity); // L / s^2
 
         this.mu = friction1;
         this.mu2 = friction2;
-        this.balls = balls;
-        this.width = DEFAULT_SIZE;
-        this.height = DEFAULT_SIZE;
-        boardGadgets = new HashMap<String, Gadget>();
         
-        for (String key : keyUForGadgets.keySet()) {
-            keyUpForGadgets.put(key, new ArrayList<Gadget>(keyUForGadgets.get(key)));
-        }
-        for (String key : keyDForGadgets.keySet()) {
-            keyDownForGadgets.put(key, new ArrayList<Gadget>(keyDForGadgets.get(key)));
-        }
-        
-        for (Gadget gadget : gadgets) {
-            // Vect pos = new Vect(gadget.getX(),gadget.getY());
-            boardGadgets.put(gadget.getName(), gadget);
-        }
-        boardGadgetPainters = new ArrayList<GadgetPainter>();
-
-        // add corner walls to gadgets
-        // Gadget cornerNE = new OuterWallPart(this, true, new Vect(20, -1),
-        // '.');
-        // boardGadgets.put(cornerNE.getPosition().toString(), cornerNE);
-        // Gadget cornerSE = new OuterWallPart(this, true, new Vect(20, 20),
-        // '.');
-        // boardGadgets.put(cornerSE.getPosition().toString(), cornerSE);
-        // Gadget cornerNW = new OuterWallPart(this, true, new Vect(-1, -1),
-        // '.');
-        // boardGadgets.put(cornerNW.getPosition().toString(), cornerNW);
-        // Gadget cornerSW = new OuterWallPart(this, true, new Vect(-1, 20),
-        // '.');
-        // boardGadgets.put(cornerSW.getPosition().toString(), cornerSW);
-
-        /*
-         * walls = new OuterWalls(); boardGadgets.put(walls.getName(), walls);
-         * for (OuterWalls w : walls) reset(w);
-         */
+        checkRep();
     }
 
     /**
      * Adds a gadget to the board
-     * 
-     * @param gadget
-     *            to be added to board
+     * @param gadget to be added to board
      */
     public synchronized void addGadget(Gadget gadget) {
         boardGadgets.put(gadget.getName(), gadget);
+        checkRep();
     }
 
     /**
      * Adds a gadget painter to the board
-     * 
-     * @param gadget
-     *            painter to be added to board
+     * @param gadget painter to be added to board
      */
     public synchronized void addGadgetPainter(GadgetPainter gadgetPainter) {
         boardGadgetPainters.add(gadgetPainter);
+        checkRep();
     }
 
+    /**
+     * Gets all the painters associated with this board
+     * @return all gadgets painters
+     */
     public synchronized List<GadgetPainter> getGadgetPainters() {
-        return this.boardGadgetPainters;
+        return new ArrayList<GadgetPainter>(this.boardGadgetPainters);
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < 22; y++) {
             for (int x = 0; x < 22; x++)
@@ -128,151 +117,34 @@ public class Board {
         return boardString;
     }
 
-    /*
-     * public synchronized void go() { int j = 0; for (int i = 0; i <
-     * balls.size(); i++) { Ball b = balls.get(i); this.balls.set(j, b.move());
-     * j++; }
-     * 
-     * int k = 0; for (int i = 0; i < balls.size(); i++) { Ball b =
-     * balls.get(i); this.balls.set(k, this.gravity(b)); k++; }
-     * 
-     * int m = 0; for (int i = 0; i < balls.size(); i++) { Ball b =
-     * balls.get(i); this.balls.set(m, this.friction(b)); m++; }
-     * 
-     * int n = 0; for (int i = 0; i < balls.size(); i++) { Ball b =
-     * balls.get(i); if (this.contactTest(b) != null) { this.balls.set(n,
-     * this.contactTest(b)); } else { this.balls.remove(n); } n++; } }
+    /**
+     * Gets the name of the board
+     * @return the name of the board
      */
-
-    /*
-     * private synchronized Ball gravity(Ball b) { double t = 50d; // In
-     * milliseconds. This should be equal to the thread // refresh rate. double
-     * u = b.getVelocity().y(); double a = g.y(); double v = u + a * t; return
-     * new Ball(b.nameb.getCenter(), new Vect(b.getVelocity().x(), v)); }
-     * 
-     * private synchronized Ball friction(Ball b) { double deltaT = 10d / 1000d;
-     * // Should be equal to the thread refresh // rate but in seconds. Vect
-     * oldV = b.getVelocity(); double speed = Math.sqrt(Math.pow(oldV.x(), 2) +
-     * Math.pow(oldV.y(), 2)); double scalingFactor = 1 - this.mu * deltaT -
-     * this.mu2 * speed * deltaT; Vect vNew = oldV.times(scalingFactor); return
-     * new Ball(b.getCenter(), vNew); }
-     */
-
-    public synchronized boolean hasName() {
-        return name.length() > 0;
-    }
-
-    public synchronized String getName() {
+    public String getName() {
         return name;
     }
 
-    public synchronized String stringify(String s) {
-        if (s.length() > 20)
-            return s.substring(0, 20);
-        StringBuffer name = new StringBuffer();
-        for (int i = 0; i < (20 - s.length()) / 2; i++)
-            name = name.append(".");
-        name = name.append(s);
-        for (int i = 0; i < (20 - s.length() + 1) / 2; i++)
-            name = name.append(".");
-        return name.toString();
-    }
-
-    /*
-     * public synchronized void remove(String direction) { String defolt =
-     * "...................."; if (direction.equals("left")) { leftBoard =
-     * defolt; walls[2].reset("LEFT"); reset(walls[2]); } else if
-     * (direction.equals("right")) { rightBoard = defolt;
-     * walls[3].reset("RIGHT"); reset(walls[3]); } else if
-     * (direction.equals("top")) { topBoard = defolt; walls[0].reset("TOP");
-     * reset(walls[0]); } else if (direction.equals("bottom")) { bottomBoard =
-     * defolt; walls[1].reset("BOTTOM"); reset(walls[1]); } else { throw new
-     * RuntimeException(
-     * "A direction other than left, right, top, or bottom was specified... Something wrong happened!"
-     * ); } }
-     * 
-     * public synchronized void add(String direction, String name) { if
-     * (direction.equals("left")) { leftBoard = name; walls[2].reset(false,
-     * "LEFT", stringify(name)); reset(walls[2]); } else if
-     * (direction.equals("right")) { rightBoard = name; walls[3].reset(false,
-     * "RIGHT", stringify(name)); reset(walls[3]); } else if
-     * (direction.equals("top")) { topBoard = name; walls[0].reset(false, "TOP",
-     * stringify(name)); reset(walls[0]); } else if (direction.equals("bottom"))
-     * { bottomBoard = name; walls[1].reset(false, "BOTTOM", stringify(name));
-     * reset(walls[1]); } else { throw new RuntimeException(
-     * "A direction other than left, right, top, or bottom was specified... Something wrong happened!"
-     * ); } }
-     * 
-     * private synchronized void reset(OuterWall outerWall) { for (OuterWallPart
-     * p : outerWall.getParts()) boardGadgets.put(p.getPosition().toString(),
-     * p); }
-     * 
-     * public synchronized String getNeighbors() { return name + " left: " +
-     * leftBoard + " right: " + rightBoard + " top: " + topBoard + " bottom: " +
-     * bottomBoard; }
-     */
-
-    /*
-     * private synchronized Ball contactTest(Ball b) { // Loop through all the
-     * gadgets and find the min time-before-collision // among all of them.
-     * HashMap<String, Gadget> allGadgets = new HashMap<String, Gadget>();
-     * allGadgets.putAll(this.boardGadgets); Gadget minTimeGadget = null; double
-     * finalMinTime = Double.POSITIVE_INFINITY; String side = ""; Iterator
-     * itGadget = allGadgets.entrySet().iterator(); while (itGadget.hasNext()) {
-     * Map.Entry pairsGadget = (Map.Entry) itGadget.next(); String coords =
-     * (String) pairsGadget.getKey(); Gadget g = (Gadget)
-     * pairsGadget.getValue(); // There's just one key-value pair in the
-     * following hashmap. HashMap<String, Double> timeMap =
-     * g.leastCollisionTime(b, b.getVelocity()); HashMap<String, Double>
-     * allTimes = timeMap; Iterator itComponents =
-     * allTimes.entrySet().iterator(); while (itComponents.hasNext()) {
-     * Map.Entry pairsComponents = (Map.Entry) itComponents.next(); String
-     * identifier = (String) pairsComponents.getKey(); double time = (double)
-     * pairsComponents.getValue(); if (time <= finalMinTime) { finalMinTime =
-     * time; minTimeGadget = g; side = identifier; } itComponents.remove(); //
-     * avoids a // ConcurrentModificationException } itGadget.remove(); //
-     * avoids a ConcurrentModificationException } Boolean bounceABall = false;
-     * Ball bounceFirst = null; // Do the same thing for all the balls. for
-     * (Ball aBall : this.balls) { HashMap<String, Double> times =
-     * aBall.leastCollisionTime(b); double ballTime = times.get("BALL"); if
-     * (ballTime <= finalMinTime) { finalMinTime = ballTime; bounceABall = true;
-     * bounceFirst = aBall; } }
-     * 
-     * double epsilon = 1.0d; if (bounceABall) { epsilon = 1.0d; } else { switch
-     * (minTimeGadget.getType()) {
-     * 
-     * case "BUMPER": Bumper bump = (Bumper) minTimeGadget; if
-     * (bump.getBumperType() == "SQUARE") { epsilon = 0.3d; } else if
-     * (bump.getBumperType() == "CIRCLE") { } break;
-     * 
-     * case "OUTER_WALL_PART": epsilon = 0.5d; break;
-     * 
-     * case "FLIPPER": epsilon = 1.0d; break;
-     * 
-     * case "ABSORBER": epsilon = 0.05d; break; } }
-     * 
-     * if (finalMinTime < epsilon) { if (bounceABall) { return
-     * bounceFirst.bounce(b); } return minTimeGadget.bounce(b, side); } return
-     * b; }
-     */
-
     /**
      * Adds a ball to the board
-     * 
-     * @param ball
-     *            to be added to the board
+     * @param ball  to be added to the board
      */
     public synchronized void addBall(Ball ball) {
         balls.add(ball);
+        checkRep();
     }
 
+    /**
+     * Removes ball from board
+     * @param ball the ball to remove
+     */
     public synchronized void removeBall(Ball ball) {
         balls.remove(ball);
+        checkRep();
     }
 
     /**
      * Returns shortest time until the next collision event will happen
-     * 
      * @return the shortest time until next collision
      */
     public synchronized double timeUntilCollision() {
@@ -304,9 +176,7 @@ public class Board {
     /**
      * For every ball, simulate a physics time increment for every ball with no
      * collisions.
-     * 
-     * @param time
-     *            the time by which to increment, time should be very small
+     * @param time the time by which to increment, time should be very small
      */
     public synchronized void incrementNoCollisionTime(double time) {
         for (Ball ball : balls) {
@@ -317,6 +187,7 @@ public class Board {
             ball.changeVelocity(newV);
             ball.changePos(ball.getPos().plus(oldV.times(time)));
         }
+        checkRep();
     }
 
     /**
@@ -326,12 +197,10 @@ public class Board {
      *            the time in seconds for which to run
      */
     public synchronized void simulateTime(double timeLeft) {
-
         boolean isColliding = true;
         double originalTime = timeLeft;
 
         while (isColliding) {
-
             double time = this.timeUntilCollision();
             if (time < originalTime * 0.05)// If time is too small then make it
                                            // bigger
@@ -350,6 +219,7 @@ public class Board {
                 this.incrementNoCollisionTime(timeLeft);
             }
         }
+        checkRep();
     }
 
     /**
@@ -412,7 +282,7 @@ public class Board {
                                toadd = false;
                         }
                     }
-                    if (toadd && portalEnabled) {
+                    if (toadd && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName()))) {
                         sendMessages.add(msg);
                     }
                 } else {
@@ -420,13 +290,20 @@ public class Board {
                 }
             }
         }
+        checkRep();
     }
     
     private boolean portalEnabled = false;
-    public void enablePortal() {
+    /**
+     * Enables all inter-boards portals on this board
+     */
+    public synchronized void enablePortal() {
         portalEnabled = true;
     }
-    public void disablePortal() {
+    /**
+     * Disables all inter-boards portals on this board
+     */
+    public synchronized void disablePortal() {
         portalEnabled = false;
     }
 
@@ -434,8 +311,7 @@ public class Board {
     /**
      * Handles a message received from the server.
      * 
-     * @param message
-     *            the message received from the server.
+     * @param message the message received from the server.
      */
     public synchronized void onMessage(Message message) {
         if (message instanceof ConnectWallMessage) {
@@ -460,19 +336,19 @@ public class Board {
             if (portalMessage.getTargetBoard().equals(getName()))
                 position = new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY());
             else
-                position = portalMessage.getBallShape().getCenter();
+                position = portalMessage.getBallShape().getCenter().plus(portalMessage.getVelocity().times(0.05/200.));
             Ball ball = new Ball(portalMessage.getName(), position,
                     portalMessage.getVelocity());
             addBall(ball);
             this.boardGadgetPainters.add(new BallPainter(ball));
         }
+        checkRep();
     }
 
     /**
      * Returns the wall next to a board edge.
      * 
-     * @param edge
-     *            the board edge
+     * @param edge the board edge
      * @return the wall next to the given board edge
      */
     private synchronized OuterWall findWall(Edge edge) {
@@ -540,7 +416,7 @@ public class Board {
             if (msg instanceof PortalMessage) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
                 messages.add(new PortalMessage(((PortalMessage) msg).getName(), ((PortalMessage) msg).getTargetPortal(), ((PortalMessage) msg).getTargetBoard(), ((PortalMessage) msg).getBallShape(), ((PortalMessage) msg).getVelocity(), getName()));
-            } else {                
+            } else {
                 messages.add(msg);
             }
         }
@@ -555,10 +431,8 @@ public class Board {
         }
         for (Message msg : sendMessages) {
             if (msg instanceof PortalMessage) {
-                if (((PortalMessage) msg).getTargetBoard().equals(getName())) {
-                    System.err.println("$$$");
+                if (((PortalMessage) msg).getTargetBoard().equals(getName()) && !portalEnabled) {
                     onMessage(msg);
-                    System.err.println(((PortalMessage) msg).getTargetPortal());
                 }
             }
         }
@@ -591,6 +465,7 @@ public class Board {
             keyUpForGadgets.put(keyName, new ArrayList<Gadget>());
         
         keyUpForGadgets.get(keyName).add(gadget);
+        checkRep();
     }
 
     public void addKeyDownBinding(String keyName, Gadget gadget) {
@@ -598,6 +473,7 @@ public class Board {
             keyDownForGadgets.put(keyName, new ArrayList<Gadget>());
         
         keyDownForGadgets.get(keyName).add(gadget);
+        checkRep();
     }
 
     public synchronized void handleKeyUp(String keyName) {

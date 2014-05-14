@@ -1,3 +1,4 @@
+
 package pingball.client;
 
 import java.io.File;
@@ -110,8 +111,8 @@ public class ClientController {
                 }
                 board.simulateTime(DT);
                 messages = board.getOutOfBoundBallMessages();
-                if (!messages.isEmpty())
-                    System.err.println(messages);
+               // if (!messages.isEmpty())
+               //     System.err.println(messages);
             }
             for (Message message : messages)
                 if (serverConnection != null)

@@ -12,14 +12,15 @@ import javax.swing.JFrame;
 import pingball.board.Board;
 import pingball.client.ClientController;
 
-public class MainWindow extends JFrame implements KeyListener {
+public class MainWindow extends JFrame {
+    private static final long serialVersionUID = 1L;
+    
     GameDisplay display;
     private Board boardForKeys;
     private ClientController clientControl;
 
     public MainWindow(Board board, String host, int port, ClientController clientController, File file) {
         super("Pingball");
-        addKeyListener(this);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
         display = new GameDisplay(board);
@@ -35,6 +36,33 @@ public class MainWindow extends JFrame implements KeyListener {
                 clientControl.stop();
             }
         });
+        
+        class MyKeyListener implements KeyListener {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String keyName = KeyEvent.getKeyText(e.getKeyCode());
+                keyName = keyName.replaceAll(" ", "");
+                keyName = keyName.toLowerCase();
+                boardForKeys.handleKeyDown(keyName);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String keyName = KeyEvent.getKeyText(e.getKeyCode());
+                keyName = keyName.replaceAll(" ", "");
+                keyName = keyName.toLowerCase();
+                boardForKeys.handleKeyDown(keyName);
+            }
+        }
+        
+        this.addKeyListener(new MagicKeyListener(new MyKeyListener()));
     }
 
     public void startController() {
@@ -44,10 +72,10 @@ public class MainWindow extends JFrame implements KeyListener {
     public void stopController() {
         clientControl.stop();
     }
-
+/*
     @Override
     public void keyPressed(KeyEvent e) {
-        String keyName = e.getKeyText(e.getKeyCode());
+        String keyName = KeyEvent.getKeyText(e.getKeyCode());
         keyName = keyName.replaceAll(" ", "");
         keyName = keyName.toLowerCase();
         boardForKeys.handleKeyDown(keyName);
@@ -55,7 +83,7 @@ public class MainWindow extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        String keyName = e.getKeyText(e.getKeyCode());
+        String keyName = KeyEvent.getKeyText(e.getKeyCode());
         keyName = keyName.replaceAll(" ", "");
         keyName = keyName.toLowerCase();
         boardForKeys.handleKeyDown(keyName);
@@ -63,6 +91,5 @@ public class MainWindow extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
-    }
+    }*/
 }

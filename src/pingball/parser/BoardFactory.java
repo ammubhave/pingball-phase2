@@ -76,8 +76,6 @@ public class BoardFactory {
        // private Stack<Expression> stack = new Stack<>();
         Board board;
         HashMap<String, String> attributes = new HashMap<String, String>();
-        HashMap<String, ArrayList<Gadget>> keyUMap = new HashMap<String, ArrayList<Gadget>>();
-        HashMap<String, ArrayList<Gadget>> keyDMap = new HashMap<String, ArrayList<Gadget>>();
 
         // board
         
@@ -97,11 +95,9 @@ public class BoardFactory {
         public void exitBoardObjectLine(BoardParser.BoardObjectLineContext ctx) {
             board = new Board(
                     attributes.get("name"),
-                    new ArrayList<Ball>(),
-                    new ArrayList<Gadget>(),
                     Double.parseDouble(attributes.get("gravity")), 
                     Double.parseDouble(attributes.get("friction1")),
-                    Double.parseDouble(attributes.get("friction2")), keyUMap, keyDMap);
+                    Double.parseDouble(attributes.get("friction2")));
             
             OuterWall w1 = new OuterWall(new Vect(0, 0), OuterWallsOrientation.HORIZONTAL, "w1");         
             board.addGadget(w1);
@@ -198,8 +194,6 @@ public class BoardFactory {
             board.addGadgetPainter(new TriangularBumperPainter(gadget));
             attributes.clear();
         }
-        
-        // add other gadget lines too!
         
         // LeftFlipper
         @Override
@@ -329,9 +323,9 @@ public class BoardFactory {
         public void exitPortalObjectLine(BoardParser.PortalObjectLineContext ctx) {
             Portal gadget = new Portal(
                     new Vect(Integer.parseInt(attributes.get("x")), Integer.parseInt(attributes.get("y"))),
-                    attributes.get("name"));
-            gadget.setTargetBoard(attributes.get("otherBoard"));
-            gadget.setTargetPortal(attributes.get("otherPortal"));
+                    attributes.get("name"),
+                    attributes.get("otherPortal"),
+                    attributes.get("otherBoard"));
             board.addGadget(gadget);
             board.addGadgetPainter(new PortalPainter(gadget));
             attributes.clear();

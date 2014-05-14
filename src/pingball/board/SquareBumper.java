@@ -1,10 +1,10 @@
 package pingball.board;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
@@ -16,15 +16,11 @@ public class SquareBumper implements Gadget {
      * altered after creation.
      */
 
-    private final double x;
-    private final double y;
-
-    // Following are constants specified by the project
     private final static double EDGE_LENGTH = 1.0;
     private final static double REFL_COEFF = 1.0;
 
     private final String name;
-    private Vect position;
+    private final Vect position;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
@@ -39,11 +35,11 @@ public class SquareBumper implements Gadget {
      * @param n
      *            , name
      */
-    public SquareBumper(Vect loc, String n) {
-        name = n;
-        position = loc;
-        x = loc.x();
-        y = loc.y();
+    public SquareBumper(Vect position, String name) {
+        this.name = name;
+        this.position = position;
+        double x = position.x();
+        double y = position.y();
 
         sides.add(new LineSegment(x, y, x + EDGE_LENGTH, y));
         sides.add(new LineSegment(x, y + EDGE_LENGTH, x + EDGE_LENGTH, y + EDGE_LENGTH));
@@ -60,15 +56,12 @@ public class SquareBumper implements Gadget {
      * Calculates time an inputted ball will take to hit this bumper. Returns a
      * very large value if not nearby (5 seconds).
      * 
-     * @param ball
-     *            to check if it's nearby
+     * @param ball to check if it's nearby
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
     public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
+        GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
     @Override
@@ -87,6 +80,7 @@ public class SquareBumper implements Gadget {
     }
 
     public List<Message> reactBall(Ball ball) {
+        Toolkit.getDefaultToolkit().beep();
         GadgetHelpers.reflectBall(sides, cornerCircles, ball, REFL_COEFF);
         this.trigger();
         return new ArrayList<Message>();
@@ -105,14 +99,14 @@ public class SquareBumper implements Gadget {
      * @return x coordinate of top-left corner of bumper.
      */
     public double getX() {
-        return x;
+        return this.position.x();
     }
 
     /**
      * @return y coordinate of top-left corner of bumper.
      */
     public double getY() {
-        return y;
+        return this.position.y();
     }
 
     /**
@@ -131,5 +125,11 @@ public class SquareBumper implements Gadget {
         StringBuilder sb = new StringBuilder(input);
         sb.setCharAt(Board.getBoardStringIndexFromVect(position), '#');
         return sb.toString();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SquareBumper)) return false;
+        return ((SquareBumper)obj).getName().equals(this.getName());
     }
 }

@@ -16,10 +16,9 @@ public class PortalTests {
     
     @Before
     public void setUp() throws Exception {
-        portal1 = new Portal(new Vect(4.5, 4.5), "test");
-        portal2 = new Portal(new Vect(7.5, 7.5), "target");
-        portal1.setTargetPortal("target");
-        portal3 = new Portal(new Vect(4.5, 4.5), "test2");
+        portal1 = new Portal(new Vect(4.5, 4.5), "test", "target", "board");
+        portal2 = new Portal(new Vect(7.5, 7.5), "target", "target", "board");
+        portal3 = new Portal(new Vect(4.5, 4.5), "test2", "target", "board");
     }
     
     
