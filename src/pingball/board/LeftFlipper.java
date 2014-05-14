@@ -125,9 +125,9 @@ public class LeftFlipper extends Flipper {
         double targetAngle = orientationToAngle(orientation);
 
         if (flipperAngle > targetAngle && flipperAngle - targetAngle > 0.006)
-            return -Flipper.ANGULAR_SPEED;
-        if (flipperAngle < targetAngle && targetAngle - flipperAngle > 0.006)
             return Flipper.ANGULAR_SPEED;
+        if (flipperAngle < targetAngle && targetAngle - flipperAngle > 0.006)
+            return -Flipper.ANGULAR_SPEED;
         return 0;
     }
     

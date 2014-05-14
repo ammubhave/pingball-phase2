@@ -54,7 +54,7 @@ board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
   
   # adds key control to gadgets
   keydown key=z action=FlipL2
-  keydown key=c action=FlipR2
+  keydown key=x action=FlipR2
   
   keydown key=z action=FlipL1
-  keydown key=c action=FlipR1
+  keydown key=x action=FlipR1
