@@ -12,9 +12,23 @@ import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 /**
- * Testing Strategy: -Test render for each of the four corners (NW, NE, SW, SE)
- * -Test
+ * Testing Strategy:
+ * 
+ * -Test render for each of the three corners depending on its orientation
+ * 
+ * -Test the triangular bumper for all orientations (TOP_LEFT, TOP_RIGHT,
+ * BOTTOM_LEFT, BOTTOM_RIGHT
+ * 
+ * -Test reactBall method, which should reflect a ball the triangular bumper.
+ * 
+ * -Create balls approaching the triangular bumper from the left, right, top,
+ * bottom, NW corner, NE corner, SW corner, and SE corner.
+ * 
+ * -Create balls that will hit the triangular bumper from left, right, top,
+ * bottom, NW corner, NE corner, SW corner, and SE corner. Also, includes a ball
+ * currently touching the triangular bumper.
  */
+
 public class TriangularBumperGadgetTest {
     String emptyBoardString;
 
