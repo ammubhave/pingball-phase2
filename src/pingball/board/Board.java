@@ -107,11 +107,11 @@ public class Board {
     }
 
     public synchronized List<GadgetPainter> getGadgetPainters() {
-        return this.boardGadgetPainters;
+        return new ArrayList<GadgetPainter>(this.boardGadgetPainters);
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < 22; y++) {
             for (int x = 0; x < 22; x++)
@@ -412,7 +412,7 @@ public class Board {
                                toadd = false;
                         }
                     }
-                    if (toadd && portalEnabled) {
+                    if (toadd && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName()))) {
                         sendMessages.add(msg);
                     }
                 } else {
@@ -423,10 +423,10 @@ public class Board {
     }
     
     private boolean portalEnabled = false;
-    public void enablePortal() {
+    public synchronized void enablePortal() {
         portalEnabled = true;
     }
-    public void disablePortal() {
+    public synchronized void disablePortal() {
         portalEnabled = false;
     }
 
@@ -460,10 +460,11 @@ public class Board {
             if (portalMessage.getTargetBoard().equals(getName()))
                 position = new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY());
             else
-                position = portalMessage.getBallShape().getCenter();
+                position = portalMessage.getBallShape().getCenter().plus(portalMessage.getVelocity().times(0.05/200.));
             Ball ball = new Ball(portalMessage.getName(), position,
                     portalMessage.getVelocity());
             addBall(ball);
+            System.err.println(ball.getVelocity());
             this.boardGadgetPainters.add(new BallPainter(ball));
         }
     }
@@ -540,7 +541,7 @@ public class Board {
             if (msg instanceof PortalMessage) {
                 removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
                 messages.add(new PortalMessage(((PortalMessage) msg).getName(), ((PortalMessage) msg).getTargetPortal(), ((PortalMessage) msg).getTargetBoard(), ((PortalMessage) msg).getBallShape(), ((PortalMessage) msg).getVelocity(), getName()));
-            } else {                
+            } else {
                 messages.add(msg);
             }
         }
@@ -555,10 +556,10 @@ public class Board {
         }
         for (Message msg : sendMessages) {
             if (msg instanceof PortalMessage) {
-                if (((PortalMessage) msg).getTargetBoard().equals(getName())) {
-                    System.err.println("$$$");
+                if (((PortalMessage) msg).getTargetBoard().equals(getName()) && !portalEnabled) {
+                    //System.err.println("$$$");
                     onMessage(msg);
-                    System.err.println(((PortalMessage) msg).getTargetPortal());
+                    //System.err.println(((PortalMessage) msg).getTargetPortal());
                 }
             }
         }

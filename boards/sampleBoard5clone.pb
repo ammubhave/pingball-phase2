@@ -7,8 +7,8 @@ squareBumper name=Square x=4 y=12
 circleBumper name=Circle x=5 y=12
 triangleBumper name=Triangle x=7 y=12 orientation=90
 rightFlipper name=FlipperR x=5 y=5 orientation=180
-portal name=Portal1 x=10 y=5 otherBoard=buildTest otherPortal=Portal2
-portal name=Portal2 x=4 y=1 otherBoard=buildTest otherPortal=Portal1
+portal name=Portal1a x=10 y=5 otherBoard=buildTest otherPortal=Portal2b
+portal name=Portal2a x=4 y=1 otherBoard=buildTest otherPortal=Portal1b
 #fire trigger=Square action=Absorber
 #fire trigger=Circle action=Absorber
 fire trigger=Absorber action=Absorber
