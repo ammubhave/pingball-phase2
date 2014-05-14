@@ -12,15 +12,18 @@ import pingball.board.OuterWall;
 import pingball.board.OuterWall.OuterWallsOrientation;
 
 /**
- * Testing Strategy: -Test render for each of the four sides (Top, Left, Bottom,
- * Right) with and without neighbors names. -total of 8 tests for render -Test
- * reactBall method, which should reflect a ball the outer wall. -Create balls
- * approaching the outer wall from the left, right, top, bottom. For each
- * direction, test both transparent wall with a neighbor and a solid wall
- * without a neighbor. -Test leastCollisionTime method. -Create balls
- * approaching the outer wall from the left, right, top, bottom. For each
- * direction, test both transparent wall with a neighbor and a solid wall
- * without a neighbor.
+ * Testing Strategy: 
+ * -Test render for each of the four sides (Top, Left, Bottom, Right) with 
+ *  and without neighbors names. 
+ *     -total of 8 tests for render 
+ * -Test reactBall method, which should reflect a ball the outer wall. 
+ *     -Create balls approaching the outer wall from the left, right, top, bottom. 
+ *     For each direction, test both transparent wall with a neighbor and a solid 
+ *     wall without a neighbor. 
+ * -Test leastCollisionTime method. 
+ *     -Create balls approaching the outer wall from the left, right, top, bottom. 
+ *     For each direction, test both transparent wall with a neighbor and a solid 
+ *     wall without a neighbor. 
  */
 public class OuterWallsGadgetTest {
     String emptyBoardString;
@@ -208,42 +211,62 @@ public class OuterWallsGadgetTest {
 
     @Test
     public void testPerpendicularReflectionTop() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, -1));
+        topWall.reactBall(ball);
+        assertEquals(new Vect(0, 1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTransparentTop() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, -1));
+        topWall.setNeighborName("suryo");
+        topWall.reactBall(ball);
+        assertEquals(new Vect(0, -1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionLeft() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(-1, 0));
+        leftWall.reactBall(ball);
+        assertEquals(new Vect(1, 0), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTransparentLeft() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(-1, 0));
+        leftWall.setNeighborName("suryo");
+        leftWall.reactBall(ball);
+        assertEquals(new Vect(-1, 0), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionBottom() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, 1));
+        bottomWall.reactBall(ball);
+        assertEquals(new Vect(0, -1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTransparentBottom() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(0, 1));
+        bottomWall.setNeighborName("suryo");
+        bottomWall.reactBall(ball);
+        assertEquals(new Vect(0, 1), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionRight() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(1, 0));
+        rightWall.reactBall(ball);
+        assertEquals(new Vect(-1, 0), ball.getVelocity());
     }
 
     @Test
     public void testPerpendicularReflectionTransparentRight() {
-
+        Ball ball = new Ball("ball", new Vect(5, 5), new Vect(1, 0));
+        rightWall.setNeighborName("suryo");
+        rightWall.reactBall(ball);
+        assertEquals(new Vect(1, 0), ball.getVelocity());
     }
 
     // LEAST COLLISION TIME TESTS

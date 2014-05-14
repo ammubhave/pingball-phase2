@@ -12,8 +12,9 @@ import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
 
 /**
- * testing strategy: - test render for all four corners - test perpendicular
- * reflection - test equals
+ * Testing Strategy: 
+ * -Test render for each of the four corners (NW, NE, SW, SE)
+ * -Test
  */
 public class TriangularBumperGadgetTest {
     String emptyBoardString;

@@ -9,6 +9,16 @@ import physics.Vect;
 import pingball.board.Ball;
 import pingball.board.Portal;
 
+/**
+ * Testing Strategy: 
+ * -Test leastCollisionTime method.
+ *     -Create balls that will hit the portal from left, right, 
+ *     top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ * -Test reactBall method when the portal does not have a target portal.
+ *     -Create balls approaching the portal from the left, right,
+ *      top, bottom, NW corner, NE corner, SW corner, and SE corner.
+ */
+
 public class PortalTests {
     Portal portal1;
     Portal portal2;
