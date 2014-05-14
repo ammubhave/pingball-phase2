@@ -22,8 +22,8 @@ public class CircularBumperPainter implements GadgetPainter {
         g.setColor(circularBumperColor);
         g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
         
-        g.fillOval(GraphicsConstants.convertX(this.gadget.getX()-0.5),
-                   GraphicsConstants.convertY(this.gadget.getY()-0.5),
+        g.fillOval(GraphicsConstants.convertX(this.gadget.getX()),
+                   GraphicsConstants.convertY(this.gadget.getY()),
                    GraphicsConstants.CELL_SIZE,
                    GraphicsConstants.CELL_SIZE);
     }

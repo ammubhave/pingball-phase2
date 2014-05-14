@@ -22,31 +22,12 @@ public class TriangularBumperPainter implements GadgetPainter {
         g.setColor(triangularBumperColor);
         g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
         List<LineSegment> segments = gadget.getLineSegments();
-        g.drawLine(
-                GraphicsConstants.convertX(segments.get(0).p1().x()),
-                GraphicsConstants.convertY(segments.get(0).p1().y()),
-                GraphicsConstants.convertX(segments.get(0).p2().x()),
-                GraphicsConstants.convertY(segments.get(0).p2().y()));
-        g.drawLine(
-                GraphicsConstants.convertX(segments.get(1).p1().x()),
-                GraphicsConstants.convertY(segments.get(1).p1().y()),
-                GraphicsConstants.convertX(segments.get(1).p2().x()),
-                GraphicsConstants.convertY(segments.get(1).p2().y()));
-        g.drawLine(
-                GraphicsConstants.convertX(segments.get(2).p1().x()),
-                GraphicsConstants.convertY(segments.get(2).p1().y()),
-                GraphicsConstants.convertX(segments.get(2).p2().x()),
-                GraphicsConstants.convertY(segments.get(2).p2().y()));
-       /*         new int[] { 
-                        GraphicsConstants.convertX(segments.get(0).p1().x()),
-                        GraphicsConstants.convertX(segments.get(1).p1().x()),
-                        GraphicsConstants.convertX(segments.get(2).p1().x())
-                        },
-                new int[] { 
-                        GraphicsConstants.convertY(segments.get(0).p1().y()),
-                        GraphicsConstants.convertY(segments.get(1).p1().y()),
-                        GraphicsConstants.convertY(segments.get(2).p1().y())
-                        },
-                   2);*/
+        for (int i = 0; i < 3; i++) {
+            g.drawLine(
+                    GraphicsConstants.convertX(segments.get(i).p1().x()),
+                    GraphicsConstants.convertY(segments.get(i).p1().y()),
+                    GraphicsConstants.convertX(segments.get(i).p2().x()),
+                    GraphicsConstants.convertY(segments.get(i).p2().y()));
+        }
     }
 }

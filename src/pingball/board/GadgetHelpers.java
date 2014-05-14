@@ -7,7 +7,18 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 
-public class GadgetHelpers {    
+/**
+ * Helping methods for gadgets
+ *
+ */
+public class GadgetHelpers {
+    /**
+     * Computers the least collision time for the ball with the lines or circles, whichever is least
+     * @param lines the lines with which to collide
+     * @param circles the circles with which to collide
+     * @param ball the ball which is colliding
+     * @return the least time until collision
+     */
     public static double leastCollisionTime(List<LineSegment> lines, List<Circle> circles, Ball ball) {
         if (lines == null) lines = new ArrayList<LineSegment>();
         if (circles == null) circles = new ArrayList<Circle>();
@@ -28,6 +39,13 @@ public class GadgetHelpers {
         return smallestTime;
     }
 
+    /**
+     * Performs a collision of ball with lines/circles whichever is going to happen using reflectionCoefficient
+     * @param lines the lines with which to collide
+     * @param circles the circles with which to collide
+     * @param ball the ball which is colliding
+     * @param reflectionCoefficient the reflection coefficient
+     */
     public static void reflectBall(List<LineSegment> lines, List<Circle> circles, Ball ball, double reflectionCoefficient) {
         if (lines == null) lines = new ArrayList<LineSegment>();
         if (circles == null) circles = new ArrayList<Circle>();
@@ -59,7 +77,23 @@ public class GadgetHelpers {
         }
     }
     
+    /**
+     * Performs a collision of ball with lines/circles whichever is going to happen with reflection coefficient as 1.
+     * @param lines the lines with which to collide
+     * @param circles the circles with which to collide
+     * @param ball the ball which is colliding
+     */
     public static void reflectBall(List<LineSegment> lines, List<Circle> circles, Ball ball) {
         reflectBall(lines, circles, ball, 1);
+    }
+    
+    /**
+     * Calls the action method of all gadgets
+     * @param gadgets the gadgets to call action on
+     */
+    public static void callActionOnGadgets(List<Gadget> gadgets) {
+        for (Gadget gadget : gadgets) {
+            gadget.action();
+        }
     }
 }

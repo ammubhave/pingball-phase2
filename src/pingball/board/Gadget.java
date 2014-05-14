@@ -39,37 +39,34 @@ public interface Gadget {
     /**
      * Determines the smallest time until the ball is going to collide with it.
      * 
-     * @param ball
-     *            the Ball object with which it may collide
+     * @param ball the Ball object with which it may collide
      * @return the time until collision will happen
      */
     public double leastCollisionTime(Ball ball);
 
 
     /**
-     * Performs the action required once a trigger has occurred. This could
-     * involve changing the velocity/angle/position of the ball. (NOTE: The
-     * freezing may be necessary when multiple balls are interacting with one
-     * gadget: it is just there to serve as a reminder.)
+     * Performs the changes which happen to a ball when it collides with this
+     * gadget. This may involve changing the velocity/angle/position of the ball. 
      * 
-     * @param ball
-     *            the Ball object inside this.containingSquare that is
-     *            interacting with the gadget
+     * @param ball the Ball object which is interacting with the gadget
+     * @return Any messages generated from this collision
      */
     public List<Message> reactBall(Ball ball);
 
     /**
-     * Performs action of the gadget
+     * Performs action of the gadget on itself.
+     * For e.g., flips the flipper, releases the ball from absorber, etc.
      */
     public void action();
 
     /**
-     * @return x coordinate of the upper-leftmost point of the gadget
+     * @return x coordinate of the upper-leftmost point of the gadget bounding box
      */
     public double getX();
 
     /**
-     * @return y coordinate of the upper-leftmost point of the gadget
+     * @return y coordinate of the upper-leftmost point of the gadget bounding box
      */
     public double getY();
 
@@ -81,8 +78,7 @@ public interface Gadget {
     /**
      * Hooks the action of another gadget to the trigger of this gadget
      * 
-     * @param gadget
-     *            the gadget's whose action needs to be hooked
+     * @param gadget the gadget's whose action needs to be hooked
      */
     public void hookActionToTrigger(Gadget gadget);
     

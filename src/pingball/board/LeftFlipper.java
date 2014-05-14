@@ -13,20 +13,24 @@ import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.board.Flipper.FlipperOrientation;
+import pingball.board.Flipper.PivotOrientation;
 import pingball.proto.Message;
 
 /** Represents the LeftFlipper gadget class */
 
 public class LeftFlipper implements Gadget {
-
-    /**
-     * Definition of orientation: 1: top 2: bottom 3: left 4: right
+    /*
+     * Thread Safety:
+     * - All public mutations happen synchronized
+     * - The new thread which is spun also does all mutation synchronized on this flipper object
      */
+
     private FlipperOrientation orientation;
+    private final PivotOrientation pivot;
     /**
      * Definition of pivot: 1: topLeft 2: topRight 3: bottomLeft 4: bottomRight
      */
-    private final int pivot;
+    //private final int pivot;
 
     private Double flipperAngle = 0.0;
 
@@ -34,142 +38,175 @@ public class LeftFlipper implements Gadget {
     private final static double EDGE_LENGTH = 2;
     private final static double CORNER_DIAMETER = 0.5;
     private final static double CORNER_RADIUS = CORNER_DIAMETER / 2;
+    private final static double ANGULAR_SPEED = 18.8495559; // rad/sec
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> cornerCircles = new ArrayList<Circle>();
-
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
 
     private final String name;
-    private double xLoc;
-    private double yLoc;
-
-    public LeftFlipper(Vect loc, FlipperOrientation orient, String n) {
-        xLoc = loc.x();
-        yLoc = loc.y();
-
-        name = n;
-
-        this.orientation = orient;
-
-        if (orientation == FlipperOrientation.TOP) {
-            pivot = 2;
-        } else if (orientation == FlipperOrientation.BOTTOM) {
-            pivot = 3;
-        } else if (orientation == FlipperOrientation.LEFT) {
-            pivot = 1;
-        } else { // Right
-            pivot = 4;
+    private final Vect position;
+    //private double x;
+    //private double y;
+    
+    /*
+     * Rep Invariant:
+     * - attributes are non-null
+     * - orientation and pivot must be consistent
+     */
+    private synchronized void checkRep() {
+        assert orientation != null;
+        assert sides != null;
+        assert cornerCircles != null;
+        assert gadgetsToBeHooked != null;
+        assert name != null;
+        
+        switch (pivot) {
+        case TOP_LEFT: assert orientation == FlipperOrientation.LEFT || orientation == FlipperOrientation.TOP; break;
+        case TOP_RIGHT: assert orientation == FlipperOrientation.TOP || orientation == FlipperOrientation.RIGHT; break;
+        case BOTTOM_RIGHT: assert orientation == FlipperOrientation.RIGHT || orientation == FlipperOrientation.BOTTOM; break;
+        case BOTTOM_LEFT: assert orientation == FlipperOrientation.BOTTOM || orientation == FlipperOrientation.LEFT; break;
+        default: assert false;
         }
+    }
+
+    public LeftFlipper(Vect position, FlipperOrientation orientation, String name) {
+        this.position = position;
+        this.name = name;
+
+        this.orientation = orientation;
+        
+        switch (orientation) {
+        case LEFT:
+            pivot = PivotOrientation.TOP_LEFT; break;
+        case TOP:
+            pivot = PivotOrientation.TOP_RIGHT; break;
+        case RIGHT:
+            pivot = PivotOrientation.BOTTOM_RIGHT; break;
+        case BOTTOM:
+            pivot = PivotOrientation.BOTTOM_LEFT; break;
+        default:
+            throw new IllegalArgumentException("orientation is invalid");
+        }
+        
         flipperAngle = orientationToAngle(orientation);
         remakeComponents();
+        
+        checkRep();
     }
 
     public synchronized double orientationToAngle(FlipperOrientation orientation) {
-        if ((orientation == FlipperOrientation.TOP && pivot == 2)
-                || (orientation == FlipperOrientation.RIGHT && pivot == 4)
-                || (orientation == FlipperOrientation.BOTTOM && pivot == 3)
-                || (orientation == FlipperOrientation.LEFT && pivot == 1))
+        if ((orientation == FlipperOrientation.LEFT && pivot == PivotOrientation.TOP_LEFT)
+                || (orientation == FlipperOrientation.TOP && pivot == PivotOrientation.TOP_RIGHT)
+                || (orientation == FlipperOrientation.RIGHT && pivot == PivotOrientation.BOTTOM_RIGHT)
+                || (orientation == FlipperOrientation.BOTTOM && pivot == PivotOrientation.BOTTOM_LEFT))
             return 0;
         else
             return 1.57079633;
     }
 
-    public synchronized void remakeComponents() {
+    private void remakeComponents() {
         sides.clear();
         cornerCircles.clear();
 
         LineSegment l1, l2;
         Circle c1, c2;
         Angle a = new Angle(-flipperAngle);
-
-        if (pivot == 1) {
-            Vect pv = new Vect(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS);
-            /*
-             * l1 = new LineSegment(xLoc, yLoc + CORNER_RADIUS, xLoc, yLoc +
-             * EDGE_LENGTH - CORNER_RADIUS); l2 = new LineSegment(xLoc +
-             * CORNER_DIAMETER, yLoc + CORNER_RADIUS, xLoc + CORNER_DIAMETER,
-             * yLoc + EDGE_LENGTH - CORNER_RADIUS); c1 = new Circle(xLoc +
-             * CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS); c2 = new
-             * Circle(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS,
-             * CORNER_RADIUS);
-             */
-            l1 = Geometry.rotateAround(new LineSegment(xLoc, yLoc + CORNER_RADIUS, xLoc, yLoc + EDGE_LENGTH
+        
+        double x = this.position.x();
+        double y = this.position.y();
+        Vect pv = this.getPivotVect();
+        
+        if (pivot == PivotOrientation.TOP_LEFT) {
+            
+            l1 = Geometry.rotateAround(new LineSegment(x, y + CORNER_RADIUS, x, y + EDGE_LENGTH
                     - CORNER_RADIUS), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(xLoc + CORNER_DIAMETER, yLoc + CORNER_RADIUS, xLoc
-                    + CORNER_DIAMETER, yLoc + EDGE_LENGTH - CORNER_RADIUS), pv, a);
-            c1 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS,
+            l2 = Geometry.rotateAround(new LineSegment(x + CORNER_DIAMETER, y + CORNER_RADIUS, x
+                    + CORNER_DIAMETER, y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            c1 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
+            c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
-        } else if (pivot == 2) {
-            Vect pv = new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS);
-            l1 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_DIAMETER, xLoc
-                    + CORNER_RADIUS, yLoc + CORNER_DIAMETER), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc, xLoc + CORNER_RADIUS,
-                    yLoc), pv, a);
-            c1 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS,
+            
+        } else if (pivot == PivotOrientation.TOP_RIGHT) {
+            
+            l1 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_DIAMETER, x
+                    + CORNER_RADIUS, y + CORNER_DIAMETER), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH - CORNER_RADIUS, y, x + CORNER_RADIUS,
+                    y), pv, a);
+            c1 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-        } else if (pivot == 4) {
-            Vect pv = new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
-            l1 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + EDGE_LENGTH
-                    - CORNER_RADIUS, xLoc + EDGE_LENGTH - CORNER_DIAMETER, yLoc + CORNER_RADIUS), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(xLoc + EDGE_LENGTH, yLoc + EDGE_LENGTH - CORNER_RADIUS, xLoc
-                    + EDGE_LENGTH, yLoc + CORNER_RADIUS), pv, a);
-            c1 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS,
+            c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
+            
+        } else if (pivot == PivotOrientation.BOTTOM_RIGHT) {
+            
+            l1 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH - CORNER_DIAMETER, y + EDGE_LENGTH
+                    - CORNER_RADIUS, x + EDGE_LENGTH - CORNER_DIAMETER, y + CORNER_RADIUS), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH, y + EDGE_LENGTH - CORNER_RADIUS, x
+                    + EDGE_LENGTH, y + CORNER_RADIUS), pv, a);
+            c1 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH
+            c2 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + EDGE_LENGTH
                     - CORNER_RADIUS, CORNER_RADIUS), pv, a);
-        } else {
-            Vect pv = new Vect(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
-            l1 = Geometry.rotateAround(new LineSegment(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS, xLoc
-                    + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH, xLoc + EDGE_LENGTH
-                    - CORNER_RADIUS, yLoc + EDGE_LENGTH), pv, a);
-            c1 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS,
+            
+        } else { // BOTTOM_LEFT
+            
+            l1 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS, x
+                    + EDGE_LENGTH - CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + EDGE_LENGTH, x + EDGE_LENGTH
+                    - CORNER_RADIUS, y + EDGE_LENGTH), pv, a);
+            c1 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS, CORNER_RADIUS), pv, a);
+            c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
         }
 
         sides.add(l1);
         sides.add(l2);
         cornerCircles.add(c1);
         cornerCircles.add(c2);
+        
+        checkRep();
     }
 
     @Override
     public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
+        GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
     @Override
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
     }
-
+    
+    /**
+     * Gets the pivot vector
+     * @return the pivot vector
+     */
     private synchronized Vect getPivotVect() {
-        if (pivot == 1)
-            return new Vect(xLoc + CORNER_RADIUS, yLoc + CORNER_RADIUS);
-        else if (pivot == 2)
-            return new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + CORNER_RADIUS);
-        else if (pivot == 3)
-            return new Vect(xLoc + CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
-        else
-            return new Vect(xLoc + EDGE_LENGTH - CORNER_RADIUS, yLoc + EDGE_LENGTH - CORNER_RADIUS);
+        if (pivot == PivotOrientation.TOP_LEFT)
+            return new Vect(this.position.x() + CORNER_RADIUS, this.position.y() + CORNER_RADIUS);
+        else if (pivot == PivotOrientation.TOP_RIGHT)
+            return new Vect(this.position.x() + EDGE_LENGTH - CORNER_RADIUS, this.position.y() + CORNER_RADIUS);
+        else if (pivot == PivotOrientation.BOTTOM_LEFT)
+            return new Vect(this.position.x() + CORNER_RADIUS, this.position.y() + EDGE_LENGTH - CORNER_RADIUS);
+        else // BOTTOM_RIGHT
+            return new Vect(this.position.x() + EDGE_LENGTH - CORNER_RADIUS, this.position.y() + EDGE_LENGTH - CORNER_RADIUS);
     }
 
+    /**
+     * Gets the rotational velocity of the flipper
+     * @return the rotational velocity of the flipper
+     */
     private synchronized double getVelocity() {
         double targetAngle = orientationToAngle(orientation);
 
         if (flipperAngle > targetAngle && flipperAngle - targetAngle > 0.006)
-            return -18.8495559;
+            return -ANGULAR_SPEED;
         if (flipperAngle < targetAngle && targetAngle - flipperAngle > 0.006)
-            return 18.8495559;
+            return ANGULAR_SPEED;
         return 0;
     }
 
+    @Override
     public synchronized List<Message> reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         List<LineSegment> lines = sides;
@@ -221,57 +258,33 @@ public class LeftFlipper implements Gadget {
         double smallestTime = Double.POSITIVE_INFINITY;
         for (LineSegment ls : lines) {
             double time = Geometry.timeUntilRotatingWallCollision(ls, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
-                    //(ls, ball.getCircle(), ball.getVelocity());
             if (time <= smallestTime) {
                 smallestTime = time;
             }
         }
         for (Circle circ : circles) {
             double time = Geometry.timeUntilRotatingCircleCollision(circ, getPivotVect(), getVelocity(), ball.getCircle(), ball.getVelocity());
-                    //lCircleCollision(circ, ball.getCircle(), ball.getVelocity());
             if (time <= smallestTime) {
                 smallestTime = time;
             }
         }
-        //czreturn smallestTime;
-        return Math.max(smallestTime - 2*0.05/200., 0);
+        return Math.max(smallestTime, 0);
     }
-
-    /*
-     * /** Changes the orientation of the flipper
-     * 
-     * @param orientation of the flipper before
-     * 
-     * private void changeFlipperOrientation(FlipperOrientation orientation) {
-     * if (orientation == FlipperOrientation.TOP) { oneLineFlipper = new
-     * LineSegment(xLoc, yLoc, xLoc + 2, yLoc); topLine = new LineSegment(xLoc,
-     * yLoc, xLoc + 2, yLoc); leftLine = new LineSegment(xLoc, yLoc, xLoc, yLoc
-     * + 0.5); rightLine = new LineSegment(xLoc + 2, yLoc, xLoc + 2, yLoc +
-     * 0.5); bottomLine = new LineSegment(xLoc, yLoc + 0.5, xLoc + 2, yLoc +
-     * 0.5); } else if (orientation == FlipperOrientation.BOTTOM) {
-     * oneLineFlipper = new LineSegment(xLoc, yLoc + 2, xLoc + 2, yLoc + 2);
-     * topLine = new LineSegment(xLoc, yLoc + 1.5, xLoc + 2, yLoc + 1.5);
-     * leftLine = new LineSegment(xLoc, yLoc + 1.5, xLoc, yLoc + 2); rightLine =
-     * new LineSegment(xLoc + 2, yLoc + 1.5, xLoc + 2, yLoc + 2); bottomLine =
-     * new LineSegment(xLoc, yLoc + 2, xLoc + 2, yLoc + 2); } else if
-     * (orientation == FlipperOrientation.LEFT) { oneLineFlipper = new
-     * LineSegment(xLoc, yLoc, xLoc, yLoc + 2); topLine = new LineSegment(xLoc,
-     * yLoc, xLoc + 0.5, yLoc); leftLine = new LineSegment(xLoc, yLoc, xLoc,
-     * yLoc + 2); rightLine = new LineSegment(xLoc + 0.5, yLoc, xLoc + 0.5, yLoc
-     * + 2); bottomLine = new LineSegment(xLoc, yLoc + 2, xLoc + 0.5, yLoc + 2);
-     * } else { // RIGHT oneLineFlipper = new LineSegment(xLoc + 2, yLoc, xLoc +
-     * 2, yLoc + 2); topLine = new LineSegment(xLoc + 1.5, yLoc, xLoc + 2,
-     * yLoc); leftLine = new LineSegment(xLoc + 1.5, yLoc, xLoc + 1.5, yLoc +
-     * 2); rightLine = new LineSegment(xLoc + 2, yLoc, xLoc + 2, yLoc + 2);
-     * bottomLine = new LineSegment(xLoc + 1.5, yLoc + 2, xLoc + 2, yLoc + 2); }
-     * }
-     */
-
+    
     private ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-
     class FlipperRotator extends TimerTask {
-        LeftFlipper flipper;
-        int direction; // 1 -> positive, -1 -> negative
+        private LeftFlipper flipper;
+        private int direction; // 1 -> positive, -1 -> negative
+        
+        /*
+         * Rep Invariant:
+         * - flipper should be non-null
+         * - direction should be either 1 or -1
+         */
+        private void checkRep() {
+            assert flipper != null;
+            assert direction == 1 || direction == -1;
+        }
 
         public FlipperRotator(LeftFlipper flipper) {
             this.flipper = flipper;
@@ -281,6 +294,8 @@ public class LeftFlipper implements Gadget {
             } else {
                 direction = 1;
             }
+            
+            checkRep();
         }
 
         @Override
@@ -293,14 +308,14 @@ public class LeftFlipper implements Gadget {
                         exec.shutdownNow();
                         return;
                     }
-                    flipperAngle -= 18.8495559 * dt;
+                    flipperAngle -= ANGULAR_SPEED * dt;
                     remakeComponents();
                 } else {
                     if (flipperAngle >= targetAngle) {
                         exec.shutdownNow();
                         return;
                     }
-                    flipperAngle += 18.8495559 * dt;
+                    flipperAngle += ANGULAR_SPEED * dt;
                     remakeComponents();
                 }
             }
@@ -318,68 +333,46 @@ public class LeftFlipper implements Gadget {
     @Override
     public synchronized void action() {
         moveFlipper();
-        /*
-         * if (rotatorThread != null && rotatorThread.isAlive()) {
-         * rotatorThread.interrupt(); try { rotatorThread.join(); } catch
-         * (InterruptedException e) { e.printStackTrace(); } }
-         */
+        
+        // Stop any running rotations
         if (exec.getActiveCount() >= 0) {
             exec.shutdownNow();
         }
+
         exec = new ScheduledThreadPoolExecutor(1);
         double BOARD_REFRESH_INTERVAL = 0.05 / 200.0;
         exec.scheduleAtFixedRate(new FlipperRotator(this), 0, (long) (BOARD_REFRESH_INTERVAL * 1000 * 1000),
                 TimeUnit.MICROSECONDS);
-
-        // exec.scheduleAtFixedRate(new BoardPrinterTask(), 0,
-        // (long)(BOARD_REFRESH_INTERVAL*1000*1000), TimeUnit.MICROSECONDS);
-
-        // rotatorThread = new Thread(new FlipperRotator());
-        // rotatorThread.start();
-
     }
 
     public synchronized void moveFlipper() {
         if (orientation == FlipperOrientation.TOP) {
-            if (pivot == 1) {
+            if (pivot == PivotOrientation.TOP_LEFT) {
                 orientation = FlipperOrientation.LEFT;
-            } else {
+            } else { // TOP_RIGHT
                 orientation = FlipperOrientation.RIGHT;
             }
         } else if (orientation == FlipperOrientation.BOTTOM) {
-            if (pivot == 3) {
+            if (pivot == PivotOrientation.BOTTOM_LEFT) {
                 orientation = FlipperOrientation.LEFT;
-            } else {
+            } else { // BOTTOM_RIGHT
                 orientation = FlipperOrientation.RIGHT;
             }
         } else if (orientation == FlipperOrientation.LEFT) {
-            if (pivot == 1) {
+            if (pivot == PivotOrientation.TOP_LEFT) {
                 orientation = FlipperOrientation.TOP;
-            } else {
+            } else { // BOTTOM_LEFT
                 orientation = FlipperOrientation.BOTTOM;
             }
         } else { // RIGHT
-            if (pivot == 2) {
+            if (pivot == PivotOrientation.TOP_RIGHT) {
                 orientation = FlipperOrientation.TOP;
-            } else {
+            } else { // BOTTOM_RIGHT
                 orientation = FlipperOrientation.BOTTOM;
             }
         }
-    }
-
-    /**
-     * Returns String representation of the board depending on whether it's
-     * vertical or not. Does not support diagonal flippers
-     * 
-     * @return string representation of a flipper
-     */
-    @Override
-    public synchronized String toString() {
-        if (orientation == FlipperOrientation.TOP || orientation == FlipperOrientation.BOTTOM) {
-            return "_";
-        } else {
-            return "|";
-        }
+        
+        checkRep();
     }
 
     /** Returns the name of the LeftFlipper gadget */
@@ -388,20 +381,10 @@ public class LeftFlipper implements Gadget {
         return name;
     }
 
-    /**
-     * Returns a string describing the orientation of the flipper.
-     * 
-     * @return orientation of flipper
-     */
-    public synchronized FlipperOrientation getOrientation() {
-        return this.orientation;
-    }
-
     @Override
     public synchronized String render(String input) {
         StringBuilder sb = new StringBuilder(input);
-        Vect position = new Vect(this.xLoc, this.yLoc);
-        // I am assuming NW=TOP, NE=RIGHT, SE=LEFT, SW=BOTTOM
+        Vect position = new Vect(this.position.x(), this.position.y());
         if (this.orientation == FlipperOrientation.TOP) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '-');
             sb.setCharAt(Board.getBoardStringIndexFromVect(position) + 1, '-');
@@ -420,11 +403,17 @@ public class LeftFlipper implements Gadget {
 
     @Override
     public double getX() {
-        return this.xLoc;
+        return this.position.x();
     }
 
     @Override
     public double getY() {
-        return this.yLoc;
+        return this.position.y();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof LeftFlipper)) return false;
+        return ((LeftFlipper)obj).getName().equals(this.getName());
     }
 }

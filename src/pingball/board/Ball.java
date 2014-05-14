@@ -11,9 +11,9 @@ import physics.Vect;
  */
 
 public class Ball {
-    /**
+    /*
      * Thread Safety Information: The ball class will be threadsafe because
-     * all access to position or velocity first synchronize on them separately.
+     * all access to position or velocity first synchronize.
      * Vect is immutable so makes those parts of code thread safe (prevents rep exposure)
      */
 
@@ -26,14 +26,26 @@ public class Ball {
 
     /**
      * Creates a new Ball object
-     * @param ballName the name of the ball
-     * @param pos the position of the ball
-     * @param vel the velocity of the ball
+     * @param name the name of the ball
+     * @param position the position of the ball
+     * @param velocity the velocity of the ball
      */
-    public Ball(String ballName, Vect pos, Vect vel) {
-        this.position = pos;
-        this.velocity = vel;
-        name = ballName;
+    public Ball(String name, Vect position, Vect velocity) {
+        this.position = position;
+        this.velocity = velocity;
+        this.name = name;
+        
+        checkRep();
+    }
+    
+    /*
+     *  Rep Invariant:
+     *  - no attributes should be null
+     */
+    private void checkRep() {
+        assert position != null;
+        assert velocity != null;
+        assert name != null;
     }
 
     /**
@@ -41,7 +53,7 @@ public class Ball {
      * 
      * @return Vect form of position
      */
-    public synchronized Vect getPos() {        
+    public synchronized Vect getPos() {
         return position;
     }
 
@@ -77,6 +89,8 @@ public class Ball {
      */
     public synchronized void changePos(Vect newPos) {
         position = newPos;
+        
+        checkRep();
     }
 
     /**
@@ -86,6 +100,8 @@ public class Ball {
      */
     public synchronized void changeVelocity(Vect newVel) {
         velocity = newVel;
+        
+        checkRep();
     }
     
     /**
@@ -99,4 +115,9 @@ public class Ball {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Ball)) return false;
+        return ((Ball)obj).getName().equals(this.getName());
+    }
 }

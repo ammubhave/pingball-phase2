@@ -16,27 +16,40 @@ public class Portal implements Gadget {
     private final static double RADIUS = 0.5;
 
     private final String name;
-    private Vect position;
-    private Circle portal;
+    private final Vect position;
+    private final Circle portal;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-    private String targetPortalName;
-    private String targetBoardName;
+    private final String targetPortalName;
+    private final String targetBoardName;
+    
+    /*
+     * Rep Invariant:
+     * - Everything is non-null;
+     */
+    private void checkRep() {
+        assert name != null;
+        assert position != null;
+        assert portal != null;
+        assert gadgetsToBeHooked != null;
+        assert targetPortalName != null;
+        assert targetBoardName != null;
+    }
 
-    public Portal(Vect loc, String n) {
-        name = n;
-        position = loc;
-        double centerX = loc.x() + RADIUS;
-        double centerY = loc.y() + RADIUS;
+    public Portal(Vect position, String name, String targetPortalName, String targetBoardName) {
+        this.name = name;
+        this.position = position;
+        double centerX = position.x() + RADIUS;
+        double centerY = position.y() + RADIUS;
         portal = new Circle(centerX, centerY, RADIUS);
-        targetPortalName = null;
-        targetBoardName = null;
+        this.targetPortalName = targetPortalName;
+        this.targetBoardName = targetBoardName;
+        
+        checkRep();
     }
 
     @Override
     public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
+        GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
     @Override
@@ -52,7 +65,7 @@ public class Portal implements Gadget {
         if (this.targetPortalName == null) {
             return new ArrayList<Message>();
         }
-        // System.err.println(targetBoardName);
+
         PortalMessage message = new PortalMessage(ball.getName(),
                 this.targetPortalName, this.targetBoardName, ball.getCircle(),
                 ball.getVelocity(), null);
@@ -65,50 +78,32 @@ public class Portal implements Gadget {
     public void action() {
     }
 
-    public synchronized double getX() {
+    @Override
+    public double getX() {
         return portal.getCenter().x();
     }
 
     @Override
-    public synchronized double getY() {
+    public double getY() {
         return portal.getCenter().y();
     }
 
     @Override
-    public synchronized String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
+        
+        checkRep();
     }
 
     @Override
-    public synchronized String render(String input) {
+    public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), '@');
         return sb.toString();
     }
-
-    /**
-     * Set the name of the target portal.
-     * 
-     * @param otherPortal
-     *            the name of the target portal name
-     */
-    public synchronized void setTargetPortal(String otherPortal) {
-        targetPortalName = otherPortal;
-    }
-
-    /**
-     * Set the name of the target board.
-     * 
-     * @param otherBoard
-     *            the name of the target board name
-     */
-    public synchronized void setTargetBoard(String otherBoard) {
-        targetBoardName = otherBoard;
-    }
-
 }

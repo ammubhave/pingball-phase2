@@ -13,26 +13,38 @@ import pingball.proto.Message;
  * Represents the outer walls in pingball
  */
 public class OuterWall implements Gadget {
+    /**
+     * Thread Safety:
+     * - the mutable neighborName is modified synchronized, render which accesses neighborName is synchronized
+     * - all others are final and not mutated
+     */
+    
     private String neighborName;
-    private int width;
-    private int height;
-    private Vect position;
-    private OuterWallsOrientation orientation;
-    private double coefficientOfReflection;
-    private String name;
+    
+    private final int width;
+    private final int height;
+    private final Vect position;
+    private final OuterWallsOrientation orientation;
+    private final String name;    
+    private final static double REFL_COEFF = 1;
 
     /**
-     * Abstraction Function: The width, height, position and
-     * coefficientOfReflection is the respective property of the gadget.
-     * neighborName is the name of the neighboring board hookedGadgets are all
-     * the gadgets which are hooked to this gadget.
-     * 
-     * Rep Invariant: The width and the height should be nonnegative. The
-     * position should not be null.
+     * Rep Invariant:
+     * - everything should be non-null (except neighborName)
      */
 
     private void checkRep() {
         assert position != null;
+        assert orientation != null;
+        assert name != null;
+        
+        switch (orientation) {
+        case HORIZONTAL:
+        case VERTICAL:
+            break;
+        default:
+            assert false;
+        }
     }
 
     /**
@@ -53,28 +65,15 @@ public class OuterWall implements Gadget {
      * @param coefficientOfReflection
      *            the coefficient of reflection
      */
-    public OuterWall(Vect position, OuterWallsOrientation orientation, double coefficientOfReflection, String name) {
-        this.height = 20;
-        this.width = 20;
+    public OuterWall(Vect position, OuterWallsOrientation orientation, String name) {
+        this.height = Board.DEFAULT_SIZE;
+        this.width = Board.DEFAULT_SIZE;
         this.position = position;
         this.orientation = orientation;
-        this.coefficientOfReflection = coefficientOfReflection;
         this.neighborName = null;
         this.name = name;
+        
         checkRep();
-    }
-
-    /**
-     * Creates a new gadget to represent the outer walls with the given
-     * position, orientation. The coefficient of reflection is 1.0
-     * 
-     * @param position
-     *            the position of the top left vertex of the wall.
-     * @param orientation
-     *            the orientation of the wall
-     */
-    public OuterWall(Vect position, OuterWallsOrientation orientation, String name) {
-        this(position, orientation, 1.0, name);
     }
 
     @Override
@@ -82,27 +81,23 @@ public class OuterWall implements Gadget {
         return this.name;
     }
 
-    public Vect getPos() {
-        return this.position;
-    }
-
     /**
-     * Gets the name of the neighbor board if connected.
-     * 
+     * Gets the name of the neighbor board if connected. Otherwise null.
      * @return the name of the neighbor board
      */
-    public String getNeighborName() {
+    public synchronized String getNeighborName() {
         return this.neighborName;
     }
 
     /**
      * Set the name of the neighbor board.
-     * 
-     * @param neighborName
-     *            the name of the neighbor board
+     * A value of null means that no board is connected
+     * @param neighborName the name of the neighbor board
      */
-    public void setNeighborName(String neighborName) {
+    public synchronized void setNeighborName(String neighborName) {
         this.neighborName = neighborName;
+        
+        checkRep();
     }
 
     @Override
@@ -126,9 +121,6 @@ public class OuterWall implements Gadget {
                     this.position.plus(new Vect(0, 21)).plus(delta)), ball.getCircle(), ball.getVelocity());
         }
         throw new RuntimeException("This wall is in illegal state");
-    }
-
-    public void doAction() {
     }
 
     @Override
@@ -185,26 +177,30 @@ public class OuterWall implements Gadget {
         case HORIZONTAL:
             ball.changeVelocity(Geometry.reflectWall(
                     new LineSegment(this.position.plus(new Vect(-1, 0)), this.position.plus(new Vect(21, 0))),
-                    ball.getVelocity(), this.coefficientOfReflection));
+                    ball.getVelocity(), REFL_COEFF));
             break;
         case VERTICAL:
             delta = new Vect(0, 0);
             if (this.position.equals(new Vect(21, 0)))
                 delta = new Vect(-1, 0);
             ball.changeVelocity(Geometry.reflectWall(new LineSegment(this.position.plus(new Vect(0, -1)).plus(delta),
-                    this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), this.coefficientOfReflection));
+                    this.position.plus(new Vect(0, 21)).plus(delta)), ball.getVelocity(), REFL_COEFF));
             break;
         }
 
         return new ArrayList<Message>();
     }
+    
+    /**
+     * Returns the orientaton of this wall
+     * @return the orientaton of the wall
+     */
+    public OuterWallsOrientation getOrientation() {
+        return this.orientation;
+    }
 
     @Override
     public void action() {
-    }
-
-    public OuterWallsOrientation getOrientation() {
-        return this.orientation;
     }
 
     @Override

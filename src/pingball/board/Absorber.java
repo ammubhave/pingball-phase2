@@ -12,16 +12,14 @@ import pingball.proto.Message;
 /** This class represents an Absorber Gadget */
 
 public class Absorber implements Gadget {
-    /**
-     * Thread Safety Information: Absorber is threadsafe because it is only
-     * modifiable by one ball at a time due to the setup of the client handler.
-     * 
+    /*
+     * Thread Safety Information: Absorber is threadsafe because
+     * - The only mutable attribute is 'heldBall' and it is accessed in synchronized manner.
+     * - gadgetsToBeHooked is only modified in factory.
+     * - All other attributes are immutable
      */
     private final int width; // measured horizontally
     private final int height; // measured vertically
-    private final double xLocation; // Starting x-coordinate
-    private final double yLocation; // Starting y-coordinate
-
     private final Vect position;
 
     private Ball heldBall = null;
@@ -31,172 +29,140 @@ public class Absorber implements Gadget {
     private final String name;
 
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> cornerCircles = new ArrayList<Circle>();
+    
+    /*
+     * Rep Invariant:
+     * - heldBall, if non-null, should be within the bounds of the absorber
+     * - width, height must be positive
+     * - all others must be non-null
+     */
+    private void checkRep() {
+        assert position != null;
+        assert sides != null;
+        assert cornerCircles != null;
+        assert gadgetsToBeHooked != null;
+        assert name != null;
+        
+        if (heldBall != null) {
+            assert heldBall.getCircle().getCenter().x() > position.x();
+            assert heldBall.getCircle().getCenter().x() < position.x() + width;
+            assert heldBall.getCircle().getCenter().y() > position.y();
+            assert heldBall.getCircle().getCenter().y() < position.y() + height;
+        }
+        
+        assert width > 0;
+        assert height > 0;        
+    }
 
     /**
      * Creates an absorber gadget with the following user-inputted parameters.
      * 
-     * @param loc
-     *            , vector representing the starting location
-     * @param width
-     *            , horizontal distance of absorber
-     * @param height
-     *            , vertical distance of absorber
-     * @param isSelfTriggerable
-     *            , whether absorber shoots out a ball when it's hit by one
-     * @param n
-     *            , name of absorber
+     * @param position vector representing the starting location
+     * @param width horizontal distance of absorber
+     * @param height vertical distance of absorber
+     * @param name name of absorber
      */
-    public Absorber(Vect loc, int width, int height, String n) {
-        name = n;
+    public Absorber(Vect position, int width, int height, String name) {
+        this.position = position;
+        this.name = name;
         this.width = width;
         this.height = height;
+        
+        double x = this.position.x();
+        double y = this.position.y();
 
-        xLocation = loc.x();
-        yLocation = loc.y();
+        sides.add(new LineSegment(x, y, x + width, y));                     // Top Line
+        sides.add(new LineSegment(x, y + height, x + width, y + height));   // Bottom Line
+        sides.add(new LineSegment(x, y, x, y + height));                    // Left Line
+        sides.add(new LineSegment(x + width, y, x + width, y + height));    // Right Line
 
-        this.position = new Vect(xLocation, yLocation);
-
-        sides.add(new LineSegment(xLocation, yLocation, xLocation + width, yLocation));
-        sides.add(new LineSegment(xLocation, yLocation + height, xLocation + width, yLocation + height));
-        sides.add(new LineSegment(xLocation, yLocation, xLocation, yLocation + height));
-        sides.add(new LineSegment(xLocation + width, yLocation, xLocation + width, yLocation + height));
-
-        cornerCircles.add(new Circle(xLocation, yLocation, 0));
-        cornerCircles.add(new Circle(xLocation + width, yLocation, 0));
-        cornerCircles.add(new Circle(xLocation, yLocation + height, 0));
-        cornerCircles.add(new Circle(xLocation + width, yLocation + height, 0));
+        cornerCircles.add(new Circle(x, y, 0));                             // Top Left Circle
+        cornerCircles.add(new Circle(x + width, y, 0));                     // Top Right Circle
+        cornerCircles.add(new Circle(x, y + height, 0));                    // Bottom Left Circle
+        cornerCircles.add(new Circle(x + width, y + height, 0));            // Bottom Right Circle
+        
+        checkRep();
     }
 
     @Override
-    public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
+    public void trigger() { 
+        GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
-    /*
-     * Returns the smallest collision time and the colliding wall for that ball
-     * 
-     * @param ball the ball for which info is to be taken
-     * 
-     * @return tuple of collision info
-     * 
-     * private Tuple<Double, LineSegment> getCollisionInfo(Ball ball) { /* class
-     * TupleDLs extends Tuple<Double, LineSegment> { public TupleDLs(Double x,
-     * LineSegment y) { super(x, y); } }
-     * 
-     * Function<LineSegment, TupleDLs> mapper = new Function<LineSegment,
-     * TupleDLs>() {
-     * 
-     * @Override public TupleDLs apply(LineSegment t) { return new TupleDLs(
-     * Geometry.timeUntilWallCollision(t, ball.getCircle(), ball.getVelocity()),
-     * t ); } }; List<TupleDLs> mapped = map(mapper, sides);
-     * 
-     * BinOp<TupleDLs, TupleDLs, TupleDLs> reducer = new BinOp<TupleDLs,
-     * TupleDLs, TupleDLs>() {
-     * 
-     * @Override public TupleDLs apply(TupleDLs t, TupleDLs u) { return t.x <
-     * u.x ? t : u; } }; return reduce(mapped, reducer, new
-     * TupleDLs(Double.POSITIVE_INFINITY, null)); double smallestTime =
-     * Double.POSITIVE_INFINITY; LineSegment smallestTimeWall = null; for
-     * (LineSegment ls : sides) { double time =
-     * Geometry.timeUntilWallCollision(ls, ball.getCircle(),
-     * ball.getVelocity()); if (time <= smallestTime) { smallestTime = time;
-     * smallestTimeWall = ls; } } return new Tuple<Double,
-     * LineSegment>(smallestTime, smallestTimeWall); }
-     */
-
-    /**
-     * Calculates time on ball will take to hit this bumper if it travelled in
-     * straight line.
-     * 
-     * @param ball
-     *            the ball to check
-     * @return amount of time to take to trigger object based on inputted ball.
-     */
     @Override
     public double leastCollisionTime(Ball ball) {
         return GadgetHelpers.leastCollisionTime(sides, cornerCircles, ball);
     }
 
-    /**
-     * Called when inputted ball is less than 0.001 seconds from impacting
-     * gadget (as found out from the trigger function). Handles the resulting
-     * physics of when given ball collides with this bumper.
-     */
     @Override
-    public void action() {
+    public synchronized void action() {
+        // Only shoot is there a ball to shoot
         if (heldBall != null) {
             heldBall.changeVelocity(SHOOT_VELOCITY);
-            heldBall.changePos(new Vect(xLocation + width - 0.25, yLocation - 0.25));
-            System.out.println(heldBall.getVelocity());
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() - 0.25));
             heldBall = null;
         }
+        
+        checkRep();
     }
 
-    public List<Message> reactBall(Ball ball) {
+    @Override
+    public synchronized List<Message> reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         if (heldBall != null && !isInside(ball)) {
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
         } else if (heldBall == null) {
-            ball.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
+            ball.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
             ball.changeVelocity(new Vect(0, 0));
             heldBall = ball;
         } else {
-            heldBall.changePos(new Vect(xLocation + width - 0.25, yLocation + height - 0.25));
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
             heldBall.changeVelocity(new Vect(0, 0));
         }
 
         this.trigger();
+        
         return new ArrayList<Message>();
     }
 
-    /** @return: upper left x coordinate of absorber */
+    @Override
     public double getX() {
-        return xLocation;
+        return this.position.x();
     }
 
-    /** @return: upper left y coordinate of absorber */
+    @Override
     public double getY() {
-        return yLocation;
-    }
-
-    /** @return: width of absorber */
-    public int getWidth() {
-        return width;
-    }
-
-    /** @return: height of absorber */
-
-    public int getHeight() {
-        return height;
-    }
-
-    public List<LineSegment> getLineSegments() {
-        return this.sides;
+        return this.position.y();
     }
 
     /**
-     * @param ball
-     *            , ball to check if it's in absorber
-     * @return: true if ball is inside absorber
+     * Returns LineSegments representing the absorber.
+     * @return List of line segments representing the absorber
+     */
+    public List<LineSegment> getLineSegments() {
+        return new ArrayList<LineSegment>(this.sides);
+    }
+
+    /**
+     * @param ball ball to check if it's in absorber
+     * @return true if ball is inside absorber
      */
     public boolean isInside(Ball ball) {
         double x = ball.getPos().x();
         double y = ball.getPos().y();
-        return (xLocation < x && x < xLocation + width && yLocation < y && y < yLocation + height);
+        return (x < x && x < x + width && y < y && y < y + height);
     }
 
-    /** @return: name of absorber */
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void hookActionToTrigger(Gadget gadget) {
-        gadgetsToBeHooked.add(gadget);
+        gadgetsToBeHooked.add(gadget);       
     }
 
     @Override
@@ -207,7 +173,12 @@ public class Absorber implements Gadget {
             for (int x = (int) position.x(); x < (int) position.x() + width; x++)
                 sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)), '=');
 
-        return sb.toString();
+        return sb.toString();        
     }
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Absorber)) return false;
+        return ((Absorber)obj).getName().equals(this.getName());
+    }
 }

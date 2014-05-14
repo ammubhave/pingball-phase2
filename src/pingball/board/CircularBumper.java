@@ -13,46 +13,37 @@ public class CircularBumper implements Gadget {
 
     /**
      * Thread Safety Information: CircularBumper is threadsafe because it is
-     * never altered after creation.
+     * never altered after creation. (immutable)
+     * - gadgetsToBeHooked is only modified in factory.
      */
 
-    // Following are constants specified by the project
     private final double REFL_COEFF = 1.0;
     private final static double RADIUS = 0.5;
 
     private final String name;
-    private Vect position;
+    private final Vect position;
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
-    private Circle circleGadget;
+    private final Circle circleGadget;
 
     /**
-     * Creates a circle bumper with the user-inputted parameters. Has a radius
-     * of 0.5
-     * 
-     * @param loc
-     *            , vector of the center of the bumper
-     * @param n
-     *            , name
+     * Creates a circle bumper with the user-inputted parameters. Has a radius 0.5 L
+     * @param loc vector of the center of the bumper
+     * @param n name
      */
-    public CircularBumper(Vect loc, String n) {
-        name = n;
-        position = loc;
-        double centerX = loc.x() + RADIUS;
-        double centerY = loc.y() + RADIUS;
+    public CircularBumper(Vect position, String name) {
+        this.name = name;
+        this.position = position;
+        double centerX = position.x() + RADIUS;
+        double centerY = position.y() + RADIUS;
         circleGadget = new Circle(centerX, centerY, RADIUS);
     }
 
+    @Override
     public void trigger() {
-        for (int i = 0; i < gadgetsToBeHooked.size(); i++) {
-            gadgetsToBeHooked.get(i).action();
-        }
+        GadgetHelpers.callActionOnGadgets(gadgetsToBeHooked);
     }
 
-    /**
-     * Called when inputted ball is less than 0.001 seconds from impacting
-     * gadget (as found out from the trigger function). Handles the resulting
-     * physics of when given ball collides with this bumper.
-     */
+    @Override
     public void action() {
     }
 
@@ -70,48 +61,22 @@ public class CircularBumper implements Gadget {
         return Geometry.timeUntilCircleCollision(circleGadget, ball.getCircle(), velocity);
     }
 
-    /**
-     * @return the reflection coefficient
-     */
-    public double getReflCoeff() {
-        return REFL_COEFF;
-    }
-
-    /** @return a vector indicating the center of the circle */
-    public Vect getPos() {
-        return circleGadget.getCenter();
-    }
-
-    /**
-     * @return a string representation of a circular bumper as seen on the
-     *         board.
-     */
     @Override
-    public String toString() {
-        return "0";
-    }
-
-    /**
-     * @return x coordinate of the center of bumper
-     */
     public double getX() {
-        return circleGadget.getCenter().x();
+        return circleGadget.getCenter().x() - RADIUS;
     }
 
-    /**
-     * @return y coordinate of the center of bumper
-     */
+    @Override
     public double getY() {
-        return circleGadget.getCenter().y();
+        return circleGadget.getCenter().y() - RADIUS;
     }
 
-    /**
-     * @return name of the bumper
-     */
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public List<Message> reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(),
@@ -132,5 +97,10 @@ public class CircularBumper implements Gadget {
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'O');
         return sb.toString();
     }
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CircularBumper)) return false;
+        return ((CircularBumper)obj).getName().equals(this.getName());
+    }
 }
