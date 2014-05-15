@@ -14,11 +14,13 @@ import javax.swing.JFrame;
 import physics.Vect;
 import pingball.board.Ball;
 import pingball.board.Board;
+import pingball.board.CircularBumper;
 import pingball.board.SquareBumper;
 import pingball.board.TriangularBumper;
 import pingball.board.TriangularBumper.TriangularBumperOrientation;
 import pingball.client.ClientController;
 import pingball.ui.board.BallPainter;
+import pingball.ui.board.CircularBumperPainter;
 import pingball.ui.board.GraphicsConstants;
 import pingball.ui.board.SquareBumperPainter;
 import pingball.ui.board.TriangularBumperPainter;
@@ -144,6 +146,14 @@ public class MainWindow extends JFrame {
                             String.valueOf(e.hashCode()));
                     board.addGadget(triangularBumperTR);
                     board.addGadgetPainter(new TriangularBumperPainter(triangularBumperTR));
+                    break;
+                case CIRCULAR_BUMPER:
+                    CircularBumper circularBumper = new CircularBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())),
+                            String.valueOf(e.hashCode()));
+                    board.addGadget(circularBumper);
+                    board.addGadgetPainter(new CircularBumperPainter(circularBumper));
                     break;
                 default:
                     break;                
