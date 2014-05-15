@@ -102,11 +102,17 @@ public class GadgetHelpers {
         }
     }
     
+    private static Clip clip;
     public static void playBounceSound() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/bounce.wav").getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
+            if (clip == null) {
+                clip = AudioSystem.getClip();
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/bounce.wav").getAbsoluteFile());
+                clip.open(audioInputStream);
+            }
+            if (clip.isRunning())
+                clip.stop();
+            clip.setFramePosition(0);
             clip.start();
         } catch(Exception ex) {
             System.out.println("Error with playing sound.");
