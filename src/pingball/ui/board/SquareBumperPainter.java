@@ -10,7 +10,7 @@ import physics.LineSegment;
 import pingball.board.SquareBumper;
 
 public class SquareBumperPainter implements GadgetPainter {
-    private final Color squareBumperColor = new Color(0x23, 0x85, 0xe6);
+    private final Color squareBumperColor = new Color(0xae, 0, 0);//new Color(0x23, 0x85, 0xe6);
     private SquareBumper gadget;
     
     public SquareBumperPainter(SquareBumper gadget) {

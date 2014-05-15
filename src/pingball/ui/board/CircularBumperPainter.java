@@ -9,7 +9,7 @@ import java.awt.Point;
 import pingball.board.CircularBumper;
 
 public class CircularBumperPainter implements GadgetPainter {
-    private final Color circularBumperColor = new Color(0x23, 0x85, 0xe6);
+    private final Color circularBumperColor = new Color(0, 0x89, 0x30);;//. new Color(0x23, 0x85, 0xe6);
     
     private CircularBumper gadget;
     

@@ -12,7 +12,7 @@ import pingball.board.LeftFlipper;
 import pingball.board.RightFlipper;
 
 public class RightFlipperPainter implements GadgetPainter {
-    private final Color leftFlipperColor = new Color(0x23, 0x85, 0xe6);
+    private final Color leftFlipperColor = Color.black;// new Color(0x23, 0x85, 0xe6);
     private RightFlipper gadget;
     
     public RightFlipperPainter(RightFlipper gadget) {
