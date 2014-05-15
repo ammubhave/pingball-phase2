@@ -12,9 +12,25 @@ import javax.swing.JFrame;
 import pingball.board.Board;
 import pingball.client.ClientController;
 
+/**
+ * The MainWindow class represents the graphical user interface for the Pingball
+ * game. It contains a menu bar with two menus: the game menu and the server
+ * menu. The game menu has six menu items: load board, pause, resume, restart,
+ * exit, and exit all. The server menu has two menu items: connect to a server
+ * by specifying the host and port number and disconnecting from a server.
+ * 
+ * Manual Testing Strategy: Each of these menu items were manually tested in
+ * different orders multiple times to ensure that the program was functioning
+ * correctly. For instance, multiple boards were loaded by the user and made
+ * sure that they all connected properly. Different port numbers and host names
+ * were also inputed to make sure that the user could connect to the server
+ * properly. The movement of the ball and the gadgets on the board was visually
+ * inspected.
+ */
+
 public class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
-    
+
     GameDisplay display;
     private Board boardForKeys;
     private ClientController clientControl;
@@ -30,19 +46,19 @@ public class MainWindow extends JFrame {
         this.add(new DisplayMenu(this, board, host, port, file), BorderLayout.NORTH);
         this.pack();
         this.setVisible(true);
-        
+
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 clientControl.stop();
             }
         });
-        
+
         class MyKeyListener implements KeyListener {
 
             @Override
             public void keyTyped(KeyEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
@@ -61,14 +77,14 @@ public class MainWindow extends JFrame {
                 boardForKeys.handleKeyDown(keyName);
             }
         }
-        
+
         this.addKeyListener(new MagicKeyListener(new MyKeyListener()));
     }
 
     public void startController() {
         clientControl.start();
     }
-    
+
     public void stopController() {
         clientControl.stop();
     }
