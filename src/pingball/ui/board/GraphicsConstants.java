@@ -29,7 +29,7 @@ public class GraphicsConstants {
      * @return the column
      */
     public static int convertFromX(int x) {
-        return (int)(x/CELL_SIZE-1.25);
+        return (int)(x/CELL_SIZE-1);
     }
     
     /**
@@ -38,6 +38,6 @@ public class GraphicsConstants {
      * @return the row
      */
     public static int convertFromY(int y) {
-        return (int)(y/CELL_SIZE-2);
+        return (int)(y/CELL_SIZE-1);
     }
 }
