@@ -3,14 +3,20 @@ package pingball.ui;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
 
+import physics.Vect;
+import pingball.board.Ball;
 import pingball.board.Board;
 import pingball.client.ClientController;
+import pingball.ui.board.BallPainter;
+import pingball.ui.board.GraphicsConstants;
 
 /**
  * The MainWindow class represents the graphical user interface for the Pingball
@@ -35,7 +41,7 @@ public class MainWindow extends JFrame {
     private Board boardForKeys;
     private ClientController clientControl;
 
-    public MainWindow(Board board, String host, int port, ClientController clientController, File file) {
+    public MainWindow(final Board board, String host, int port, ClientController clientController, File file) {
         super("Pingball");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -77,8 +83,45 @@ public class MainWindow extends JFrame {
                 boardForKeys.handleKeyDown(keyName);
             }
         }
+        
+        class MyMouseListener implements MouseListener {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+                Ball ball = new Ball(String.valueOf(e.hashCode()), new Vect(GraphicsConstants.convertFromX(e.getX())+0.25, GraphicsConstants.convertFromY(e.getY())+0.25), new Vect(0, 0));
+                board.addBall(ball);
+                board.addGadgetPainter(new BallPainter(ball));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+        }
 
         this.addKeyListener(new MagicKeyListener(new MyKeyListener()));
+        this.addMouseListener(new MyMouseListener());
     }
 
     public void startController() {
