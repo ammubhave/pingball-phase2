@@ -17,33 +17,33 @@ import pingball.ui.board.BallPainter;
 import pingball.ui.board.GadgetPainter;
 
 /**
- * 
+ * This class represents the board.
  */
 public class Board {
-    /*
-     * Thread Safety:
-     * All public methods are either on immutable objects or synchronized, does not create new threads
+
+    /**
+     * Thread Safety: All public methods are either on immutable objects or
+     * synchronized, does not create new threads.
      */
-    
+
     public static final int DEFAULT_SIZE = 20;
 
     private final List<Ball> balls = new ArrayList<Ball>();
     private final HashMap<String, Gadget> boardGadgets = new HashMap<String, Gadget>();
-    private final List<GadgetPainter> boardGadgetPainters  = new ArrayList<GadgetPainter>();
-    
+    private final List<GadgetPainter> boardGadgetPainters = new ArrayList<GadgetPainter>();
+
     private final String name;
     private final Vect g; // In L / s^2
     private final double mu; // In per s.
     private final double mu2; // In per L.
-    
+
     private HashMap<String, ArrayList<Gadget>> keyUpForGadgets = new HashMap<String, ArrayList<Gadget>>();
     private HashMap<String, ArrayList<Gadget>> keyDownForGadgets = new HashMap<String, ArrayList<Gadget>>();
-    
+
     private PortalMessage pendingPortalMessage = null;
-    
+
     /*
-     * Rep Invariant:
-     * - everything should be non-null
+     * Rep Invariant: - everything should be non-null
      */
     public void checkRep() {
         assert balls != null;
@@ -57,10 +57,14 @@ public class Board {
     /**
      * Creates a new instance of Board.
      * 
-     * @param name the name of the board
-     * @param gravity the gravity in the board
-     * @param friction1 the friction coeff 1 in the board
-     * @param friction2 the friction coeff 2 in the board
+     * @param name
+     *            the name of the board
+     * @param gravity
+     *            the gravity in the board
+     * @param friction1
+     *            the friction coeff 1 in the board
+     * @param friction2
+     *            the friction coeff 2 in the board
      */
     public Board(String name, double gravity, double friction1, double friction2) {
         this.name = name;
@@ -68,13 +72,15 @@ public class Board {
 
         this.mu = friction1;
         this.mu2 = friction2;
-        
+
         checkRep();
     }
 
     /**
      * Adds a gadget to the board
-     * @param gadget to be added to board
+     * 
+     * @param gadget
+     *            to be added to board
      */
     public synchronized void addGadget(Gadget gadget) {
         boardGadgets.put(gadget.getName(), gadget);
@@ -83,7 +89,9 @@ public class Board {
 
     /**
      * Adds a gadget painter to the board
-     * @param gadget painter to be added to board
+     * 
+     * @param gadget
+     *            painter to be added to board
      */
     public synchronized void addGadgetPainter(GadgetPainter gadgetPainter) {
         boardGadgetPainters.add(gadgetPainter);
@@ -92,6 +100,7 @@ public class Board {
 
     /**
      * Gets all the painters associated with this board
+     * 
      * @return all gadgets painters
      */
     public synchronized List<GadgetPainter> getGadgetPainters() {
@@ -118,6 +127,7 @@ public class Board {
 
     /**
      * Gets the name of the board
+     * 
      * @return the name of the board
      */
     public String getName() {
@@ -126,7 +136,9 @@ public class Board {
 
     /**
      * Adds a ball to the board
-     * @param ball  to be added to the board
+     * 
+     * @param ball
+     *            to be added to the board
      */
     public synchronized void addBall(Ball ball) {
         balls.add(ball);
@@ -135,7 +147,9 @@ public class Board {
 
     /**
      * Removes ball from board
-     * @param ball the ball to remove
+     * 
+     * @param ball
+     *            the ball to remove
      */
     public synchronized void removeBall(Ball ball) {
         balls.remove(ball);
@@ -144,6 +158,7 @@ public class Board {
 
     /**
      * Returns shortest time until the next collision event will happen
+     * 
      * @return the shortest time until next collision
      */
     public synchronized double timeUntilCollision() {
@@ -175,14 +190,16 @@ public class Board {
     /**
      * For every ball, simulate a physics time increment for every ball with no
      * collisions.
-     * @param time the time by which to increment, time should be very small
+     * 
+     * @param time
+     *            the time by which to increment, time should be very small
      */
     public synchronized void incrementNoCollisionTime(double time) {
         for (Ball ball : balls) {
             Vect oldV = ball.getVelocity();
             Vect newV = oldV.times(1 - this.mu * time - this.mu2 * oldV.length() * time).plus(this.g.times(time));
-           // if (newV.length() < 0.05) // If velocity is too small, kill it
-           //     newV = new Vect(0, 0);
+            // if (newV.length() < 0.05) // If velocity is too small, kill it
+            // newV = new Vect(0, 0);
             ball.changeVelocity(newV);
             ball.changePos(ball.getPos().plus(oldV.times(time)));
         }
@@ -272,20 +289,23 @@ public class Board {
             }
         else {
             Message msg = gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
-            if (msg instanceof PortalMessage && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName())))
-                pendingPortalMessage = (PortalMessage)msg;
-            
+            if (msg instanceof PortalMessage
+                    && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName())))
+                pendingPortalMessage = (PortalMessage) msg;
+
         }
         checkRep();
     }
-    
+
     private boolean portalEnabled = false;
+
     /**
      * Enables all inter-boards portals on this board
      */
     public synchronized void enablePortal() {
         portalEnabled = true;
     }
+
     /**
      * Disables all inter-boards portals on this board
      */
@@ -293,11 +313,11 @@ public class Board {
         portalEnabled = false;
     }
 
-
     /**
      * Handles a message received from the server.
      * 
-     * @param message the message received from the server.
+     * @param message
+     *            the message received from the server.
      */
     public synchronized void onMessage(Message message) {
         if (message instanceof ConnectWallMessage) {
@@ -320,11 +340,12 @@ public class Board {
             PortalMessage portalMessage = (PortalMessage) message;
             Vect position;
             if (portalMessage.getTargetBoard().equals(getName()))
-                position = new Vect(((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getX(), ((Portal)getGadgetFromName(portalMessage.getTargetPortal())).getY());
+                position = new Vect(((Portal) getGadgetFromName(portalMessage.getTargetPortal())).getX(),
+                        ((Portal) getGadgetFromName(portalMessage.getTargetPortal())).getY());
             else
-                position = portalMessage.getBallShape().getCenter().plus(portalMessage.getVelocity().times(0.05/200.));
-            Ball ball = new Ball(portalMessage.getName(), position,
-                    portalMessage.getVelocity());
+                position = portalMessage.getBallShape().getCenter()
+                        .plus(portalMessage.getVelocity().times(0.05 / 200.));
+            Ball ball = new Ball(portalMessage.getName(), position, portalMessage.getVelocity());
             addBall(ball);
             this.boardGadgetPainters.add(new BallPainter(ball));
         }
@@ -334,7 +355,8 @@ public class Board {
     /**
      * Returns the wall next to a board edge.
      * 
-     * @param edge the board edge
+     * @param edge
+     *            the board edge
      * @return the wall next to the given board edge
      */
     private synchronized OuterWall findWall(Edge edge) {
@@ -398,11 +420,11 @@ public class Board {
                 removedBalls.add(ball);
             }
         }
-        
+
         if (pendingPortalMessage != null) {
-            removedBalls.add(getBallFromName(pendingPortalMessage.getName()));           
+            removedBalls.add(getBallFromName(pendingPortalMessage.getName()));
         }
-        
+
         for (Ball ball : removedBalls) {
             balls.remove(ball);
             int i = 0;
@@ -412,16 +434,18 @@ public class Board {
                         break;
             this.boardGadgetPainters.remove(i);
         }
-        
+
         if (pendingPortalMessage != null) {
             if (pendingPortalMessage.getTargetBoard().equals(getName()) && !portalEnabled) {
                 onMessage(pendingPortalMessage);
             } else {
-                messages.add(new PortalMessage(pendingPortalMessage.getName(), pendingPortalMessage.getTargetPortal(), pendingPortalMessage.getTargetBoard(), pendingPortalMessage.getBallShape(), pendingPortalMessage.getVelocity(), getName()));
+                messages.add(new PortalMessage(pendingPortalMessage.getName(), pendingPortalMessage.getTargetPortal(),
+                        pendingPortalMessage.getTargetBoard(), pendingPortalMessage.getBallShape(),
+                        pendingPortalMessage.getVelocity(), getName()));
             }
             pendingPortalMessage = null;
         }
-        
+
         return messages;
     }
 
@@ -436,7 +460,7 @@ public class Board {
     public synchronized Gadget getGadgetFromName(String name) {
         return boardGadgets.get(name);
     }
-    
+
     public synchronized Ball getBallFromName(String name) {
         for (Ball ball : balls) {
             if (ball.getName().equals(name))
@@ -448,7 +472,7 @@ public class Board {
     public void addKeyUpBinding(String keyName, Gadget gadget) {
         if (!keyUpForGadgets.containsKey(keyName))
             keyUpForGadgets.put(keyName, new ArrayList<Gadget>());
-        
+
         keyUpForGadgets.get(keyName).add(gadget);
         checkRep();
     }
@@ -456,13 +480,13 @@ public class Board {
     public void addKeyDownBinding(String keyName, Gadget gadget) {
         if (!keyDownForGadgets.containsKey(keyName))
             keyDownForGadgets.put(keyName, new ArrayList<Gadget>());
-        
+
         keyDownForGadgets.get(keyName).add(gadget);
         checkRep();
     }
 
     public synchronized void handleKeyUp(String keyName) {
-        if (!keyUpForGadgets.containsKey(keyName)) 
+        if (!keyUpForGadgets.containsKey(keyName))
             return;
         for (Gadget gadget : keyUpForGadgets.get(keyName)) {
             gadget.action();
@@ -470,7 +494,7 @@ public class Board {
     }
 
     public synchronized void handleKeyDown(String keyName) {
-        if (!keyDownForGadgets.containsKey(keyName)) 
+        if (!keyDownForGadgets.containsKey(keyName))
             return;
         for (Gadget gadget : keyDownForGadgets.get(keyName)) {
             gadget.action();
