@@ -9,6 +9,7 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.client.ClientController;
 
 /** This class represents a right flipper gadget */
 
@@ -157,20 +158,19 @@ public class RightFlipper extends Flipper {
         public void run() {
             synchronized (flipper) {
                 double targetAngle = orientationToAngle(orientation);
-                double dt = 0.05 / 200.0;
                 if (direction == -1) {
                     if (flipperAngle <= targetAngle) {
                         exec.shutdownNow();
                         return;
                     }
-                    flipperAngle -= 18.8495559 * dt;
+                    flipperAngle -= 18.8495559 * ClientController.DT;
                     remakeComponents();
                 } else {
                     if (flipperAngle >= targetAngle) {
                         exec.shutdownNow();
                         return;
                     }
-                    flipperAngle += 18.8495559 * dt;
+                    flipperAngle += 18.8495559 * ClientController.DT;
                     remakeComponents();
                 }
             }

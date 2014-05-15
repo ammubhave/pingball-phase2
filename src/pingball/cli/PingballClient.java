@@ -58,7 +58,7 @@ public class PingballClient {
                     throw new IllegalArgumentException("unable to parse number for " + flag);
                 }
             }
-            String boardPath = "boards/sampleBoard6.pb";
+            String boardPath = "boards/welcomeBoard.pb";
             if (arguments.size() >= 1)
                 boardPath = arguments.remove();
 

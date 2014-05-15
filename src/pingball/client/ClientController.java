@@ -20,8 +20,8 @@ import pingball.proto.WelcomeMessage;
 import pingball.ui.MainWindow;
 
 public class ClientController {
-    private final double BOARD_REFRESH_INTERVAL = 0.050; // seconds
-    private final double DT = 0.05 / 200.0;
+    public final static double BOARD_REFRESH_INTERVAL = 0.050; // seconds
+    public final static double DT = 0.05 / 200.0;
 
     private final Board board;
     private final String host;
