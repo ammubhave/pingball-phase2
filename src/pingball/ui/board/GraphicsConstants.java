@@ -28,8 +28,8 @@ public class GraphicsConstants {
      * @param x the x coordinate
      * @return the column
      */
-    public static double convertFromX(int x) {
-        return ((double)x/CELL_SIZE-1.25);
+    public static int convertFromX(int x) {
+        return (int)(x/CELL_SIZE-1.25);
     }
     
     /**
@@ -37,7 +37,7 @@ public class GraphicsConstants {
      * @param y the y coordinate
      * @return the row
      */
-    public static double convertFromY(int y) {
-        return ((double)y/CELL_SIZE-2);
+    public static int convertFromY(int y) {
+        return (int)(y/CELL_SIZE-2);
     }
 }
