@@ -178,7 +178,7 @@ public abstract class Flipper implements Gadget {
                 smallestTime = time;
             }
         }
-        return Math.max(smallestTime, 0);
+        return Math.max(smallestTime-0.05/200.*3, 0);
     }
 
     public synchronized void moveFlipper() {

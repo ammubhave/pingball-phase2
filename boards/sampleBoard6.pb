@@ -1,4 +1,4 @@
-board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
+board name=sampleBoard6 gravity=20.0 friction1=0.020 friction2=0.020
 
   # define a ball
   ball name=Ball x=1.5 y=1.5 xVelocity=2.5 yVelocity=2.5
@@ -22,14 +22,14 @@ board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
   squareBumper name=Square18 x=18 y=2
   squareBumper name=Square19 x=19 y=2
   
-  squareBumper name=Square12 x=12 y=11
-  squareBumper name=Square13 x=13 y=11
-  squareBumper name=Square14 x=14 y=11
-  squareBumper name=Square15 x=15 y=11
-  squareBumper name=Square16 x=16 y=11
-  squareBumper name=Square17 x=17 y=11
-  squareBumper name=Square18 x=18 y=11
-  squareBumper name=Square19 x=19 y=11
+  squareBumper name=Square123 x=12 y=11
+  squareBumper name=Square133 x=13 y=11
+  squareBumper name=Square143 x=14 y=11
+  squareBumper name=Square153 x=15 y=11
+  squareBumper name=Square163 x=16 y=11
+  squareBumper name=Square173 x=17 y=11
+  squareBumper name=Square183 x=18 y=11
+  squareBumper name=Square193 x=19 y=11
   
   # define a series of circle bumpers
   circleBumper name=Circle6 x=6 y=5
