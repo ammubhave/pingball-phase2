@@ -11,7 +11,7 @@ import physics.LineSegment;
 import pingball.board.LeftFlipper;
 
 public class LeftFlipperPainter implements GadgetPainter {
-    private final Color leftFlipperColor = Color.MAGENTA;
+    private final Color leftFlipperColor = new Color(0x23, 0x85, 0xe6);
     private LeftFlipper gadget;
     
     public LeftFlipperPainter(LeftFlipper gadget) {
@@ -46,6 +46,12 @@ public class LeftFlipperPainter implements GadgetPainter {
                 GraphicsConstants.convertY(circles.get(1).getCenter().y() - 0.25),
                 (int)(GraphicsConstants.CELL_SIZE * 0.5),
                 (int)(GraphicsConstants.CELL_SIZE * 0.5));
+        
+        g.fillOval(GraphicsConstants.convertX(circles.get(0).getCenter().x())-2, GraphicsConstants.convertY(circles.get(0).getCenter().y())-2,
+                3, 3);
+        g.fillOval(GraphicsConstants.convertX(circles.get(1).getCenter().x())-2, GraphicsConstants.convertY(circles.get(1).getCenter().y())-2,
+                3, 3);
+        g.drawLine(GraphicsConstants.convertX(circles.get(0).getCenter().x()), GraphicsConstants.convertY(circles.get(0).getCenter().y()), GraphicsConstants.convertX(circles.get(1).getCenter().x()), GraphicsConstants.convertY(circles.get(1).getCenter().y()));
     }
 
 }

@@ -9,7 +9,7 @@ import pingball.board.OuterWall;
 import pingball.board.OuterWall.OuterWallsOrientation;
 
 public class OuterWallPainter implements GadgetPainter {
-    private final Color wallColor = Color.BLACK;
+    private final Color wallColor = new Color(0xd8, 0xec, 0xff);
     
     private OuterWall gadget;
     

@@ -19,6 +19,8 @@ public class AbsorberPainter implements GadgetPainter {
     @Override
     public void paint(Graphics2D g) {
         g.setColor(absorberColor);
+        
+        
         g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
         List<LineSegment> segments = gadget.getLineSegments();
         g.drawLine(

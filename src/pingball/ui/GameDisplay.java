@@ -22,8 +22,12 @@ import pingball.ui.board.GraphicsConstants;
  *
  */
 public class GameDisplay extends JPanel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     Board board;
-    Color backgroundColor = Color.white;
+    Color backgroundColor = Color.WHITE;
 
     /**
      * Default constructor that displays only the menu options
@@ -50,7 +54,6 @@ public class GameDisplay extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         fillWindow(g2);
         drawGadgets(g2);
-        drawBalls(g2);
         // other drawings methods needs to be added here
     }
 
@@ -59,16 +62,21 @@ public class GameDisplay extends JPanel {
             painter.paint(g);
         }
     }
-
-    private void drawBalls(final Graphics2D g) {
-
-    }
-
     /*
      * Make the drawing buffer entirely white.
      */
     private void fillWindow(final Graphics2D g) {
         g.setColor(backgroundColor);
+        //g.setColor(new Color(0xd8, 0xec, 0xff));
         g.fillRect(0, 0, getWidth(), getHeight());
+        
+        g.setColor(new Color(0xf0, 0xf6, 0xfc));
+        for (int x = 0; x < GraphicsConstants.SIZE; x += GraphicsConstants.CELL_SIZE/2) {
+            System.out.println(x);
+            g.drawLine(x, 0, x, GraphicsConstants.SIZE);
+        }
+        for (int y = 0; y < GraphicsConstants.SIZE; y += GraphicsConstants.CELL_SIZE/2) {
+            g.drawLine(0, y, GraphicsConstants.SIZE, y);
+        }
     }
 }

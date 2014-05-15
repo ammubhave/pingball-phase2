@@ -10,7 +10,7 @@ import physics.LineSegment;
 import pingball.board.SquareBumper;
 
 public class SquareBumperPainter implements GadgetPainter {
-    private final Color squareBumperColor = Color.BLUE;
+    private final Color squareBumperColor = new Color(0x23, 0x85, 0xe6);
     private SquareBumper gadget;
     
     public SquareBumperPainter(SquareBumper gadget) {
@@ -42,6 +42,22 @@ public class SquareBumperPainter implements GadgetPainter {
                 GraphicsConstants.convertY(segments.get(3).p1().y()),
                 GraphicsConstants.convertX(segments.get(3).p2().x()),
                 GraphicsConstants.convertY(segments.get(3).p2().y()));
+        
+        g.drawLine(
+                GraphicsConstants.convertX(segments.get(0).p1().x()+0.25),
+                GraphicsConstants.convertY(segments.get(0).p1().y()+0.25),
+                GraphicsConstants.convertX(segments.get(0).p2().x()-0.25),
+                GraphicsConstants.convertY(segments.get(0).p2().y()+0.25));
+        g.drawLine(
+                GraphicsConstants.convertX(segments.get(0).p1().x()+0.25),
+                GraphicsConstants.convertY(segments.get(0).p1().y()+0.5),
+                GraphicsConstants.convertX(segments.get(0).p2().x()-0.25),
+                GraphicsConstants.convertY(segments.get(0).p2().y()+0.5));
+        g.drawLine(
+                GraphicsConstants.convertX(segments.get(0).p1().x()+0.25),
+                GraphicsConstants.convertY(segments.get(0).p1().y()+0.75),
+                GraphicsConstants.convertX(segments.get(0).p2().x()-0.25),
+                GraphicsConstants.convertY(segments.get(0).p2().y()+0.75));
     }
 
 }

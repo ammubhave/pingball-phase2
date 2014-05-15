@@ -9,7 +9,7 @@ import java.awt.Point;
 import pingball.board.CircularBumper;
 
 public class CircularBumperPainter implements GadgetPainter {
-    private final Color circularBumperColor = Color.YELLOW;
+    private final Color circularBumperColor = new Color(0x23, 0x85, 0xe6);
     
     private CircularBumper gadget;
     
@@ -22,10 +22,20 @@ public class CircularBumperPainter implements GadgetPainter {
         g.setColor(circularBumperColor);
         g.setStroke(new BasicStroke(GraphicsConstants.STROKE_WIDTH));
         
-        g.fillOval(GraphicsConstants.convertX(this.gadget.getX()),
+        g.drawOval(GraphicsConstants.convertX(this.gadget.getX()),
                    GraphicsConstants.convertY(this.gadget.getY()),
                    GraphicsConstants.CELL_SIZE,
                    GraphicsConstants.CELL_SIZE);
+        
+        g.drawLine(GraphicsConstants.convertX(this.gadget.getX() + 0.5),
+                GraphicsConstants.convertY(this.gadget.getY() + 0.25), 
+                GraphicsConstants.convertX(this.gadget.getX() + 0.5),
+                GraphicsConstants.convertY(this.gadget.getY() + 0.75));
+        
+        g.drawLine(GraphicsConstants.convertX(this.gadget.getX() + 0.25),
+                GraphicsConstants.convertY(this.gadget.getY() + 0.5), 
+                GraphicsConstants.convertX(this.gadget.getX() + 0.75),
+                GraphicsConstants.convertY(this.gadget.getY() + 0.5));
     }
 
 }
