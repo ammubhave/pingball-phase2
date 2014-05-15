@@ -49,7 +49,6 @@ public class DisplayMenu extends JMenuBar {
     private JMenuItem triangularBumperBottomLeft;
     private JMenuItem triangularBumperTopRight;
     private JMenuItem triangularBumperTopLeft;
-    private JMenuItem portal;
     private JMenuItem ball;
 
     private JMenuItem connectToServer;
@@ -84,7 +83,6 @@ public class DisplayMenu extends JMenuBar {
         triangularBumperBottomLeft = new JMenuItem("Triangular Bumper Bottom Left");
         triangularBumperTopRight = new JMenuItem("Triangular Bumper Top Right");
         triangularBumperTopLeft = new JMenuItem("Triangular Bumper Top Left");
-        portal = new JMenuItem("Portal");
         ball = new JMenuItem("Ball");
 
         addGadget.add(squareBumper);
@@ -93,7 +91,6 @@ public class DisplayMenu extends JMenuBar {
         addGadget.add(triangularBumperBottomLeft);
         addGadget.add(triangularBumperTopRight);
         addGadget.add(triangularBumperTopLeft);
-        addGadget.add(portal);
         addGadget.add(ball);
 
         squareBumper.addActionListener(new ActionListener() {
@@ -110,15 +107,6 @@ public class DisplayMenu extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 mainWindow.setGadgetType(GadgetType.CIRCULAR_BUMPER);
-            }
-
-        });
-
-        portal.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                mainWindow.setGadgetType(GadgetType.PORTAL);
             }
 
         });
