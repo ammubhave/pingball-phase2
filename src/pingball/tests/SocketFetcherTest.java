@@ -17,7 +17,8 @@ import pingball.proto.DisconnectWallMessage;
 import pingball.proto.Message;
 import pingball.proto.WelcomeMessage;
 
-/**
+/**Testing: 
+ * Try out our fetcher for single message, multiple messages and disconnections
  * @category no_didit
  */
 

@@ -23,7 +23,8 @@ import pingball.proto.WelcomeMessage;
  */
 
 /**
- * Testing Strategy: 
+ * Testing Strategy: Test out client side fetcher
+ * for single message, multiple messages and disconnections
  * 
  */
 

@@ -25,8 +25,8 @@ import pingball.proto.WelcomeMessage;
 import pingball.proto.ControlMessage.Type;
 
 /**
- * Testing Strategy:  
- * 
+ * Testing Strategy: - different scenarios  
+ * test sending one message, multiples messages and messaging and disconnection
 */
 
 public class SocketPusherTest {
