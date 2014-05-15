@@ -127,7 +127,7 @@ public class ClientController {
         @Override
         public void run() {
             synchronized (board) {
-               // System.out.println(board.toString());
+                System.out.println(board.toString());
                 if (window != null)
                     window.repaint();
             }
