@@ -116,7 +116,8 @@ public abstract class Flipper implements Gadget {
     
     @Override
     public synchronized Message reactBall(Ball ball) {
-        Toolkit.getDefaultToolkit().beep();
+
+        GadgetHelpers.playBounceSound();
         List<LineSegment> lines = sides;
         List<Circle> circles = cornerCircles;
         if (lines == null)

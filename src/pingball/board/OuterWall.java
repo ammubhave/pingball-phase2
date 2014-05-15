@@ -171,7 +171,8 @@ public class OuterWall implements Gadget {
     public Message reactBall(Ball ball) {
         if (this.neighborName != null)
             return null;
-        Toolkit.getDefaultToolkit().beep();
+
+        GadgetHelpers.playBounceSound();
         Vect delta;
         switch (this.orientation) {
         case HORIZONTAL:

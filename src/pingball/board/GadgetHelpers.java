@@ -1,7 +1,12 @@
 package pingball.board;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import physics.Circle;
 import physics.Geometry;
@@ -94,6 +99,18 @@ public class GadgetHelpers {
     public static void callActionOnGadgets(List<Gadget> gadgets) {
         for (Gadget gadget : gadgets) {
             gadget.action();
+        }
+    }
+    
+    public static void playBounceSound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/bounce.wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch(Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 }

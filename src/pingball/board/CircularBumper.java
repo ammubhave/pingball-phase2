@@ -78,7 +78,8 @@ public class CircularBumper implements Gadget {
 
     @Override
     public Message reactBall(Ball ball) {
-        Toolkit.getDefaultToolkit().beep();
+
+        GadgetHelpers.playBounceSound();
         ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(),
                 REFL_COEFF));
 

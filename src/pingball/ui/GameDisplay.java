@@ -72,7 +72,7 @@ public class GameDisplay extends JPanel {
         
         g.setColor(new Color(0xf0, 0xf6, 0xfc));
         for (int x = 0; x < GraphicsConstants.SIZE; x += GraphicsConstants.CELL_SIZE/2) {
-            System.out.println(x);
+           // System.out.println(x);
             g.drawLine(x, 0, x, GraphicsConstants.SIZE);
         }
         for (int y = 0; y < GraphicsConstants.SIZE; y += GraphicsConstants.CELL_SIZE/2) {
