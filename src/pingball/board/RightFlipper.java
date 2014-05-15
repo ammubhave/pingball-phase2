@@ -47,6 +47,13 @@ public class RightFlipper extends Flipper {
         checkRep();
     }
 
+    /**
+     * Returns the angle of the flipper with respect to its orientation
+     * 
+     * @param orientation
+     *            of Flipper
+     * @return double angle
+     */
     public synchronized double orientationToAngle(FlipperOrientation orientation) {
         if ((orientation == FlipperOrientation.RIGHT && pivot == PivotOrientation.TOP_RIGHT)
                 || (orientation == FlipperOrientation.BOTTOM && pivot == PivotOrientation.BOTTOM_RIGHT)
@@ -57,6 +64,10 @@ public class RightFlipper extends Flipper {
             return 1.57079633; // 90 degrees
     }
 
+    /**
+     * Changes the orientation of the flippers appropriately when a ball hits
+     * them
+     */
     public synchronized void remakeComponents() {
         sides.clear();
         cornerCircles.clear();
@@ -117,6 +128,11 @@ public class RightFlipper extends Flipper {
         cornerCircles.add(c2);
     }
 
+    /**
+     * Returns the velocity of the flipper
+     * 
+     * @return double velocity
+     */
     protected synchronized double getVelocity() {
         double targetAngle = orientationToAngle(orientation);
 
