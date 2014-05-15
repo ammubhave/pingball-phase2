@@ -74,9 +74,9 @@ public class PortalMessage extends Message {
         try{
             this.targetPortal=tokens[1];
             this.targetBoard=tokens[2];
-            this.name=tokens[6];
+            this.name=tokens[8];
             this.velocity= new Vect(Double.parseDouble(tokens[6]),Double.parseDouble(tokens[7]));
-            this.source = tokens[7];
+            this.source = tokens[9];
             double cx = Double.parseDouble(tokens[3]);
             double cy = Double.parseDouble(tokens[4]);
             double radius = Double.parseDouble(tokens[5]);

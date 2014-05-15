@@ -168,9 +168,9 @@ public class OuterWall implements Gadget {
     }
 
     @Override
-    public List<Message> reactBall(Ball ball) {
+    public Message reactBall(Ball ball) {
         if (this.neighborName != null)
-            return new ArrayList<Message>();
+            return null;
         Toolkit.getDefaultToolkit().beep();
         Vect delta;
         switch (this.orientation) {
@@ -188,7 +188,7 @@ public class OuterWall implements Gadget {
             break;
         }
 
-        return new ArrayList<Message>();
+        return null;
     }
     
     /**

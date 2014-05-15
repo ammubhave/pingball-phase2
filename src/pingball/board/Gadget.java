@@ -52,7 +52,7 @@ public interface Gadget {
      * @param ball the Ball object which is interacting with the gadget
      * @return Any messages generated from this collision
      */
-    public List<Message> reactBall(Ball ball);
+    public Message reactBall(Ball ball);
 
     /**
      * Performs action of the gadget on itself.

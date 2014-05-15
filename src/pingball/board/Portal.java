@@ -61,17 +61,15 @@ public class Portal implements Gadget {
     }
 
     @Override
-    public List<Message> reactBall(Ball ball) {
+    public Message reactBall(Ball ball) {
         if (this.targetPortalName == null) {
-            return new ArrayList<Message>();
+            return null;
         }
 
         PortalMessage message = new PortalMessage(ball.getName(),
                 this.targetPortalName, this.targetBoardName, ball.getCircle(),
                 ball.getVelocity(), null);
-        ArrayList<Message> msgs = new ArrayList<Message>();
-        msgs.add(message);
-        return msgs;
+        return message;
     }
 
     @Override

@@ -151,12 +151,12 @@ public class TriangularBumper implements Gadget {
     }
 
     @Override
-    public List<Message> reactBall(Ball ball) {
+    public Message reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         GadgetHelpers.reflectBall(sides, corners, ball, REFL_COEFF);
         this.trigger();
 
-        return new ArrayList<Message>();
+        return null;
     }
 
     /**

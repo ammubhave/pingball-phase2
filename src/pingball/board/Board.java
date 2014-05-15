@@ -39,7 +39,7 @@ public class Board {
     private HashMap<String, ArrayList<Gadget>> keyUpForGadgets = new HashMap<String, ArrayList<Gadget>>();
     private HashMap<String, ArrayList<Gadget>> keyDownForGadgets = new HashMap<String, ArrayList<Gadget>>();
     
-    private List<Message> sendMessages = new ArrayList<Message>();
+    private PortalMessage pendingPortalMessage = null;
     
     /*
      * Rep Invariant:
@@ -52,7 +52,6 @@ public class Board {
         assert name != null;
         assert keyUpForGadgets != null;
         assert keyDownForGadgets != null;
-        assert sendMessages != null;
     }
 
     /**
@@ -272,23 +271,10 @@ public class Board {
                 ball2.changeVelocity(vels.v2);
             }
         else {
-            List<Message> msgs = gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
-            for (Message msg : msgs) {
-                if (msg instanceof PortalMessage) {
-                    boolean toadd = true;
-                    for (Message sm : sendMessages) {
-                        if (sm instanceof PortalMessage) {
-                            if (((PortalMessage) sm).getName().equals(((PortalMessage) msg).getName()))
-                               toadd = false;
-                        }
-                    }
-                    if (toadd && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName()))) {
-                        sendMessages.add(msg);
-                    }
-                } else {
-                    sendMessages.add(msg);
-                }
-            }
+            Message msg = gadgets.get(shortestIndexGadget).reactBall(balls.get(shortestIndexBall));
+            if (msg instanceof PortalMessage && (portalEnabled || ((PortalMessage) msg).getTargetBoard().equals(getName())))
+                pendingPortalMessage = (PortalMessage)msg;
+            
         }
         checkRep();
     }
@@ -412,14 +398,11 @@ public class Board {
                 removedBalls.add(ball);
             }
         }
-        for (Message msg : sendMessages) {
-            if (msg instanceof PortalMessage) {
-                removedBalls.add(getBallFromName(((PortalMessage)msg).getName()));
-                messages.add(new PortalMessage(((PortalMessage) msg).getName(), ((PortalMessage) msg).getTargetPortal(), ((PortalMessage) msg).getTargetBoard(), ((PortalMessage) msg).getBallShape(), ((PortalMessage) msg).getVelocity(), getName()));
-            } else {
-                messages.add(msg);
-            }
+        
+        if (pendingPortalMessage != null) {
+            removedBalls.add(getBallFromName(pendingPortalMessage.getName()));           
         }
+        
         for (Ball ball : removedBalls) {
             balls.remove(ball);
             int i = 0;
@@ -429,14 +412,16 @@ public class Board {
                         break;
             this.boardGadgetPainters.remove(i);
         }
-        for (Message msg : sendMessages) {
-            if (msg instanceof PortalMessage) {
-                if (((PortalMessage) msg).getTargetBoard().equals(getName()) && !portalEnabled) {
-                    onMessage(msg);
-                }
+        
+        if (pendingPortalMessage != null) {
+            if (pendingPortalMessage.getTargetBoard().equals(getName()) && !portalEnabled) {
+                onMessage(pendingPortalMessage);
+            } else {
+                messages.add(new PortalMessage(pendingPortalMessage.getName(), pendingPortalMessage.getTargetPortal(), pendingPortalMessage.getTargetBoard(), pendingPortalMessage.getBallShape(), pendingPortalMessage.getVelocity(), getName()));
             }
+            pendingPortalMessage = null;
         }
-        sendMessages.clear();
+        
         return messages;
     }
 

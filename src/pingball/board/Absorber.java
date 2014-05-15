@@ -114,7 +114,7 @@ public class Absorber implements Gadget {
     }
 
     @Override
-    public synchronized List<Message> reactBall(Ball ball) {
+    public synchronized Message reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         if (heldBall != null && !isInside(ball)) {
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
@@ -131,7 +131,7 @@ public class Absorber implements Gadget {
 
         this.trigger();
 
-        return new ArrayList<Message>();
+        return null;
     }
 
     @Override

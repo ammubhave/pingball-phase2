@@ -115,7 +115,7 @@ public abstract class Flipper implements Gadget {
     protected abstract double getVelocity();
     
     @Override
-    public synchronized List<Message> reactBall(Ball ball) {
+    public synchronized Message reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         List<LineSegment> lines = sides;
         List<Circle> circles = cornerCircles;
@@ -153,7 +153,7 @@ public abstract class Flipper implements Gadget {
         }
         this.trigger();
 
-        return new ArrayList<Message>();
+        return null;
     }
 
     

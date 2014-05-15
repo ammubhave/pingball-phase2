@@ -77,14 +77,14 @@ public class CircularBumper implements Gadget {
     }
 
     @Override
-    public List<Message> reactBall(Ball ball) {
+    public Message reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         ball.changeVelocity(Geometry.reflectCircle(circleGadget.getCenter(), ball.getPos(), ball.getVelocity(),
                 REFL_COEFF));
 
         this.trigger();
 
-        return new ArrayList<Message>();
+        return null;
     }
 
     public void hookActionToTrigger(Gadget gadget) {

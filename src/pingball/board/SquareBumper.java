@@ -80,11 +80,11 @@ public class SquareBumper implements Gadget {
 
     }
 
-    public List<Message> reactBall(Ball ball) {
+    public Message reactBall(Ball ball) {
         Toolkit.getDefaultToolkit().beep();
         GadgetHelpers.reflectBall(sides, cornerCircles, ball, REFL_COEFF);
         this.trigger();
-        return new ArrayList<Message>();
+        return null;
     }
 
     /**

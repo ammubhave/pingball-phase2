@@ -73,6 +73,7 @@ public class LinksController implements Runnable {
      */
     private void handleRequest(Request request) throws InterruptedException {
     	Message message = request.getMessage();
+    	
     	if (message instanceof HelloMessage) {
     		HelloMessage hello = (HelloMessage)message;
     		BlockingQueue<Message> clientQueue = request.getClientQueue();
@@ -126,6 +127,7 @@ public class LinksController implements Runnable {
     	}
     	if (message instanceof PortalMessage) {
     	    PortalMessage portalMessage = (PortalMessage)message;
+    	    System.err.println(portalMessage.toLine());
     	    /*String target;
     	    if (this.boardLinks.isConnected(request.getBoardName()))
     	        target = request.getBoardName();
@@ -152,7 +154,7 @@ public class LinksController implements Runnable {
 			for(BoardLinks.TargetedMessage reaction : reactions)
 				dispatch(reaction);
 			return;
-    	}System.err.println(message);
+    	}
     	
         // Should never get here--make sure to return in each of the valid cases above.
         throw new UnsupportedOperationException();
