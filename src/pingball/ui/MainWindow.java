@@ -14,9 +14,14 @@ import javax.swing.JFrame;
 import physics.Vect;
 import pingball.board.Ball;
 import pingball.board.Board;
+import pingball.board.SquareBumper;
+import pingball.board.TriangularBumper;
+import pingball.board.TriangularBumper.TriangularBumperOrientation;
 import pingball.client.ClientController;
 import pingball.ui.board.BallPainter;
 import pingball.ui.board.GraphicsConstants;
+import pingball.ui.board.SquareBumperPainter;
+import pingball.ui.board.TriangularBumperPainter;
 
 /**
  * The MainWindow class represents the graphical user interface for the Pingball
@@ -40,7 +45,7 @@ public class MainWindow extends JFrame {
     GameDisplay display;
     private Board boardForKeys;
     private ClientController clientControl;
-    private GadgetType gadgetChosen;
+    private GadgetType gadgetChosen = GadgetType.BALL;
 
     public MainWindow(final Board board, String host, int port, ClientController clientController, File file) {
         super("Pingball");
@@ -89,12 +94,60 @@ public class MainWindow extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-                Ball ball = new Ball(String.valueOf(e.hashCode()), new Vect(
-                        GraphicsConstants.convertFromX(e.getX()) + 0.25,
-                        GraphicsConstants.convertFromY(e.getY()) + 0.25), new Vect(0, 0));
-                board.addBall(ball);
-                board.addGadgetPainter(new BallPainter(ball));
+                switch (gadgetChosen) {
+                case BALL:
+                    Ball ball = new Ball(String.valueOf(e.hashCode()), new Vect(
+                            GraphicsConstants.convertFromX(e.getX()) + 0.25,
+                            GraphicsConstants.convertFromY(e.getY()) + 0.25), new Vect(0, 0));
+                    board.addBall(ball);
+                    board.addGadgetPainter(new BallPainter(ball));
+                    break;
+                case SQUARE_BUMPER:
+                    SquareBumper squareBumper = new SquareBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())), String.valueOf(e.hashCode()));
+                    board.addGadget(squareBumper);
+                    board.addGadgetPainter(new SquareBumperPainter(squareBumper));
+                    break;
+                case TRIANGULAR_BUMPER_BOTTOM_LEFT:
+                    TriangularBumper triangularBumperBL = new TriangularBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())),
+                            TriangularBumperOrientation.BOTTOM_LEFT,
+                            String.valueOf(e.hashCode()));
+                    board.addGadget(triangularBumperBL);
+                    board.addGadgetPainter(new TriangularBumperPainter(triangularBumperBL));
+                    break;
+                case TRIANGULAR_BUMPER_BOTTOM_RIGHT:
+                    TriangularBumper triangularBumperBR = new TriangularBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())),
+                            TriangularBumperOrientation.BOTTOM_RIGHT,
+                            String.valueOf(e.hashCode()));
+                    board.addGadget(triangularBumperBR);
+                    board.addGadgetPainter(new TriangularBumperPainter(triangularBumperBR));
+                    break;
+                case TRIANGULAR_BUMPER_TOP_LEFT:
+                    TriangularBumper triangularBumperTL = new TriangularBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())),
+                            TriangularBumperOrientation.TOP_LEFT,
+                            String.valueOf(e.hashCode()));
+                    board.addGadget(triangularBumperTL);
+                    board.addGadgetPainter(new TriangularBumperPainter(triangularBumperTL));
+                    break;
+                case TRIANGULAR_BUMPER_TOP_RIGHT:
+                    TriangularBumper triangularBumperTR = new TriangularBumper(new Vect(
+                            GraphicsConstants.convertFromX(e.getX()),
+                            GraphicsConstants.convertFromY(e.getY())),
+                            TriangularBumperOrientation.TOP_RIGHT,
+                            String.valueOf(e.hashCode()));
+                    board.addGadget(triangularBumperTR);
+                    board.addGadgetPainter(new TriangularBumperPainter(triangularBumperTR));
+                    break;
+                default:
+                    break;                
+                }                
             }
 
             @Override
