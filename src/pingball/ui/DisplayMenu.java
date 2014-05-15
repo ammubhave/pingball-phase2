@@ -50,6 +50,7 @@ public class DisplayMenu extends JMenuBar {
     private JMenuItem triangularBumperTopRight;
     private JMenuItem triangularBumperTopLeft;
     private JMenuItem portal;
+    private JMenuItem ball;
 
     private JMenuItem connectToServer;
     private JMenuItem disconnectFromServer;
@@ -71,6 +72,11 @@ public class DisplayMenu extends JMenuBar {
         addComponentsToAddGadgetsMenu();
     }
 
+    /**
+     * Adds the square bumper, circular bumper, ball, triangular bumper, and
+     * portal options to the menu. The appropriate listeners are added and their
+     * methods are defined for all these options.
+     */
     public void addComponentsToAddGadgetsMenu() {
         squareBumper = new JMenuItem("Square Bumper");
         circleBumper = new JMenuItem("Circular Bumper");
@@ -79,6 +85,7 @@ public class DisplayMenu extends JMenuBar {
         triangularBumperTopRight = new JMenuItem("Triangular Bumper Top Right");
         triangularBumperTopLeft = new JMenuItem("Triangular Bumper Top Left");
         portal = new JMenuItem("Portal");
+        ball = new JMenuItem("Ball");
 
         addGadget.add(squareBumper);
         addGadget.add(circleBumper);
@@ -87,13 +94,13 @@ public class DisplayMenu extends JMenuBar {
         addGadget.add(triangularBumperTopRight);
         addGadget.add(triangularBumperTopLeft);
         addGadget.add(portal);
+        addGadget.add(ball);
 
         squareBumper.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.SQUARE_BUMPER);
             }
 
         });
@@ -102,8 +109,7 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.CIRCULAR_BUMPER);
             }
 
         });
@@ -112,8 +118,7 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.PORTAL);
             }
 
         });
@@ -122,8 +127,7 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_BOTTOM_RIGHT);
             }
 
         });
@@ -132,8 +136,7 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_BOTTOM_LEFT);
             }
 
         });
@@ -142,8 +145,7 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_TOP_LEFT);
             }
 
         });
@@ -152,8 +154,16 @@ public class DisplayMenu extends JMenuBar {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_TOP_RIGHT);
+            }
 
+        });
+
+        ball.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.BALL);
             }
 
         });
