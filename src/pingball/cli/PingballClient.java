@@ -11,6 +11,38 @@ import pingball.board.Board;
 import pingball.client.ClientController;
 import pingball.parser.BoardBuilder;
 
+/*
+ * Thread Safety:
+ * 
+ * The client spins up multiple threads:
+ *  - Two threads, ClientFetcher and SocketPusher operate on thread safe datatypes
+ *    and don't access any other shared objects. Hence all the objects are either
+ *    confined to it or shared objects like BlockingQueue is thread safe.
+ *    
+ *  - One Board Printer Thread
+ *    - Uses render methods of gadgets. All mutable gadgets have mutable methods synchronized and also render
+ *      as synchronized so at any point of time, the mutable gadgets do not have concurrent access.
+ *    - Does a repaint, repainting calls upon the GadgetPainter objects each of which holds an instance of
+ *      gadget. Again all the mutable gadgets have their neccessary observers synchronized.
+ *    - All other immutable gadgets like square and circle bumpers don't have anything synchronized
+ *      as they dont mutate anything**.
+ *      
+ *  - One Heartbeat Thread
+ *    This is the main thread which simulates time.
+ *    - It acts upon Ball and also mutates the gadgets when required. All these mutations on the objects
+ *      are done synchronized on those gadgets itself. Therefore, no concurrent modifications of
+ *      states is allowed.
+ *      
+ *  - Flipper rotation thread
+ *    This is spun up whenever a flipper starts to rotate.
+ *    This thread first synchronizes on the Flipper object and then performs mutation on it. And since all
+ *    other observers and mutators first synchronize on the flipper objects, concurrency is not an issue.
+ *      
+ *  ** -> There is mutation in these gadgets too in form of hooking gadgets to trigger, but this mutation
+ *      is only performed in the factory methods. So once the board is initialized and the threads started,
+ *      these gadgets are not mutated anymore.
+ */
+
 public class PingballClient {
     /**
      * Loads a board file and begins playing it.

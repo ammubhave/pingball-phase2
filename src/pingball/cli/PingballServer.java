@@ -10,6 +10,22 @@ import pingball.server.BoardLinks;
 import pingball.server.Dispatcher;
 import pingball.server.LinksController;
 
+/*
+ * Thread Safety:
+ * 
+ * The following threads are spun up by the server:
+ *   - The LinkController Thread do not use any shared objects with other threads and thus has all its
+ *     objects confined.
+ *     
+ *   - The Dispatcher spins up two threads
+ *     - The server thread and console thread.
+ *       These two threads communicate with each other using a blocking queue which is a thread
+ *       safe datatype.
+ *       
+ *   Most of the parts in the server threads are confined and all shared access are done using blocking queues
+ *   which are thread safe.
+ */
+
 public class PingballServer {
     /**
      * Joins the outer walls of clients together, so that a ball exiting one client's
