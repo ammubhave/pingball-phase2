@@ -73,12 +73,11 @@ public class RightFlipper extends Flipper {
 
         if (pivot == PivotOrientation.TOP_LEFT) {
 
-            l1 = Geometry.rotateAround(new LineSegment(x, y + CORNER_RADIUS, x, y + EDGE_LENGTH
-                    - CORNER_RADIUS), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(x + CORNER_DIAMETER, y + CORNER_RADIUS, x
-                    + CORNER_DIAMETER, y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            l1 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y, x + EDGE_LENGTH - CORNER_RADIUS, y), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + CORNER_DIAMETER, x + EDGE_LENGTH
+                    - CORNER_RADIUS, y + CORNER_DIAMETER), pv, a);
             c1 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS,
+            c2 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
             
         } else if (pivot == PivotOrientation.TOP_RIGHT) {
@@ -94,23 +93,23 @@ public class RightFlipper extends Flipper {
             
         } else if (pivot == PivotOrientation.BOTTOM_LEFT) {
 
-            l1 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_DIAMETER, x
-                    + CORNER_RADIUS, y + CORNER_DIAMETER), pv, a);
-            l2 = Geometry.rotateAround(new LineSegment(x + EDGE_LENGTH - CORNER_RADIUS, y, x + CORNER_RADIUS,
-                    y), pv, a);
-            c1 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + CORNER_RADIUS,
+            l1 = Geometry.rotateAround(new LineSegment(x, y + CORNER_RADIUS, x
+                    , y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            l2 = Geometry.rotateAround(new LineSegment(x + CORNER_DIAMETER, y + CORNER_RADIUS, x + CORNER_DIAMETER,
+                    y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            c1 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
             c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
             
         } else { // BOTTOM_RIGHT
 
-            l1 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS, x
-                    + EDGE_LENGTH - CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS), pv, a);
+            l1 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_DIAMETER, x
+                    + EDGE_LENGTH - CORNER_RADIUS, y + EDGE_LENGTH - CORNER_DIAMETER), pv, a);
             l2 = Geometry.rotateAround(new LineSegment(x + CORNER_RADIUS, y + EDGE_LENGTH, x + EDGE_LENGTH
                     - CORNER_RADIUS, y + EDGE_LENGTH), pv, a);
             c1 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS,
                     CORNER_RADIUS), pv, a);
-            c2 = Geometry.rotateAround(new Circle(x + CORNER_RADIUS, y + CORNER_RADIUS, CORNER_RADIUS), pv, a);
+            c2 = Geometry.rotateAround(new Circle(x + EDGE_LENGTH - CORNER_RADIUS, y + EDGE_LENGTH - CORNER_RADIUS, CORNER_RADIUS), pv, a);
         }
 
         sides.add(l1);
