@@ -1,6 +1,5 @@
 package pingball.board;
 
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +8,14 @@ import physics.Geometry;
 import physics.Vect;
 import pingball.proto.Message;
 
+/** This class represents a circular bumper gadget */
+
 public class CircularBumper implements Gadget {
 
     /**
      * Thread Safety Information: CircularBumper is threadsafe because it is
-     * never altered after creation. (immutable)
-     * - gadgetsToBeHooked is only modified in factory.
+     * never altered after creation. (immutable) - gadgetsToBeHooked is only
+     * modified in factory.
      */
 
     private final double REFL_COEFF = 1.0;
@@ -26,9 +27,13 @@ public class CircularBumper implements Gadget {
     private final Circle circleGadget;
 
     /**
-     * Creates a circle bumper with the user-inputted parameters. Has a radius 0.5 L
-     * @param loc vector of the center of the bumper
-     * @param n name
+     * Creates a circle bumper with the user-inputted parameters. Has a radius
+     * 0.5 L
+     * 
+     * @param loc
+     *            vector of the center of the bumper
+     * @param n
+     *            name
      */
     public CircularBumper(Vect position, String name) {
         this.name = name;
@@ -98,10 +103,11 @@ public class CircularBumper implements Gadget {
         sb.setCharAt(Board.getBoardStringIndexFromVect(this.position), 'O');
         return sb.toString();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof CircularBumper)) return false;
-        return ((CircularBumper)obj).getName().equals(this.getName());
+        if (!(obj instanceof CircularBumper))
+            return false;
+        return ((CircularBumper) obj).getName().equals(this.getName());
     }
 }

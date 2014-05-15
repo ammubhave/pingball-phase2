@@ -1,43 +1,38 @@
 package pingball.board;
 
-import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.List;
-
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
 
 /**
- * Represents the outer walls in pingball
+ * Represents the outer walls in Pingball.
  */
 public class OuterWall implements Gadget {
     /**
-     * Thread Safety:
-     * - the mutable neighborName is modified synchronized, render which accesses neighborName is synchronized
-     * - all others are final and not mutated
+     * Thread Safety: - the mutable neighborName is modified synchronized,
+     * render which accesses neighborName is synchronized - all others are final
+     * and not mutated
      */
-    
+
     private String neighborName;
-    
+
     private final int width;
     private final int height;
     private final Vect position;
     private final OuterWallsOrientation orientation;
-    private final String name;    
+    private final String name;
     private final static double REFL_COEFF = 1;
 
     /**
-     * Rep Invariant:
-     * - everything should be non-null (except neighborName)
+     * Rep Invariant: - everything should be non-null (except neighborName)
      */
 
     private void checkRep() {
         assert position != null;
         assert orientation != null;
         assert name != null;
-        
+
         switch (orientation) {
         case HORIZONTAL:
         case VERTICAL:
@@ -72,7 +67,7 @@ public class OuterWall implements Gadget {
         this.orientation = orientation;
         this.neighborName = null;
         this.name = name;
-        
+
         checkRep();
     }
 
@@ -83,6 +78,7 @@ public class OuterWall implements Gadget {
 
     /**
      * Gets the name of the neighbor board if connected. Otherwise null.
+     * 
      * @return the name of the neighbor board
      */
     public synchronized String getNeighborName() {
@@ -90,13 +86,15 @@ public class OuterWall implements Gadget {
     }
 
     /**
-     * Set the name of the neighbor board.
-     * A value of null means that no board is connected
-     * @param neighborName the name of the neighbor board
+     * Set the name of the neighbor board. A value of null means that no board
+     * is connected
+     * 
+     * @param neighborName
+     *            the name of the neighbor board
      */
     public synchronized void setNeighborName(String neighborName) {
         this.neighborName = neighborName;
-        
+
         checkRep();
     }
 
@@ -191,9 +189,10 @@ public class OuterWall implements Gadget {
 
         return null;
     }
-    
+
     /**
      * Returns the orientaton of this wall
+     * 
      * @return the orientaton of the wall
      */
     public OuterWallsOrientation getOrientation() {
