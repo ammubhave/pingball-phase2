@@ -40,6 +40,7 @@ public class MainWindow extends JFrame {
     GameDisplay display;
     private Board boardForKeys;
     private ClientController clientControl;
+    private GadgetType gadgetChosen;
 
     public MainWindow(final Board board, String host, int port, ClientController clientController, File file) {
         super("Pingball");
@@ -83,13 +84,15 @@ public class MainWindow extends JFrame {
                 boardForKeys.handleKeyDown(keyName);
             }
         }
-        
+
         class MyMouseListener implements MouseListener {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 // TODO Auto-generated method stub
-                Ball ball = new Ball(String.valueOf(e.hashCode()), new Vect(GraphicsConstants.convertFromX(e.getX())+0.25, GraphicsConstants.convertFromY(e.getY())+0.25), new Vect(0, 0));
+                Ball ball = new Ball(String.valueOf(e.hashCode()), new Vect(
+                        GraphicsConstants.convertFromX(e.getX()) + 0.25,
+                        GraphicsConstants.convertFromY(e.getY()) + 0.25), new Vect(0, 0));
                 board.addBall(ball);
                 board.addGadgetPainter(new BallPainter(ball));
             }
@@ -97,27 +100,27 @@ public class MainWindow extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 // TODO Auto-generated method stub
-                
+
             }
-            
+
         }
 
         this.addKeyListener(new MagicKeyListener(new MyKeyListener()));
@@ -126,6 +129,10 @@ public class MainWindow extends JFrame {
 
     public void startController() {
         clientControl.start();
+    }
+
+    public void setGadgetType(GadgetType gadgetChosen) {
+        this.gadgetChosen = gadgetChosen;
     }
 
     public void stopController() {

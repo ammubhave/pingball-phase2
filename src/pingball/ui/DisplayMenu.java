@@ -87,6 +87,76 @@ public class DisplayMenu extends JMenuBar {
         addGadget.add(triangularBumperTopRight);
         addGadget.add(triangularBumperTopLeft);
         addGadget.add(portal);
+
+        squareBumper.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        circleBumper.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        portal.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        triangularBumperBottomRight.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        triangularBumperBottomLeft.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        triangularBumperTopLeft.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
+
+        triangularBumperTopRight.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
     }
 
     /**
@@ -162,13 +232,14 @@ public class DisplayMenu extends JMenuBar {
 
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                mainWindow.stopController();
                 mainWindow.dispose();
             }
         });
 
         exitAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                System.exit(0);
             }
         });
     }
