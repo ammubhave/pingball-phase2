@@ -11,6 +11,11 @@ import pingball.proto.Message;
 import pingball.proto.PortalMessage;
 
 public class Portal implements Gadget {
+    /**
+     * Thread Safety:
+     * Everything is immutable.
+     * -gadgetsToBeHooked modified in factory only.
+     */
 
     // specified in spec
     private final static double RADIUS = 0.5;
