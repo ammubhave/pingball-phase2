@@ -15,6 +15,10 @@ public class PingballClient {
     /**
      * Loads a board file and begins playing it.
      * 
+     * New Features Added: - Sound when ball bounces off a gadget. - Ability to
+     * add certain gadgets to the board by selecting them in the menu and
+     * clicking on the desired location on the board.
+     * 
      * Usage: PingballClient [--host HOST] [--port PORT] FILE
      * 
      * HOST is an optional hostname or IP address of the server to connect to.
