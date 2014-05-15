@@ -1,4 +1,3 @@
-
 package pingball.client;
 
 import java.io.File;
@@ -15,7 +14,6 @@ import javax.swing.SwingUtilities;
 import pingball.board.Board;
 import pingball.proto.HelloMessage;
 import pingball.proto.Message;
-import pingball.proto.PortalMessage;
 import pingball.proto.WelcomeMessage;
 import pingball.ui.MainWindow;
 
@@ -111,8 +109,8 @@ public class ClientController {
                 }
                 board.simulateTime(DT);
                 messages = board.getOutOfBoundBallMessages();
-               // if (!messages.isEmpty())
-               //     System.err.println(messages);
+                // if (!messages.isEmpty())
+                // System.err.println(messages);
             }
             for (Message message : messages)
                 if (serverConnection != null)
@@ -127,7 +125,7 @@ public class ClientController {
         @Override
         public void run() {
             synchronized (board) {
-                System.out.println(board.toString());
+                // System.out.println(board.toString());
                 if (window != null)
                     window.repaint();
             }
