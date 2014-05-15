@@ -3,8 +3,6 @@ package pingball.ui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -36,6 +34,7 @@ public class DisplayMenu extends JMenuBar {
 
     private JMenu game;
     private JMenu server;
+    private JMenu addGadget;
 
     private JMenuItem loadBoard;
     private JMenuItem pause;
@@ -43,6 +42,14 @@ public class DisplayMenu extends JMenuBar {
     private JMenuItem restart;
     private JMenuItem exit;
     private JMenuItem exitAll;
+
+    private JMenuItem squareBumper;
+    private JMenuItem circleBumper;
+    private JMenuItem triangularBumperBottomRight;
+    private JMenuItem triangularBumperBottomLeft;
+    private JMenuItem triangularBumperTopRight;
+    private JMenuItem triangularBumperTopLeft;
+    private JMenuItem ball;
 
     private JMenuItem connectToServer;
     private JMenuItem disconnectFromServer;
@@ -61,6 +68,93 @@ public class DisplayMenu extends JMenuBar {
         addMenusToMenuBar();
         addComponentsToGameMenu();
         addComponentsToServerMenu();
+        addComponentsToAddGadgetsMenu();
+    }
+
+    /**
+     * Adds the square bumper, circular bumper, ball, triangular bumper, and
+     * portal options to the menu. The appropriate listeners are added and their
+     * methods are defined for all these options.
+     */
+    public void addComponentsToAddGadgetsMenu() {
+        squareBumper = new JMenuItem("Square Bumper");
+        circleBumper = new JMenuItem("Circular Bumper");
+        triangularBumperBottomRight = new JMenuItem("Triangular Bumper Bottom Right");
+        triangularBumperBottomLeft = new JMenuItem("Triangular Bumper Bottom Left");
+        triangularBumperTopRight = new JMenuItem("Triangular Bumper Top Right");
+        triangularBumperTopLeft = new JMenuItem("Triangular Bumper Top Left");
+        ball = new JMenuItem("Ball");
+
+        addGadget.add(squareBumper);
+        addGadget.add(circleBumper);
+        addGadget.add(triangularBumperBottomRight);
+        addGadget.add(triangularBumperBottomLeft);
+        addGadget.add(triangularBumperTopRight);
+        addGadget.add(triangularBumperTopLeft);
+        addGadget.add(ball);
+
+        squareBumper.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.SQUARE_BUMPER);
+            }
+
+        });
+
+        circleBumper.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.CIRCULAR_BUMPER);
+            }
+
+        });
+
+        triangularBumperBottomRight.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_BOTTOM_RIGHT);
+            }
+
+        });
+
+        triangularBumperBottomLeft.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_BOTTOM_LEFT);
+            }
+
+        });
+
+        triangularBumperTopLeft.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_TOP_LEFT);
+            }
+
+        });
+
+        triangularBumperTopRight.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.TRIANGULAR_BUMPER_TOP_RIGHT);
+            }
+
+        });
+
+        ball.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                mainWindow.setGadgetType(GadgetType.BALL);
+            }
+
+        });
     }
 
     /**
@@ -97,8 +191,8 @@ public class DisplayMenu extends JMenuBar {
                         final Board board = BoardBuilder.buildBoard(file);
                         ClientController controller = new ClientController(board, gameHost, gamePort, file);
                         controller.start();
-                        //mainWindow.stopController();
-                        //mainWindow.dispose();
+                        // mainWindow.stopController();
+                        // mainWindow.dispose();
                     } catch (IOException i) {
                         i.printStackTrace();
                     }
@@ -136,13 +230,14 @@ public class DisplayMenu extends JMenuBar {
 
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                mainWindow.stopController();
                 mainWindow.dispose();
             }
         });
-        
+
         exitAll.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                System.exit(0);
             }
         });
     }
@@ -217,9 +312,11 @@ public class DisplayMenu extends JMenuBar {
     public void addMenusToMenuBar() {
         game = new JMenu("Game");
         server = new JMenu("Server");
+        addGadget = new JMenu("Add Gadget");
+
         this.add(game);
         this.add(server);
+        this.add(addGadget);
     }
-
 
 }

@@ -18,6 +18,12 @@ public class PortalMessage extends Message {
     private final String name;
     private final String source;
 
+    // Rep invariant:
+    //   everything is non-null
+    // Thread safety:
+    //   all fields are immutable, just like for Message
+    //  only mutable field is source, but these messages are accessed only by one thread 
+
     public PortalMessage(String name, String targetPortal, String targetBoard,
             Circle ballShape, Vect velocity, String source) {
         this.name = name;

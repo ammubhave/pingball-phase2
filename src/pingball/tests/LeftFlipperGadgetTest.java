@@ -14,7 +14,7 @@ import pingball.board.LeftFlipper;
 /**
  * Testing strategy:
  * check for each of the 4 corners, both horizontal and vertical
- * also check for perpendicular reflection
+ * also check for perpendicular reflection on every orientation possible
  * 
  */
 public class LeftFlipperGadgetTest {

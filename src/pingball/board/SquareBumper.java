@@ -1,6 +1,5 @@
 package pingball.board;
 
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +8,13 @@ import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
 
+/** This class represents a square bumper gadget */
+
 public class SquareBumper implements Gadget {
 
     /**
      * Thread Safety Information: SquareBumper is threadsafe because it is never
-     * altered after creation.
-     * gadget hooking is done only in factory
+     * altered after creation. gadget hooking is done only in factory
      */
 
     private final static double EDGE_LENGTH = 1.0;
@@ -57,7 +57,8 @@ public class SquareBumper implements Gadget {
      * Calculates time an inputted ball will take to hit this bumper. Returns a
      * very large value if not nearby (5 seconds).
      * 
-     * @param ball to check if it's nearby
+     * @param ball
+     *            to check if it's nearby
      * @return amount of time to take to trigger object based on inputted ball.
      */
     @Override
@@ -127,10 +128,11 @@ public class SquareBumper implements Gadget {
         sb.setCharAt(Board.getBoardStringIndexFromVect(position), '#');
         return sb.toString();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof SquareBumper)) return false;
-        return ((SquareBumper)obj).getName().equals(this.getName());
+        if (!(obj instanceof SquareBumper))
+            return false;
+        return ((SquareBumper) obj).getName().equals(this.getName());
     }
 }

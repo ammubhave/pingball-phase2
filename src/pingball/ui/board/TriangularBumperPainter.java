@@ -10,7 +10,7 @@ import physics.LineSegment;
 import pingball.board.TriangularBumper;
 
 public class TriangularBumperPainter implements GadgetPainter {
-    private final Color triangularBumperColor = new Color(0x23, 0x85, 0xe6);
+    private final Color triangularBumperColor = new Color(0x23, 0x85, 0xe6);//xznew Color(0x23, 0x85, 0xe6);
     private TriangularBumper gadget;
     
     public TriangularBumperPainter(TriangularBumper gadget) {

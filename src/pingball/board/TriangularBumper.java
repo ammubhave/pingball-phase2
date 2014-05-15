@@ -9,11 +9,12 @@ import physics.LineSegment;
 import physics.Vect;
 import pingball.proto.Message;
 
+/** This class represents a triangular bumper gadget */
+
 public class TriangularBumper implements Gadget {
     /**
      * Thread Safety Information: TriangularBumper is threadsafe because it is
-     * never altered after creation.
-     * gadget hooking is done only in factory 
+     * never altered after creation. gadget hooking is done only in factory
      */
     public enum TriangularBumperOrientation {
         TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT
@@ -31,10 +32,9 @@ public class TriangularBumper implements Gadget {
 
     private final List<LineSegment> sides = new ArrayList<LineSegment>();
     private final List<Circle> corners = new ArrayList<Circle>();
-    
+
     /*
-     * Rep Invariant:
-     * - all attributes should be non-null
+     * Rep Invariant: - all attributes should be non-null
      */
     private void checkRep() {
         assert position != null;
@@ -178,7 +178,7 @@ public class TriangularBumper implements Gadget {
     public double getY() {
         return this.position.y();
     }
- 
+
     @Override
     public String getName() {
         return name;
@@ -190,21 +190,24 @@ public class TriangularBumper implements Gadget {
     }
 
     @Override
-    public String render(String input) {        
+    public String render(String input) {
         StringBuilder sb = new StringBuilder(input);
 
-        if (this.orientation == TriangularBumperOrientation.TOP_LEFT || this.orientation == TriangularBumperOrientation.BOTTOM_RIGHT) {
+        if (this.orientation == TriangularBumperOrientation.TOP_LEFT
+                || this.orientation == TriangularBumperOrientation.BOTTOM_RIGHT) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '/');
         }
-        if (this.orientation == TriangularBumperOrientation.TOP_RIGHT || this.orientation == TriangularBumperOrientation.BOTTOM_LEFT) {
+        if (this.orientation == TriangularBumperOrientation.TOP_RIGHT
+                || this.orientation == TriangularBumperOrientation.BOTTOM_LEFT) {
             sb.setCharAt(Board.getBoardStringIndexFromVect(position), '\\');
         }
         return sb.toString();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof TriangularBumper)) return false;
-        return ((TriangularBumper)obj).getName().equals(this.getName());
+        if (!(obj instanceof TriangularBumper))
+            return false;
+        return ((TriangularBumper) obj).getName().equals(this.getName());
     }
 }

@@ -10,11 +10,16 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import pingball.client.ClientController;
 import pingball.proto.Message;
 
 /** Contains Flipper helpers */
 
 public abstract class Flipper implements Gadget {
+    /* Threads Safety:
+     * All mutators first synchronize. No new threads created from this methods of Flipper.java
+     */
+    
     /**
      * Represents the orientation of the flipper arm
      */
@@ -178,7 +183,7 @@ public abstract class Flipper implements Gadget {
                 smallestTime = time;
             }
         }
-        return Math.max(smallestTime, 0);
+        return Math.max(smallestTime-ClientController.DT*3, 0);
     }
 
     public synchronized void moveFlipper() {

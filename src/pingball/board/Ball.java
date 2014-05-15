@@ -3,44 +3,42 @@ package pingball.board;
 import physics.Circle;
 import physics.Vect;
 
-/*
- * Ball class.
- * variables: Square currentSquare, tuple(x,y) ballLocation
- * you are free to change these as you wish
- * remember to write thread safety arguments
- */
+/** This class represents the ball object. */
 
 public class Ball {
-    /*
-     * Thread Safety Information: The ball class will be threadsafe because
-     * all access to position or velocity first synchronize.
-     * Vect is immutable so makes those parts of code thread safe (prevents rep exposure)
+    /**
+     * Thread Safety Information: The ball class will be threadsafe because all
+     * access to position or velocity first synchronize. Vect is immutable so
+     * makes those parts of code thread safe (prevents rep exposure)
      */
 
     private final static double RADIUS = 0.25;
 
-    private Vect position;    
+    private Vect position;
     private Vect velocity;
 
     private final String name;
 
     /**
      * Creates a new Ball object
-     * @param name the name of the ball
-     * @param position the position of the ball
-     * @param velocity the velocity of the ball
+     * 
+     * @param name
+     *            the name of the ball
+     * @param position
+     *            the position of the ball
+     * @param velocity
+     *            the velocity of the ball
      */
     public Ball(String name, Vect position, Vect velocity) {
         this.position = position;
         this.velocity = velocity;
         this.name = name;
-        
+
         checkRep();
     }
-    
+
     /*
-     *  Rep Invariant:
-     *  - no attributes should be null
+     * Rep Invariant: - no attributes should be null
      */
     private void checkRep() {
         assert position != null;
@@ -85,28 +83,32 @@ public class Ball {
     /**
      * Changes position of the ball.
      * 
-     * @param newPos new position of the ball
+     * @param newPos
+     *            new position of the ball
      */
     public synchronized void changePos(Vect newPos) {
         position = newPos;
-        
+
         checkRep();
     }
 
     /**
      * Changes velocity of the ball.
      * 
-     * @param newVel new velocity of the ball
+     * @param newVel
+     *            new velocity of the ball
      */
     public synchronized void changeVelocity(Vect newVel) {
         velocity = newVel;
-        
+
         checkRep();
     }
-    
+
     /**
      * Renders the ball onto input and returns the final board
-     * @param input the board string on which to render
+     * 
+     * @param input
+     *            the board string on which to render
      * @return the final rendered board string
      */
     public synchronized String render(String input) {
@@ -117,7 +119,8 @@ public class Ball {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Ball)) return false;
-        return ((Ball)obj).getName().equals(this.getName());
+        if (!(obj instanceof Ball))
+            return false;
+        return ((Ball) obj).getName().equals(this.getName());
     }
 }

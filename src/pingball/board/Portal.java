@@ -6,11 +6,16 @@ import java.util.List;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
-import pingball.proto.BallMessage;
 import pingball.proto.Message;
 import pingball.proto.PortalMessage;
 
+/** This class represents the portal gadget. */
 public class Portal implements Gadget {
+    /**
+     * Thread Safety:
+     * Everything is immutable.
+     * -gadgetsToBeHooked modified in factory only.
+     */
 
     // specified in spec
     private final static double RADIUS = 0.5;
@@ -21,10 +26,9 @@ public class Portal implements Gadget {
     private List<Gadget> gadgetsToBeHooked = new ArrayList<Gadget>();
     private final String targetPortalName;
     private final String targetBoardName;
-    
+
     /*
-     * Rep Invariant:
-     * - Everything is non-null;
+     * Rep Invariant: - Everything is non-null;
      */
     private void checkRep() {
         assert name != null;
@@ -43,7 +47,7 @@ public class Portal implements Gadget {
         portal = new Circle(centerX, centerY, RADIUS);
         this.targetPortalName = targetPortalName;
         this.targetBoardName = targetBoardName;
-        
+
         checkRep();
     }
 
@@ -55,9 +59,8 @@ public class Portal implements Gadget {
     @Override
     public double leastCollisionTime(Ball ball) {
         Vect velocity = ball.getVelocity();
-        return Geometry.timeUntilCircleCollision(new Circle(portal.getCenter()
-                .x(), portal.getCenter().y(), RADIUS), ball.getCircle(),
-                velocity);
+        return Geometry.timeUntilCircleCollision(new Circle(portal.getCenter().x(), portal.getCenter().y(), RADIUS),
+                ball.getCircle(), velocity);
     }
 
     @Override
@@ -66,9 +69,8 @@ public class Portal implements Gadget {
             return null;
         }
 
-        PortalMessage message = new PortalMessage(ball.getName(),
-                this.targetPortalName, this.targetBoardName, ball.getCircle(),
-                ball.getVelocity(), null);
+        PortalMessage message = new PortalMessage(ball.getName(), this.targetPortalName, this.targetBoardName,
+                ball.getCircle(), ball.getVelocity(), null);
         return message;
     }
 
@@ -94,7 +96,7 @@ public class Portal implements Gadget {
     @Override
     public void hookActionToTrigger(Gadget gadget) {
         gadgetsToBeHooked.add(gadget);
-        
+
         checkRep();
     }
 
