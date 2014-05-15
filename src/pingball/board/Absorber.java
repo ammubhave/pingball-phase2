@@ -1,6 +1,5 @@
 package pingball.board;
 
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,14 +77,17 @@ public class Absorber implements Gadget {
         double y = this.position.y();
 
         sides.add(new LineSegment(x, y, x + width, y)); // Top Line
-        sides.add(new LineSegment(x, y + height, x + width, y + height)); // Bottom Line
+        sides.add(new LineSegment(x, y + height, x + width, y + height)); // Bottom
+                                                                          // Line
         sides.add(new LineSegment(x, y, x, y + height)); // Left Line
-        sides.add(new LineSegment(x + width, y, x + width, y + height)); // Right Line
+        sides.add(new LineSegment(x + width, y, x + width, y + height)); // Right
+                                                                         // Line
 
         cornerCircles.add(new Circle(x, y, 0)); // Top Left Circle
         cornerCircles.add(new Circle(x + width, y, 0)); // Top Right Circle
         cornerCircles.add(new Circle(x, y + height, 0)); // Bottom Left Circle
-        cornerCircles.add(new Circle(x + width, y + height, 0)); // Bottom Right Circle
+        cornerCircles.add(new Circle(x + width, y + height, 0)); // Bottom Right
+                                                                 // Circle
 
         checkRep();
     }
@@ -105,8 +107,7 @@ public class Absorber implements Gadget {
         // Only shoot is there a ball to shoot
         if (heldBall != null) {
             heldBall.changeVelocity(SHOOT_VELOCITY);
-            heldBall.changePos(new Vect(this.position.x() + width - 0.25,
-                    this.position.y() - 0.25));
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() - 0.25));
             heldBall = null;
         }
 
@@ -115,17 +116,14 @@ public class Absorber implements Gadget {
 
     @Override
     public synchronized Message reactBall(Ball ball) {
-        Toolkit.getDefaultToolkit().beep();
         if (heldBall != null && !isInside(ball)) {
             GadgetHelpers.reflectBall(sides, cornerCircles, ball);
         } else if (heldBall == null) {
-            ball.changePos(new Vect(this.position.x() + width - 0.25,
-                    this.position.y() + height - 0.25));
+            ball.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
             ball.changeVelocity(new Vect(0, 0));
             heldBall = ball;
         } else {
-            heldBall.changePos(new Vect(this.position.x() + width - 0.25,
-                    this.position.y() + height - 0.25));
+            heldBall.changePos(new Vect(this.position.x() + width - 0.25, this.position.y() + height - 0.25));
             heldBall.changeVelocity(new Vect(0, 0));
         }
 
@@ -182,8 +180,7 @@ public class Absorber implements Gadget {
 
         for (int y = (int) position.y(); y < (int) position.y() + height; y++)
             for (int x = (int) position.x(); x < (int) position.x() + width; x++)
-                sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)),
-                        '=');
+                sb.setCharAt(Board.getBoardStringIndexFromVect(new Vect(x, y)), '=');
 
         return sb.toString();
     }
