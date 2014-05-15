@@ -1,6 +1,5 @@
 package pingball.board;
 
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,7 +151,7 @@ public class TriangularBumper implements Gadget {
 
     @Override
     public Message reactBall(Ball ball) {
-        Toolkit.getDefaultToolkit().beep();
+        GadgetHelpers.playBounceSound();
         GadgetHelpers.reflectBall(sides, corners, ball, REFL_COEFF);
         this.trigger();
 
